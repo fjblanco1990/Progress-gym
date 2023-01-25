@@ -1,1 +1,217 @@
-/* You can add global styles to this file, and also import other style files */
+
+
+@font-face {
+    font-family: "SpeedayBold";
+     src: url("./assets/fonts/Speeday-Bold-FFP.ttf") format("truetype");
+     font-weight: normal;
+     font-style: normal;
+}
+
+@font-face {
+    font-family: "SpeedayRegular";
+     src: url("./assets/fonts/Speeday-Regular-FFP.ttf") format("truetype");
+     font-weight: normal;
+     font-style: normal;
+}
+
+@font-face {
+    font-family: "OptiAgency";
+     src: url("./assets/fonts/OPTIAgency-Gothic.otf") format("otf");
+     font-weight: normal;
+     font-style: normal;
+}
+
+@font-face {
+    font-family: "OptiAgencyGothicMedium";
+     src: url("./assets/fonts/OPTIAgency-GothicMedium.ttf") format("truetype");
+     font-weight: normal;
+     font-style: normal;
+}
+// Variable overrides first
+// $primary: #900;
+// $enable-shadows: true;
+// $prefix: "mo-";
+
+h1 {
+    font-family: 'SpeedayRegular';
+    letter-spacing: 3px;
+}
+
+form {
+    width: 100%;
+    margin: 45px auto;
+}
+form h1 {
+    font-size: 3em;
+    font-weight: 300;
+    text-align: center;
+    color: rgba(53,162,162,1);
+}
+
+form h5 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #333;
+    font-family: 'OptiAgencyGothicMedium'; 
+}
+
+form hr.sep {
+    background: rgba(53,162,162,1);
+    box-shadow: none;
+    border: none;
+    height: 2px;
+    width: 25%;
+    margin: 0px auto 45px auto;
+}
+
+form .emoji {
+    font-size: 1.2em;
+}
+
+.group {
+    position: relative;
+    margin: 30px 0;
+}
+
+textarea {
+    resize: none;
+}
+
+input,
+textarea,
+select {
+    background: none;
+    color: #333;
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #333;
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 3px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+}
+
+input::placeholder { 
+    color: rgba(53,162,162,1); 
+}
+
+input:focus~label,
+textarea:focus~label,
+input:valid~label,
+textarea:valid~label {
+    top: -16px;
+    font-size: 12px;
+    color: rgba(53,162,162,1);
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-size: 15px;
+}
+
+input:focus~label.label-select,
+input:valid~label.label-select {
+    top: -60px;
+    font-size: 12px;
+    color: rgba(53,162,162,1);
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+input:focus~.bar:before,
+textarea:focus~.bar:before {
+    width: 320px;
+}
+
+input[type="password"] {
+    letter-spacing: 0.3em;
+}
+
+label {
+    font-weight: bold;
+    font-size: 16px;
+    font-family: "OptiAgencyGothicMedium";
+    position: relative;
+    letter-spacing: 3px;
+
+}
+
+
+.label-title {
+    color: #c6c6c6;
+    font-size: 16px;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 3px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.label-select {
+    top: -60px;
+    color: rgba(53,162,162,1);
+}
+
+.text-validation-sm {
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 1px;
+}
+
+.table-gym {
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 1px;
+}
+
+.table-gym .table-title-gym {
+    background: rgba(53,162,162,1);
+}
+
+.btn-gym-progress {
+    border-radius: 4px !important;
+    border: 1px solid rgba(53,162,162,1) !important;
+    background-color: rgba(53,162,162,1) !important;
+    height: 50px !important;
+    font-family: 'OptiAgencyGothicMedium' !important;
+    font-size: 20px !important;
+    letter-spacing: 2px !important;
+    transition: 300ms all !important;
+    margin-right: 10px !important;
+    padding: 10px !important;
+    &:hover {
+        border: 1px solid rgb(38, 114, 114) !important;
+        background: rgb(38, 114, 114) !important;
+        font-size: 21px !important;
+    }
+}
+
+.btn-gym-dark {
+    border-radius: 4px!important;
+    border: 1px solid #333 !important;
+    background-color: #333 !important;
+    color: white !important;
+    height: 50px !important;
+    font-family: 'OptiAgencyGothicMedium' !important;
+    font-size: 20px !important;
+    letter-spacing: 2px !important;
+    transition: 300ms all !important;
+    padding: 10px !important;
+    &:hover {
+        border: 1px solid #333333cf !important;
+        background: #333333cf !important;
+        font-size: 21px !important;
+    }
+}
+
+.cursor {
+    cursor: pointer;
+}

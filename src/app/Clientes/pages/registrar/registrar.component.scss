@@ -1,0 +1,81 @@
+.content-general {
+    display: flex;
+    width: 100%;
+    justify-items: center;
+    margin: 0px auto;
+    padding: 0px;
+    margin: 0px;
+    justify-content: center;
+    flex-direction: row;
+
+}
+.content-form { 
+    margin: 0px -51px 0px -218px;
+    display: block;
+    margin-top: 190px;
+    width: 85%;
+    height: 650px;
+    float: left;
+}
+
+.informativo {
+    width: 18%;
+    height: 650px;
+    float: left;
+    margin-top: 190px;
+}
+
+.form {
+    width: 70%;
+    margin: 0px auto;
+}
+
+h2 {
+    margin-top: 30px;
+    font-size: 40px;
+    text-align: center;
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+p {
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 3px;
+    margin-top: 15px;
+}
+
+p > span {
+    font-weight: bold;
+}
+
+.info-plan {
+    margin-top: 100px;
+}
+
+.info-plan .total {
+    font-size: 25px;
+    color: #267272;
+    font-weight: bold;  
+}
+
+.form h2 {
+    margin-top: 30px;
+    font-size: 40px;
+    text-align: center;
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.content-btn-footer {
+    float: right;
+    justify-items: center;
+    align-items: center;
+    margin: 0px 0px 0px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+

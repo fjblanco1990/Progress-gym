@@ -1,0 +1,216 @@
+
+
+.content-form {
+    margin: 0px auto;
+    position: absolute;
+    margin-top: 140px;
+    width: 100%;
+    height: 750px;
+}
+
+
+.form {
+    width: 70%;
+    margin: 0px auto;
+}
+
+h2 {
+    margin-top: 30px;
+    font-size: 40px;
+    text-align: center;
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.content-btn-footer {
+    float: right;
+    justify-items: center;
+    align-items: center;
+    margin: 0px 0px 0px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.content-errors {
+    width: 100%;
+    height: 250px;
+    display: block;
+    border: 1px solid #333;
+    text-align: center;
+}
+
+.content-errors h4{
+    font-family: OptiAgencyGothicMedium;
+    line-height: 250px;
+    color: #35a2a2;
+    letter-spacing: 4px;
+    font-weight: 800;
+}
+
+
+.color-warnign {
+    color: rgb(190, 121, 16);
+}
+
+.color-danger {
+    color: rgb(253, 36, 36);
+}
+
+.color-normal {
+    color: #FFFFFF;
+}
+
+.paginator-footer {
+
+    justify-content: end;
+    font-family: OptiAgencyGothicMedium;
+}
+
+.content-ppal {
+    width: 100%;
+    display: flex;
+    margin-top: 50px;
+}
+
+.content-form-dates {
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: -130px;
+}
+
+.content-options {
+    width: 50%;
+    height: auto;
+    justify-content: center;
+    display: block;
+    margin-top: 40px;
+}
+
+.option {
+    font-size: 20px;
+    width: 80%;
+    height: 50px;
+    border: 1px solid #35a2a2;
+    margin-bottom: 60px;
+    text-align: center;
+    background: #35a2a2;
+    color: white;
+    font-family: "OptiAgencyGothicMedium";
+    letter-spacing: 5px;
+    line-height: 45px;
+    transition: all 500ms;
+    font-weight: bold;
+
+    &:hover{
+        border: 1px solid #35a2a2;
+        background: white;
+        color: #35a2a2;
+        cursor: pointer;
+        
+    }
+}
+
+.content-information {
+    width: 50%;
+    height: auto;
+    float: left;
+    font-family: "OptiAgencyGothicMedium";
+    letter-spacing: 3px;
+    margin-top: 30px;
+
+}
+
+.sub-title {
+    font-weight: bold;
+    font-size: 20px;
+    color: #35a2a2;
+}
+
+.content-btn {
+    text-align: center;
+    margin-top: 25px;
+}
+
+
+.title-dark {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #333;
+    color: white;
+}
+
+.btn-x {
+    background: none !important;
+    color: white;
+    float: right;
+    font-size: 30px;
+    margin-top: -60px;
+    width: auto;
+    margin-right: 10px;
+    &::after {
+        color: white;
+        background: white;
+    }
+}
+
+.btn-progress {
+    border: 1px solid rgba(53,162,162,1);
+    background-color: rgba(53,162,162,1);
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid rgb(38, 114, 114);
+        background: rgb(38, 114, 114);
+        font-size: 21px;
+    }
+}
+.btn-dark {
+    border: 1px solid #333;
+    background-color: #333;
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid #333333cf;
+        background: #333333cf;
+        font-size: 21px;
+    }
+}
+
+.input-get-doc {
+    font-size: 20px !important;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    display: block;
+    margin: 0px auto;
+
+}
+
+#titleModal {
+    font-family: 'OptiAgencyGothicMedium';  
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.msj-error {
+    text-align: center;
+    margin: 0px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+}

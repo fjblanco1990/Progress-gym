@@ -1,0 +1,132 @@
+<div class="content-general">
+    <div class="content-form">
+        <div class="form">
+            <app-back-bottom></app-back-bottom>
+            <h2>Clientes registrados<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script></h2>
+            <div class="container">
+                <form [formGroup]="consultarClientForm">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Documento"
+                                 (input)="filtrarDocumento(consultarClientForm.controls.Documento.value)"
+                                 (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Documento</label>
+                                
+                            </div>
+
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Nombre" (input)="filterNombre(consultarClientForm.controls.Nombre.value)"
+                                (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Nombre</label>
+                            
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="FechaInicial" 
+                                (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha Inicial</label>
+                            
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="FechaFinal"
+                                (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha final</label>
+                            
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <div class="col-sm content-btn-footer">
+                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="filterRangoFechas(consultarClientForm.controls.FechaInicial.value,consultarClientForm.controls.FechaFinal.value)">Consultar</button>
+                                    <button type="button" class="btn-gym-dark" (click)="reset()" >Limpiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </form>
+            </div>
+            <div class="content-table" *ngIf="clientesModelLstSearch.length > 0">
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                      <tr >
+                        <th class="table-title-gym">Cliente</th>
+                        <th class="table-title-gym">Documento</th>
+                        <th class="table-title-gym">Fecha nacimiento</th>
+                        <th class="table-title-gym">Celular</th>
+                        <th class="table-title-gym">Plan</th>
+                        <th class="table-title-gym">Forma de pago</th>
+                        <th class="table-title-gym">Estado</th>
+                        <th class="table-title-gym">Fecha de registro</th>
+                        <th class="table-title-gym">Usuario</th>
+                        <th class="table-title-gym">Fecha de inicio</th>
+                        <th class="table-title-gym">Fecha de fin</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let cliente of clientesModelLstSearch | paginate: { currentPage: p }" class="tr-table cursor"
+                          [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido, 'color-normal': !cliente.porVencer &&  !cliente.Vencido , 'color-danger ': cliente.Vencido && cliente.porVencer }"
+                          [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' dias': 'Le quedan '+ cliente.DiasFaltantes +' dias' " (click)="editarCliente(cliente)">
+                        <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>
+                        <td>{{cliente.cliente.Documento_identitdad}}</td>
+                        <td >{{cliente.cliente.Fecha_nacimiento | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{cliente.cliente.Celular}}</td>    
+                        <td>{{cliente.plan.Descripcion}}</td>
+                        <td>{{cliente.forma_pago.Descripcion}}</td>
+                        <td>{{ (cliente.cliente.Estado === true ? 'Activo': 'In activo')}}</td>
+                        <td>{{cliente.cliente.Fecha_registro | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{cliente.usuario.Nombre_completo}}</td>
+                        <td>{{cliente.cliente.Fecha_inicio | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{cliente.cliente.Fecha_fin | date: 'dd/MM/yyyy' }}</td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                      maxSize="12"
+                      responsive="true"
+                      previousLabel="Anterior"
+                      nextLabel="Siguiente"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div>
+            <div class="content-errors" *ngIf="clientesModelLstSearch.length <= 0">
+                
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="informativo">
+        <h2>Informacion plan</h2>
+        <div class="info-plan">
+            <p> <span> Nombre completo: </span> {{registerClientForm.controls.Nombres.value}}
+                {{registerClientForm.controls.Apellidos.value}} </p>
+            <p> <span> Fecha registro: </span> {{registerClientForm.controls.Fecha_registro.value}} </p>
+            <p> <span> Plan: </span> </p>
+            <p> <span>Metodo de pago: </span> </p>
+            <p> <span> Valor a pagar: </span> </p>
+        </div>
+
+    </div> -->
+</div>
+
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>

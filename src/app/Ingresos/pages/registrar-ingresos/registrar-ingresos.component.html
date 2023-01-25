@@ -1,0 +1,174 @@
+<!-- <div class="content-form">
+    <div class="form">
+        <p>registrar-ingresos works! cambios</p>
+        <p>1. Cuantas personas Ingresaron al dia</p>
+        <p>2. Cuanto se vendio en el dia (Planes, dia, tiquetera, Etc..)</p>
+
+    </div>
+</div> -->
+
+<div class="content-general">
+    <div class="content-form">
+        <div class="form">
+            <app-back-bottom></app-back-bottom>
+            <h2>Informes Ventas</h2>
+            <div class="content-form-dates">
+                <form [formGroup]="informesForm">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="FechaInicial" (focus)="desactiveRegistroIngreso()"
+                                (blur)="habilitarRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaInicial.errors?.required &&
+                                    ( informesForm.controls.FechaInicial.touched)">
+                                    {{ 'Fecha de inicio es Obligatoria'}}
+                                    </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha de inicio</label>
+                            
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required"  formControlName="FechaFinal" (focus)="desactiveRegistroIngreso()" 
+                                (blur)="habilitarRegistroIngreso()"/>
+                                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaFinal.errors?.required &&
+                                ( informesForm.controls.FechaFinal.touched)">
+                                {{ 'Fecha fin es Obligatoria'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha de fin</label>
+                            </div>
+                        </div>
+                        <div class="col-sm content-btn">
+                            <button type="button" class="btn-gym-progress"
+                            (click)="getInformeDiarioGeneral()">Consultar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="content-ppal">
+                <div class="content-options">
+                    <div class="option" (click)="OpenModalInformation(1)">
+                        Consultar ingresos diarios
+                    </div>
+                    <div class="option" (click)="OpenModalInformation(0)">
+                        Consultar ventas diarias
+                    </div>
+                    <div class="option">
+                        +
+                    </div>
+                 
+                </div>
+                <div class="content-information">
+                        <div class="info-plan">
+                            <p> <span> Ingresos diarios (Planes): </span> <strong> {{informeGeneral?.Cantidad_Ingresos}} </strong></p>
+                            <p> <span> Ingresos diarios (dia): </span> <strong> {{Totla_ingresosDia}} </strong></p>
+                            <p> <span> ventas diarias planes: </span> <strong>  {{informeGeneral?.Total_Ventas | currency}} </strong></p>
+                            <p> <span> Ventas diarias suministros: </span> <strong>{{ resultVentasSuminitros | currency}} </strong></p>
+                            <p> <span> Total Ventas Diarias:</span> <strong>{{ (informeGeneral?.Total_Ventas +  resultVentasSuminitros) | currency }}</strong></p>
+                            <p> <span class="sub-title"> Planes </span> </p>
+                            <p class="total"> <span> Tiquetera: </span>  <strong>{{ informeGeneral?.Tiquetera }}</strong>  </p>
+                            <p class="total"> <span> Mensual: </span>  <strong>{{ informeGeneral?.Mensual }}</strong>  </p>
+                            <p class="total"> <span> Bimestral: </span>  <strong>{{ informeGeneral?.Bimestral }}</strong>  </p>
+                            <p class="total"> <span> Trimestral: </span> <strong>{{ informeGeneral?.Trimestral }}</strong> </p>
+                            <p class="total"> <span> Semestral: </span>  <strong>{{ informeGeneral?.Semestral }}</strong> </p>
+                            <p class="total"> <span> Anual: </span>  <strong>{{ informeGeneral?.Anual}}</strong> </p>
+                        </div>
+            
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <button hidden id="openModal" #openModal data-bs-toggle="modal" data-bs-target="#getInformationModal"></button>
+  <!-- Modal -->
+
+  <div class="modal fade" id="getInformationModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header title-dark">
+          <h5 class="modal-title" id="titleModal">Registrar Ingreso</h5>
+          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+            <div class="content-table" *ngIf="resultVentas.informeData.length > 0">
+
+                <table class="table table-dark table-hover table-gym">
+                <thead>
+                    <tr >
+                    <th class="table-title-gym">Nombre</th>
+                    <th *ngIf="tipoConsulta == 0" class="table-title-gym">{{'Plan adquirido'}}</th>
+                    <th *ngIf="tipoConsulta == 0" class="table-title-gym">{{'Valor'}}</th>
+
+                    <th *ngIf="tipoConsulta == 1" class="table-title-gym">{{'Fecha de ingreso'}}</th>
+                    </tr>
+                
+                </thead>
+                <tbody>
+                    <tr *ngFor="let informe of resultVentas.informeData | paginate: { currentPage: p }" class="tr-table cursor">
+
+                    <td *ngIf="tipoConsulta == 0">{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
+                    <td *ngIf="tipoConsulta == 0">{{informe.planes.Descripcion}}</td>
+                    <td *ngIf="tipoConsulta == 0"> {{informe.planes.Valor_Plan }}</td>
+
+                    <td *ngIf="tipoConsulta == 1">{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
+                    <td *ngIf="tipoConsulta == 1">{{informe.ingreso.Fecha_Ingreso}}</td>
+                    </tr>
+                </tbody>
+                </table>
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                    maxSize="12"
+                    responsive="true"
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination"
+                    screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page">
+                </paging-controls>
+
+                <table class="table table-dark table-hover table-gym"  *ngIf="tipoConsulta == 0"> 
+                    <thead >
+                        <tr *ngIf="tipoConsulta == 0">
+                            <th *ngIf="tipoConsulta == 0" class="table-title-gym">Concepto</th>
+                            <th *ngIf="tipoConsulta == 0" class="table-title-gym"></th>
+                            <th *ngIf="tipoConsulta == 0" class="table-title-gym">Valor</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let informe of resultVentas.informeVenta | paginate: { currentPage: venta }"  class="tr-table cursor">
+
+                            <td *ngIf="tipoConsulta == 0">{{informe.descripcion}} </td>
+                            <td *ngIf="tipoConsulta == 0"></td>
+                            <td *ngIf="tipoConsulta == 0">{{informe.value | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <paging-controls  *ngIf="tipoConsulta == 0" class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event"
+                    maxSize="12"
+                    responsive="true"
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination"
+                    screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page">
+                </paging-controls>
+
+            </div>
+            <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+            </div>
+          
+        </div>
+        <div class="modal-footer footer">
+          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>
+

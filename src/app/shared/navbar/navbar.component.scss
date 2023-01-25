@@ -1,0 +1,39 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    left:0px;
+    height: auto;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    line-height: 80px;
+}
+
+.header h1 {
+    text-transform: uppercase;
+    letter-spacing: 10px;
+}
+
+.initial-text-title {
+    // color: rgb(255,255,255);
+    // color: radial-gradient();
+    color: #35A2A2;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(53,162,162,1) 35%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    
+}
+
+.row-1 {
+    display: block;
+    float: left;
+    width: 100%;
+    height: 65px;
+    margin-top: 0px;
+    margin-bottom: 15px;
+}

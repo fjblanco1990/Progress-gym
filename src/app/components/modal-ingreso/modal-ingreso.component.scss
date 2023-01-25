@@ -1,0 +1,79 @@
+.title-dark {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #333;
+    color: white;
+}
+
+.btn-x {
+    background: none !important;
+    color: white;
+    float: right;
+    font-size: 30px;
+    margin-top: -60px;
+    width: auto;
+    margin-right: 10px;
+    &::after {
+        color: white;
+        background: white;
+    }
+}
+
+.btn-progress {
+    border: 1px solid rgba(53,162,162,1);
+    background-color: rgba(53,162,162,1);
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid rgb(38, 114, 114);
+        background: rgb(38, 114, 114);
+        font-size: 21px;
+    }
+}
+.btn-dark {
+    border: 1px solid #333;
+    background-color: #333;
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid #333333cf;
+        background: #333333cf;
+        font-size: 21px;
+    }
+}
+
+.input-get-doc {
+    font-size: 20px !important;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    display: block;
+    margin: 0px auto;
+
+}
+
+#titleModal {
+    font-family: 'OptiAgencyGothicMedium';  
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.msj-error {
+    text-align: center;
+    margin: 0px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+}

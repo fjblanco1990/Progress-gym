@@ -1,0 +1,225 @@
+<form [formGroup]="registerClientForm">
+    <div class="content-general">
+        <div class="content-form">
+            <div class="form">
+                <app-back-bottom [form]="registerClientForm"></app-back-bottom>
+                <h2>Registrar cliente</h2>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Nombres"
+                                    (focus)="desactiveRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Nombres.errors?.required &&
+                                    ( registerClientForm.controls.Nombres.touched)">
+                                    {{ 'Nombres son obligatorio'}}
+                                </span>
+                                <span class="text-danger text-validation-sm"
+                                    *ngIf="registerClientForm.controls.Nombres.errors?.pattern">
+                                    {{ 'Nombres solo aceptan letras - minimo 2 letras' }}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Nombres</label>
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Apellidos"
+                                    (focus)="desactiveRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
+                                    ( registerClientForm.controls.Apellidos.touched)">
+                                    {{ 'Apellidos son obligatorio'}}
+                                </span>
+                                <span class="text-danger text-validation-sm"
+                                    *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
+                                    {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Apellidos</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="Fecha_nacimiento"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Fecha_nacimiento.errors?.required &&
+                                    ( registerClientForm.controls.Fecha_nacimiento.touched)">
+                                    {{ 'Fecha de nacimiento es Obligatoria'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha Nacimiento</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="tetx" required="required" formControlName="Documento_identitdad"
+                                    [disabled]="updateAvalible" (focus)="desactiveRegistroIngreso()"
+                                    (blur)="habilitarRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Documento_identitdad.errors?.required &&
+                                    ( registerClientForm.controls.Documento_identitdad.touched)">
+                                    {{ 'Documento es obligatorio'}}
+                                </span>
+                                <span class="text-danger text-validation-sm"
+                                    *ngIf="registerClientForm.controls.Documento_identitdad.errors?.pattern">
+                                    {{ 'Documento solo acepta numeros - minimo 5 digitos' }}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Documento</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="number" required="required" formControlName="Celular"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Celular.errors?.required &&
+                                    ( registerClientForm.controls.Celular.touched)">
+                                    {{ 'Celular es obligatorio'}}
+                                </span>
+                                <span class="text-danger text-validation-sm"
+                                    *ngIf="registerClientForm.controls.Celular.errors?.pattern">
+                                    {{ 'Celular solo acepta numeros - minimo 5 digitos' }}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Celular</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Id_Plan"
+                                    (change)="validarSeleccion('Id_Plan', 'plan')">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [value]="optPlan.Id_Plan" *ngFor="let optPlan of planData">
+                                        {{optPlan.Descripcion}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Plan.errors?.required &&
+                                ( registerClientForm.controls.Id_Plan.touched)">
+                                    {{ 'Plan es obligatorio , debe seleccionar una opción'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Plan</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Id_Forma_pago"
+                                    (change)="validarSeleccion('Id_Forma_pago', 'forma')">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [value]="optForm.Id_Forma_Pago" *ngFor="let optForm of formasData">
+                                        {{optForm.Descripcion}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Forma_pago.errors?.required &&
+                                    ( registerClientForm.controls.Id_Forma_pago.touched)">
+                                    {{ 'Forma de pago es Obligatoria , debe seleccionar una opción'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Forma de pago</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Estado"
+                                    (change)="validarSeleccion('Estado', 'estado')">
+                                    <option value="-1">---Seleccione---</option>
+                                    <option value="{{estado.value}}" *ngFor="let estado of estados">
+                                        {{estado.descripcion}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Estado.errors?.required &&
+                                    ( registerClientForm.controls.Estado.touched)">
+                                    {{ 'Estado es Obligatoria'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Estado</label>
+                              
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="Fecha_registro"
+                                    [disabled]="updateAvalible" (focus)="desactiveRegistroIngreso()"
+                                    (blur)="habilitarRegistroIngreso()" />
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha Registro</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="Fecha_inicio"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="setFechaFinal()"
+                                    (blur)="habilitarRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Fecha_inicio.errors?.required &&
+                                ( registerClientForm.controls.Fecha_inicio.touched)">
+                                    {{ 'Fecha de inicio es Obligatoria'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha de inicio</label>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" disabled formControlName="Fecha_fin"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha de fin</label>
+                            </div>
+                        </div>
+                        <div class="col-sm content-btn-footer">
+                            <button type="button" class="btn-gym-progress" *ngIf="!updateAvalible"
+                                (click)="guardarCliente()">Guardar</button>
+                            <button type="button" class="btn-gym-progress" *ngIf="updateAvalible"
+                                (click)="editarCliente()">Editar</button>
+                            <button type="button" class="btn-gym-dark"
+                                (click)="cancelRegisterCliente()">Cancelar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="informativo">
+            <h2>Informacion</h2>
+            <div class="info-plan">
+
+                <p> <span> Nombre completo: </span> {{ registerClientForm.controls.Nombres.value }}
+                    {{registerClientForm.controls.Apellidos.value}} </p>
+                <p> <span> Fecha registro: </span> {{ registerClientForm.controls.Fecha_registro.value | date:
+                    'dd-MMMM-YYYY' }} </p>
+                <p> <span> Cantidad días comprados: </span> {{value_plan_seleccionado?.Cantidad_Dias}} </p>
+                <p class="total"> <span> Valor a pagar: </span> {{ value_plan_seleccionado?.Valor_Plan | currency}} </p>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>

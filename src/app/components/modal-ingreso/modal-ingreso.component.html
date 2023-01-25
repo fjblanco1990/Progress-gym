@@ -1,0 +1,29 @@
+<button type="button" #openGetdocumento class="btn btn-primary" hidden data-bs-toggle="modal" data-bs-target="#getDocumentoModal">
+    open
+</button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="getDocumentoModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header title-dark">
+          <h5 class="modal-title" id="titleModal">Registrar Ingreso</h5>
+          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal" (click)="reiniciarModal()" >X</button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="registerForm">
+            <input class="input-get-doc" type="text" name="documento" id="" formControlName="documento" >
+            <br>
+            <div class="msj-error" *ngIf="showError">
+              <span class="text-danger">{{mensajeError}}</span>
+            </div>
+          </form>
+          
+        </div>
+        <div class="modal-footer footer">
+          <button type="button" class="btn btn-primary btn-progress" (click)="validateRegister()" >Save changes</button>
+          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" (click)="reiniciarModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
