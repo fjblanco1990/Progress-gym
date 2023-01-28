@@ -9,11 +9,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: '*',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
     path: 'home',
     component: LayoutComponent
   },
@@ -26,9 +21,14 @@ const routes: Routes = [
     loadChildren: () => import('./Ingresos/ingresos.module').then(module => module.IngresosModule)
   },
   {
-    path: 'proveedores',
-    loadChildren: () => import('./proveedore/proveedore.module').then(module => module.ProveedoreModule)
-  }
+    path: 'maestros',
+    loadChildren: () => import('./Maestros/maestros.module').then(module => module.MaestrosModule)
+  },
+  {
+    path: '*',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

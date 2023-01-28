@@ -121,23 +121,25 @@ export class RegistrarIngresosComponent implements OnInit {
   }
 
   getInformeDiarioGeneral() {
+    this.resultVentasSuminitros = 0;
+    this.informeGeneral = [];
     if (this.informesForm.valid) {
-      this.resultVentasSuminitros = 0;
+     
       this.resultVentas.informeVenta = [];
         this.datesSend = new Informe_fechas();
         this.datesSend.Fecha_Inicial = this.informesForm.controls.FechaInicial.value;
         this.datesSend.Fecha_Final =  this.informesForm.controls.FechaFinal.value;
         this._ingresoService.getInformeDiarioGeneral(this.datesSend).subscribe( result => this.informeGeneral = result);
-        this._ventasService.GetVentasAll().subscribe( result => {
+        this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
           result.forEach((venta: any) => {
-            this.resultVentasSuminitros = this.resultVentasSuminitros + venta.Valor_Venta;
-            const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.Id_Concepto);
+            this.resultVentasSuminitros = this.resultVentasSuminitros + venta.venta.Valor_Venta;
+            const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.venta.Id_Concepto);
             
-            this.Totla_ingresosDia = venta.Id_Concepto === 6 ? this.Totla_ingresosDia+1: this.Totla_ingresosDia+0;
+            this.Totla_ingresosDia = venta.venta.Id_Concepto === 6 ? this.Totla_ingresosDia+1: this.Totla_ingresosDia+0;
            
             const infoVenta = {
                 descripcion: conpdata === undefined  ? '' : conpdata.Descripcion,
-                value: venta.Valor_Venta
+                value: venta.venta.Valor_Venta
               }
             
             this.resultVentas.informeVenta.push(infoVenta);

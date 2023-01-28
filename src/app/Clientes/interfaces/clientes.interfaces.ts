@@ -1,5 +1,6 @@
+import { PlanModel } from "src/app/components/class/planes.class";
 import { Forma_PagoModel } from "src/app/Formas-pago/class/forma-pago.class";
-import { PlanModel } from "src/app/Planes/class/planes.class";
+
 import { Usuario_Model } from "src/app/Usuarios/class/usuarios.class";
 
 export class Clientes {

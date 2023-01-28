@@ -1,99 +1,110 @@
-
 <div class="content-general">
-    <div class="registro cursor card-menu"  routerLink="/clientes/registrarclientes/0" >
-        <h2>Registros</h2>
-        <img src="../../../assets/img/fuerza.png" alt="">
+    <div class="content-item-menu">
+        <div class="registro cursor card-menu" routerLink="/clientes/registrarclientes/0">
+            <h2>Registros</h2>
+            <img src="../../../assets/img/fuerza.png" alt="">
+        </div>
+        <div class="consultas cursor card-menu" routerLink="/clientes/consultarclientes">
+            <h2>Consultas Registros</h2>
+            <img src="../../../assets/img/pesa.png" alt="">
+        </div>
+        <div class="consultas cursor card-menu" routerLink="/ingresos/consultar-ingreso">
+            <h2>Consultas Ingresos</h2>
+            <img src="../../../assets/img/inside.png" alt="">
+
+        </div>
+        <div class="ingresos cursor card-menu" routerLink="/ingresos/Informes">
+            <h2>Informes</h2>
+            <img src="../../../assets/img/report.png" alt="" width="50">
+        </div>
+        <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#getInformationModal"
+            (click)="desactiveRegistroIngreso()">
+            <h2>Ventas</h2>
+            <img src="../../../assets/img/icon-venta.png" alt="" width="50">
+        </div>
+        <div class="proveedores card-menu" routerLink="/proveedores/registrar/form" *ngIf="false">
+            <h2>Proveedore</h2>
+        </div>
+       
+        <div class="ingresos cursor card-menu" routerLink="/maestros/configuracion">
+            <h2>Config. Maestros</h2>
+            <img src="../../../assets/img/icon-config.png" alt="" width="50">
+        </div>
     </div>
-    <div class="consultas cursor card-menu" routerLink="/clientes/consultarclientes">
-        <h2>Consultas Registros</h2>
-        <img src="../../../assets/img/pesa.png" alt="">
-    </div>
-    <div class="consultas cursor card-menu" routerLink="/ingresos/consultar-ingreso">
-        <h2>Consultas Ingresos</h2>
-        <img src="../../../assets/img/inside.png" alt="">
-        
-    </div>
-    <div class="ingresos cursor card-menu" routerLink="/ingresos/Informes">
-        <h2>Informes</h2>
-        <img src="../../../assets/img/report.png" alt="" width="50">
-    </div>
-    <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#getInformationModal" (click)="desactiveRegistroIngreso()">
-        <h2>Ventas</h2>
-        <img src="../../../assets/img/report.png" alt="" width="50">
-    </div>
-    <div class="proveedores card-menu" routerLink="/proveedores/registrar/form" *ngIf="false">
-        <h2>Proveedore</h2>
-    </div>
-   
 </div>
 
 
-  <!-- Modal -->
+<!-- Modal -->
 
-  <div class="modal fade" id="getInformationModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+<div class="modal fade" id="getInformationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog  modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Registrar venta</h5>
-          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal" (click)="habilitarRegistroIngreso()">X</button>
-        </div>
-        <div class="modal-body">
-            <div class="content-form">
-                <form [formGroup]="ventasForm">
-                    <div class="content-general-venta">
-                        <div class="content-form">
-                            <div class="form">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-sm">
-                                            <div class="group">
-                                                <select required formControlName="Id_Concepto"
-                                                    (change)="validarSeleccion('Id_Concepto', 'concepto')">
-                                                    <!-- <option value="-1">---Seleccione---</option> -->
-                                                    <option [value]="optPlan.Id_Concepto" *ngFor="let optPlan of conceptoData">
-                                                        {{optPlan.Descripcion}}
-                                                    </option>
-                                                </select>
-                                                <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Plan.errors?.required &&
+        <div class="modal-content">
+            <div class="modal-header title-dark">
+                <h5 class="modal-title" id="titleModal">Registrar venta</h5>
+                <button type="button" class="btn-close btn-x" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso()">X</button>
+            </div>
+            <div class="modal-body">
+                <div class="content-form">
+                    <form [formGroup]="ventasForm">
+                        <div class="content-general-venta">
+                            <div class="content-form">
+                                <div class="form">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="group">
+                                                    <select required formControlName="Id_Concepto"
+                                                        (change)="validarSeleccion('Id_Concepto', 'concepto')">
+                                                        <!-- <option value="-1">---Seleccione---</option> -->
+                                                        <option [ngValue]="optPlan"
+                                                            *ngFor="let optPlan of conceptoData">
+                                                            {{optPlan.Descripcion}}
+                                                        </option>
+                                                    </select>
+                                                    <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Plan.errors?.required &&
                                                 ( registerClientForm.controls.Id_Plan.touched)">
                                                     {{ 'Plan es obligatorio , debe seleccionar una opción'}}
                                                 </span> -->
-                                                <span class="highlight"></span>
-                                                <span class="bar"></span>
-                                                <label class="label-select">Concepto</label>
-                
+                                                    <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="label-select">Concepto</label>
+
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm">
-                                            <div class="group">
-                                                <input type="number" required="required" formControlName="Valor_Venta"
-                                                    (focus)="desactiveRegistroIngreso()" />
-                                                <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls.Valor_Venta.errors?.required &&
+                                            <div class="col-sm">
+                                                <div class="group">
+                                                    <input type="number" required="required"
+                                                        formControlName="Valor_Venta"
+                                                        (focus)="desactiveRegistroIngreso()" />
+                                                    <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls.Valor_Venta.errors?.required &&
                                                     ( ventasForm.controls.Valor_Venta.touched)">
-                                                    {{ 'El valor de la venta es obligatorio'}}
-                                                </span>
-                                               
-                                                <span class="highlight"></span>
-                                                <span class="bar"></span>
-                                                <label class="label-title">Valor venta</label>
-                
+                                                        {{ 'El valor de la venta es obligatorio'}}
+                                                    </span>
+
+                                                    <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="label-title">Valor venta</label>
+
+                                                </div>
                                             </div>
+
                                         </div>
-                                       
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>  
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer footer">
+                <button type="button" class="btn btn-primary btn-progress" (click)="saveVenta()">Save sale</button>
+                <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso()">Close</button>
+            </div>
         </div>
-        <div class="modal-footer footer">
-            <button type="button" class="btn btn-primary btn-progress" (click)="saveVenta()" >Save sale</button>
-          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" (click)="habilitarRegistroIngreso()" >Close</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
 <app-modal-ingreso [HabilitarRegistroIngreso]="habilitarIngreso"></app-modal-ingreso>

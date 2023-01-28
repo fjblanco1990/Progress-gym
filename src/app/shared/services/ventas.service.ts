@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Informe_fechas } from 'src/app/Ingresos/interfaces/informes.interface';
 
 import { environment } from 'src/environments/environment';
 
@@ -20,8 +21,8 @@ export class VentasService {
     return this.httpSerivice.get<any>(`${environment.apiUrl}GetVentasAll`);
   }
 
-  GetVentasUnicasDiarias(documento: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}GetVentasUnicasDiarias?documento=${documento}`);
+  GetVentasUnicasDiarias(datesDto: Informe_fechas): Observable<any> {
+    return this.httpSerivice.post<any>(`${environment.apiUrl}GetVentasUnicasDiarias`, JSON.stringify(datesDto));
   }
 
   saveVentas(ventasForm: any):Observable<any> {

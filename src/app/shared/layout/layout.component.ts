@@ -34,10 +34,13 @@ export class LayoutComponent implements OnInit {
   }
 
   validarSeleccion(input: string, name_input: string) {
-    if (this.ventasForm.controls[input].value === '-1') {
+    if (this.ventasForm.controls[input].value.Id_Concepto === '-1') {
       this._notifAlert.Advertencia('Debe seleccionar una opcion valida');
       this.ventasForm.controls[input].reset();
+    } else {
+      this.ventasForm.controls.Valor_Venta.setValue(this.ventasForm.controls[input].value.valor_concepto)
     }
+    
   }
 
   getConceptos() {
@@ -50,7 +53,7 @@ export class LayoutComponent implements OnInit {
       const fecha_Up = new Date;
       var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
       this.ventasForm.controls.Fecha_Ingreso.setValue(fecha_update_format);
-
+      this.ventasForm.controls.Id_Concepto.setValue(this.ventasForm.controls.Id_Concepto.value.Id_Concepto);
       this._ventasService.saveVentas(this.ventasForm.value).subscribe( resultSAve => {
         this.ventasForm.reset();
         this._notifAlert.Exitoso('La venta se registro con exito');

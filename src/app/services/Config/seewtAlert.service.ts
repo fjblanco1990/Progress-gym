@@ -144,8 +144,9 @@ export class NotificacionesService {
 
     confirmation(text: string, textBtnConfirm: string, textBtnCancel: string): Promise<boolean> {
        var algo = Swal.fire({
-            text: text,
-            icon: 'question',
+            title: text,
+            // text: text,
+            icon: 'warning',
             showCancelButton: true,
             iconColor: '#144959',
             cancelButtonText: textBtnCancel,

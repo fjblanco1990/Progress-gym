@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProveedorDashComponent } from './page/proveedor-dash/proveedor-dash.component';
+import { MaestrosDashComponent } from './pages/maestros-dash/maestros-dash.component';
 
 const routes: Routes = [
   // {
@@ -9,11 +9,11 @@ const routes: Routes = [
   // },
   {
     path: '',
-    component: ProveedorDashComponent,
+    component: MaestrosDashComponent,
     children: [
       {
-        path: 'registrar',
-        loadChildren: () => import('./registrar/registrar.module').then(module => module.RegistrarModule)
+        path: 'configuracion',
+        loadChildren: () => import('./../Maestros/components/components.module').then(module => module.ComponentsMasterModule)
       }
     ]
   }
@@ -23,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ProveedoreRoutingModule { }
+export class MaestrosRoutingModule { }

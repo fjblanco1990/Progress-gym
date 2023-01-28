@@ -1,0 +1,26 @@
+.content-options {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.optiosn-link {
+    width: 45%;
+    border: 1px solid;
+    height: 50px;
+    text-align: center;
+    line-height: 45px;
+    margin-right: 10px;
+    overflow: auto;
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 3px;
+    font-size: 25px;
+    background: #35a2a2 !important;
+    color: white !important;
+    transition: all 500ms;
+    &:hover {
+        cursor: pointer;
+        background: #333 !important;
+        color: white !important;
+    }
+}

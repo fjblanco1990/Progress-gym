@@ -7,8 +7,9 @@ import { Ingreso } from 'src/app/Ingresos/interfaces/ingresos.interface';
 import { IngresoService } from 'src/app/Ingresos/services/ingreso.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { ClientesService } from '../../Clientes/services/clientes.service';
-import { PlanModel } from 'src/app/Planes/class/planes.class';
-import { PlanesService } from '../../Planes/services/planes.service';
+import { PlanModel } from '../class/planes.class';
+
+import { ModalIngresoService } from '../services/modal-ingreso.service';
 
 @Component({
   selector: 'app-modal-ingreso',
@@ -28,12 +29,12 @@ export class ModalIngresoComponent implements OnInit {
   registerForm!: FormGroup;
   planData: PlanModel[] = [];
   constructor(private _formBuilder: FormBuilder, private _clientesService: ClientesService, private _ingresoService: IngresoService,
-    private _notifAlert: NotificacionesService, private planService: PlanesService) { }
+    private _notifAlert: NotificacionesService, private _modalIngresoService: ModalIngresoService) { }
 
   ngOnInit(): void {
     this.InicializarFormularios();
     this.RegistarEntradaCliente();
-    this.planService.getPlanes().subscribe(p => this.planData = p);
+    this._modalIngresoService.getPlanes().subscribe((p:any) => this.planData = p);
 
   }
 

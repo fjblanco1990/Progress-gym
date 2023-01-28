@@ -120,7 +120,7 @@
                     </tr>
                 </tbody>
                 </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event" *ngIf="resultVentas.informeData.length > 5"
                     maxSize="12"
                     responsive="true"
                     previousLabel="Anterior"

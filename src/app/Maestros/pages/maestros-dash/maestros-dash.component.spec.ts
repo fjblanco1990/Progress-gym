@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegistrarPageComponent } from './registrar-page.component';
+import { MaestrosDashComponent } from './maestros-dash.component';
 
-describe('RegistrarPageComponent', () => {
-  let component: RegistrarPageComponent;
-  let fixture: ComponentFixture<RegistrarPageComponent>;
+describe('MaestrosDashComponent', () => {
+  let component: MaestrosDashComponent;
+  let fixture: ComponentFixture<MaestrosDashComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegistrarPageComponent ]
+      declarations: [ MaestrosDashComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegistrarPageComponent);
+    fixture = TestBed.createComponent(MaestrosDashComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

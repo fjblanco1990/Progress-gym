@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProveedorDashComponent } from './proveedor-dash.component';
+import { DashComponent } from './dash.component';
 
-describe('ProveedorDashComponent', () => {
-  let component: ProveedorDashComponent;
-  let fixture: ComponentFixture<ProveedorDashComponent>;
+describe('DashComponent', () => {
+  let component: DashComponent;
+  let fixture: ComponentFixture<DashComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProveedorDashComponent ]
+      declarations: [ DashComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProveedorDashComponent);
+    fixture = TestBed.createComponent(DashComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

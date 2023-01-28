@@ -1,5 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { PlanModel } from '../class/planes.class';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-planes',
@@ -7,12 +6,10 @@ import { PlanModel } from '../class/planes.class';
   styleUrls: ['./planes.component.scss']
 })
 export class PlanesComponent implements OnInit {
-  @Output() planData: PlanModel[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
   }
-
-
 
 }

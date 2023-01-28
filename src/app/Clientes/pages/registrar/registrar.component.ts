@@ -1,20 +1,19 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { map, tap } from 'rxjs/operators';
 import { PatternsService } from 'src/app/services/Config/patterns.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { ClientesService } from '../../services/clientes.service';
-import { PlanesService } from '../../../Planes/services/planes.service';
+
 import { FormaPagoService } from '../../../Formas-pago/services/forma-pago.service';
 import { Forma_PagoModel } from 'src/app/Formas-pago/class/forma-pago.class';
-import { PlanModel } from 'src/app/Planes/class/planes.class';
+
 import { SendDataComponentsService } from '../../services/send-data-componentes.service';
 import { Clientes, Clientes_Completo } from '../../interfaces/clientes.interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClienteMapService } from '../../../services/Mapper/cliente.map.service'
-import { Ingreso } from '../../../Ingresos/interfaces/ingresos.interface';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
+import { PlanModel } from 'src/app/components/class/planes.class';
 @Component({
   selector: 'app-registrar',
   templateUrl: './registrar.component.html',
@@ -56,7 +55,7 @@ export class RegistrarComponent implements OnInit  {
     private _clientesService: ClientesService,
     private _patternsService: PatternsService,
     private _notifAlert: NotificacionesService,
-    private _planesService: PlanesService,
+    private _modalServices: ModalIngresoService,
     private _formaPagoService: FormaPagoService,
     private _sendDataComponentsService: SendDataComponentsService,
     private _router: Router,
@@ -89,7 +88,7 @@ export class RegistrarComponent implements OnInit  {
   }
 
   getPlanes() {
-    this._planesService.getPlanes().subscribe(result => this.planData = result);
+    this._modalServices.getPlanes().subscribe(result => this.planData = result);
   }
 
   getFormasPago() {
@@ -159,7 +158,7 @@ export class RegistrarComponent implements OnInit  {
     if (!this.registerClientForm.valid) {
       this.registerClientForm.markAllAsTouched();
     } else {
-      this._notifAlert.confirmation('La actualizacion se realiza para un reingreso ?','SI', 'NO').then( reingreso => {
+      this._notifAlert.confirmation('¿ Que deseas hacer ?','NUEVO PAGO', 'EDITAR USUARIO').then( reingreso => {
         if (reingreso) {
           this.EditClientPrivate(reingreso);
         } else {
@@ -346,9 +345,9 @@ export class RegistrarComponent implements OnInit  {
       Id_Cliente: [null],
       Nombres: [null, [Validators.required, Validators.pattern(this._patternsService.patternOnlyStringSpace)]],
       Apellidos: [null, [Validators.required, Validators.pattern(this._patternsService.patternOnlyStringSpace)]],
-      Fecha_nacimiento: [null, [Validators.required]],
+      Fecha_nacimiento: [null],
       Documento_identitdad: [null, [Validators.pattern(this._patternsService.patternOnlyNumberFive)]],
-      Celular: [null, [Validators.required, Validators.pattern(this._patternsService.patternOnlyNumberFive)]],
+      Celular: [null, [Validators.pattern(this._patternsService.patternOnlyNumberFive)]],
       Id_Plan: [null, [Validators.required]],
       Id_Forma_pago: [null, [Validators.required]],
       Estado: [null, [Validators.required]],
