@@ -82,7 +82,8 @@
                     <tbody>
                       <tr *ngFor="let cliente of clientesModelLstSearch | paginate: { currentPage: p }" class="tr-table cursor"
                           [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido, 'color-normal': !cliente.porVencer &&  !cliente.Vencido , 'color-danger ': cliente.Vencido && cliente.porVencer }"
-                          [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' dias': 'Le quedan '+ cliente.DiasFaltantes +' dias' " (click)="editarCliente(cliente)">
+                          [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' ' + cliente.palabra: 'Le quedan '+ cliente.DiasFaltantes +' '+ cliente.palabra "
+                           (click)="editarCliente(cliente)">
                         <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>
                         <td>{{cliente.cliente.Documento_identitdad}}</td>
                         <td >{{cliente.cliente.Fecha_nacimiento | date: 'dd/MM/yyyy'}}</td>

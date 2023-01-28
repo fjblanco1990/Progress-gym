@@ -1,11 +1,110 @@
 <div class="content-general">
     <div class="content-form">
         <div class="form">
+            <div class="content-title">
+                <h2 class="cursor">Planes</h2>
+            </div>
             <div class="content-options">
-                Aqui va el formulario de dos campos
-                <br>
-                Seguido de la tabla para mostrar y editar
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="text" required="required" formControlName="Descripcion"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Nombres.errors?.required &&
+                                ( registerClientForm.controls.Nombres.touched)">
+                                {{ 'Nombres son obligatorio'}}
+                            </span>
+                            <span class="text-danger text-validation-sm"
+                                *ngIf="registerClientForm.controls.Nombres.errors?.pattern">
+                                {{ 'Nombres solo aceptan letras - minimo 2 letras' }}
+                            </span> -->
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Descripción</label>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="number" required="required" formControlName="Apellidos"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
+                                ( registerClientForm.controls.Apellidos.touched)">
+                                {{ 'Apellidos son obligatorio'}}
+                            </span>
+                            <span class="text-danger text-validation-sm"
+                                *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
+                                {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
+                            </span> -->
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Valor del plan</label>
+
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="number" required="required" formControlName="Cantidad_Dias"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
+                                ( registerClientForm.controls.Apellidos.touched)">
+                                {{ 'Apellidos son obligatorio'}}
+                            </span>
+                            <span class="text-danger text-validation-sm"
+                                *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
+                                {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
+                            </span> -->
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Cantidad de días</label>
+
+                        </div>
+                    </div>
+                    <div class="col-sm content-btn-footer">
+                        <button type="button" class="btn-gym-progress" 
+                           >Guardar</button>
+                        <button type="button" class="btn-gym-progress" 
+                           >Editar</button>
+                        <button type="button" class="btn-gym-dark"
+                            >Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <div class="content-table" *ngIf="planesData.length > 0">
+                <!--  -->
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                        <tr>
+                            <th class="table-title-gym">Descripcíon</th>
+                            <th class="table-title-gym">Valor del plan</th>
+                            <th class="table-title-gym">Cantidad de dias</th>
+                            <th class="table-title-gym">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- (click)="editarCliente(cliente)" -->
+                        <tr *ngFor="let plan of planesData | paginate: { currentPage: p }" class="tr-table cursor">
+                            <td>{{plan.Descripcion}} </td>
+                            <td>{{plan.Valor_Plan | currency}}</td>
+                            <td>{{plan.Cantidad_Dias}}</td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                    maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div>
+            <div class="content-errors" *ngIf="planesData.length <= 0">
+                <h4>No se encontraron resultados con los parametros ingresados</h4>
             </div>
         </div>
     </div>
 </div>
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>

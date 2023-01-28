@@ -29,5 +29,5 @@ export class Clientes_Completo {
     porVencer!: boolean;
     Vencido!: boolean;
     DiasFaltantes: number = 0;
-   
+    palabra!: string;
 }

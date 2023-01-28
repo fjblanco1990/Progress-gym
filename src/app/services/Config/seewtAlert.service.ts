@@ -111,6 +111,7 @@ export class NotificacionesService {
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
+          
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
                 toast.addEventListener('mouseleave', Swal.resumeTimer);
@@ -119,7 +120,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'warning',
-            title: mensaje
+            title: mensaje,
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -145,7 +151,6 @@ export class NotificacionesService {
     confirmation(text: string, textBtnConfirm: string, textBtnCancel: string): Promise<boolean> {
        var algo = Swal.fire({
             title: text,
-            // text: text,
             icon: 'warning',
             showCancelButton: true,
             iconColor: '#144959',
@@ -153,6 +158,7 @@ export class NotificacionesService {
             confirmButtonText: textBtnConfirm,
             customClass: {
                 popup : 'my-popup-class', 
+                title: 'title-gym-progress',
                 confirmButton: 'btn-gym-progress',
                 cancelButton: 'btn-gym-dark '
               }

@@ -22,15 +22,24 @@
       
 }
 .form {
-    width: 70%;
+    width: 80%;
     margin: 0px auto;
 }
 
 h2 {
-    margin-top: 30px;
+    margin-top: 50px;
     font-size: 40px;
     text-align: center;
     font-family: 'OptiAgencyGothicMedium'; 
     font-weight: bold;
     letter-spacing: 3px;
+}
+
+.text-help {
+    width: 100%;
+    font-family: "OptiAgencyGothicMedium";
+    letter-spacing: 3px;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
