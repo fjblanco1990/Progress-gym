@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ConceptoService } from '../../services/conceptos.service';
+import { ConceptoModel } from '../../../components/class/conceptos.class';
 
 @Component({
   selector: 'app-conceptos',
@@ -9,9 +11,11 @@ export class ConceptosComponent implements OnInit {
 
   habilitarModal: boolean = true;
   con: number = 1;
-  constructor() { }
+  conceptosData: ConceptoModel[] = [];
+  constructor(private _conceptoService: ConceptoService) { }
 
   ngOnInit(): void {
+    this.getConceptos();
   }
 
   desactiveRegistroIngreso() {
@@ -22,4 +26,7 @@ export class ConceptosComponent implements OnInit {
     this.habilitarModal = true;
   }
 
+  getConceptos() {
+    this._conceptoService.getConceptos().subscribe( result => this.conceptosData =  result);
+  }
 }

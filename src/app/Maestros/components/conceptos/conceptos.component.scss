@@ -8,3 +8,12 @@ h2 {
     line-height: 80px;
     font-family: 'OptiAgencyGothicMedium' !important;
 }
+
+.table > thead { 
+    letter-spacing: 4px !important;
+}
+
+.ngx-pagination .current :active {
+    background: #35a2a2  !important;
+
+}
