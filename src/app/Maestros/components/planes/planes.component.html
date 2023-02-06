@@ -1,6 +1,7 @@
 <div class="content-general">
     <div class="content-form">
         <div class="form">
+            <form action="" [formGroup]="PlanesForm">
             <div class="content-title">
                 <h2 class="cursor">Planes</h2>
             </div>
@@ -10,14 +11,10 @@
                         <div class="group">
                             <input type="text" required="required" formControlName="Descripcion"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Nombres.errors?.required &&
-                                ( registerClientForm.controls.Nombres.touched)">
-                                {{ 'Nombres son obligatorio'}}
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Descripcion.errors?.required &&
+                            ( PlanesForm.controls.Descripcion.touched)">
+                                {{ 'La descripcion es obligatoria'}}
                             </span>
-                            <span class="text-danger text-validation-sm"
-                                *ngIf="registerClientForm.controls.Nombres.errors?.pattern">
-                                {{ 'Nombres solo aceptan letras - minimo 2 letras' }}
-                            </span> -->
                             <span class="highlight"></span>
                             <span class="bar"></span>
                             <label class="label-title">Descripción</label>
@@ -27,16 +24,12 @@
                     </div>
                     <div class="col-sm">
                         <div class="group">
-                            <input type="number" required="required" formControlName="Apellidos"
+                            <input type="number" required="required" formControlName="Valor_Plan"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
-                                ( registerClientForm.controls.Apellidos.touched)">
-                                {{ 'Apellidos son obligatorio'}}
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Valor_Plan.errors?.required &&
+                            ( PlanesForm.controls.Valor_Plan.touched)">
+                                {{'El valor del plan es obligatorio'}}
                             </span>
-                            <span class="text-danger text-validation-sm"
-                                *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
-                                {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
-                            </span> -->
                             <span class="highlight"></span>
                             <span class="bar"></span>
                             <label class="label-title">Valor del plan</label>
@@ -47,14 +40,10 @@
                         <div class="group">
                             <input type="number" required="required" formControlName="Cantidad_Dias"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
-                                ( registerClientForm.controls.Apellidos.touched)">
-                                {{ 'Apellidos son obligatorio'}}
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Cantidad_Dias.errors?.required &&
+                            ( PlanesForm.controls.Cantidad_Dias.touched)">
+                                {{'La cantidad del dias del plan es obligatorio'}}
                             </span>
-                            <span class="text-danger text-validation-sm"
-                                *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
-                                {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
-                            </span> -->
                             <span class="highlight"></span>
                             <span class="bar"></span>
                             <label class="label-title">Cantidad de días</label>
@@ -62,10 +51,8 @@
                         </div>
                     </div>
                     <div class="col-sm content-btn-footer">
-                        <button type="button" class="btn-gym-progress" 
-                           >Guardar</button>
-                        <button type="button" class="btn-gym-progress" 
-                           >Editar</button>
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave" (click)="GuardarPlan()">Guardar</button>
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit" (click)="EditarPlan()">Editar</button>
                         <button type="button" class="btn-gym-dark"
                             >Cancelar</button>
                     </div>
@@ -90,7 +77,8 @@
                             <td>{{plan.Valor_Plan | currency}}</td>
                             <td>{{plan.Cantidad_Dias}}</td>
                             <td>
-
+                                <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapPlan(plan)"></i>
+                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(plan.Id_Plan)"></i>
                             </td>
                         </tr>
 
@@ -104,6 +92,7 @@
             <div class="content-errors" *ngIf="planesData.length <= 0">
                 <h4>No se encontraron resultados.</h4>
             </div>
+            </form>
         </div>
     </div>
 </div>

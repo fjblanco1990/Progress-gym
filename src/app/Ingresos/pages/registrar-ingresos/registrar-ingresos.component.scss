@@ -215,6 +215,22 @@ h2 {
     padding-right: 5px;
 }
 
+.content-title-historico {
+    width: 100%;
+    height: auto;
+    margin-top: -15px;
+}
+
+.title-historico {
+    width: 49%;
+    float: left;
+    text-align: center;
+    border: 1px solid;
+    margin-right: 6px;
+    height: 50px;
+    line-height: 40px;
+}
+
 @media only screen and (max-width: 600px) {
     .content-form {
         margin: 0px auto;

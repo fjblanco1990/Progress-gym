@@ -25,6 +25,11 @@ export class VentasService {
     return this.httpSerivice.post<any>(`${environment.apiUrl}GetVentasUnicasDiarias`, JSON.stringify(datesDto));
   }
 
+  GetVentasPlanesDiarios(datesDto: Informe_fechas): Observable<any> {
+    return this.httpSerivice.post<any>(`${environment.apiUrl}GetVentasPlanesDiarios`, JSON.stringify(datesDto));
+  }
+
+
   saveVentas(ventasForm: any):Observable<any> {
     return this.httpSerivice.post(`${environment.apiUrl}GuardarVenta`, JSON.stringify(ventasForm))
   }

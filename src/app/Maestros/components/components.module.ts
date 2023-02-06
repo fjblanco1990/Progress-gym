@@ -7,19 +7,24 @@ import { ConceptosComponent } from './conceptos/conceptos.component';
 import { DashComponent } from './dash/dash.component';
 import { NgxTablePaginationModule } from 'ngx-table-pagination';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UsuairosComponent } from './usuairos/usuairos.component';
 
 
 @NgModule({
   declarations: [
     PlanesComponent,
     ConceptosComponent,
-    DashComponent
+    DashComponent,
+    UsuairosComponent
   ],
   imports: [
     CommonModule,
     ComponentsRoutingModule,
     NgxTablePaginationModule,
-    ComponentsModule
+    ComponentsModule,
+    ReactiveFormsModule,
+    
   ]
 })
 export class ComponentsMasterModule { }

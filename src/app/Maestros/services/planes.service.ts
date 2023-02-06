@@ -13,10 +13,22 @@ export class PlanesService {
 
   private headers!: HttpHeaders;
 
-  constructor(private http: HttpClient, private httpSerivice: HttpServiceService ) { }
+  constructor(private http: HttpClient, private _httpSerivice: HttpServiceService ) { }
 
   getPlanes(): Observable<PlanModel[]> {
-    return this.httpSerivice.get<PlanModel[]>(`${environment.apiUrl}GetPlanes`);
+    return this._httpSerivice.get<PlanModel[]>(`${environment.apiUrl}GetPlanes`);
+  }
+
+  guardarPlan(planForm: any): Observable<any> {
+    return this._httpSerivice.post(`${environment.apiUrl}GuardarPlan`, JSON.stringify(planForm))
+  }
+
+  editPlan(planDto: PlanModel): Observable<any> {
+    return this._httpSerivice.post(`${environment.apiUrl}EditarPlan`, JSON.stringify(planDto))
+  }
+
+  eliminarPlan(idConcepto: number): Observable<boolean> {
+    return this._httpSerivice.get<boolean>(`${environment.apiUrl}EliminarPlan?idPlan=${idConcepto}`);
   }
 
 }

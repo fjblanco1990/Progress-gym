@@ -17,18 +17,31 @@ import { IngresoService } from '../../services/ingreso.service';
 })
 export class RegistrarIngresosComponent implements OnInit {
    
-  @ViewChild('openModal', {static: true}) openModalInformation!: ElementRef;
+  @ViewChild('openModalIngresos', {static: true}) openModalIngresos!: ElementRef;
+  @ViewChild('openModalVentas', {static: true}) openModalVentas!: ElementRef;
+  @ViewChild('openModalPlanes', {static: true}) openModalPlanes!: ElementRef;
+  @ViewChild('openModalHistorico', {static: true}) openModalHistorico!: ElementRef;
   informesForm!: FormGroup;
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
   p: number = 1;
   venta: number = 1;
+  plan: number = 1
   datesSend!: Informe_fechas;
   informeGeneral: any;
   resultVentas = { 
     informeData: [],
     informeVenta: [
+      {
+        descripcion: '',
+        value: 0
+      }
+    ],
+    informePlanes: [
+
+    ],
+    informeHistorico: [
       {
         descripcion: '',
         value: 0
@@ -61,59 +74,59 @@ export class RegistrarIngresosComponent implements OnInit {
     this.informesForm.reset();
   }
 
-  OpenModalInformation(tipo: number) {
-    this.tipoConsulta = tipo;
-    if (tipo === 0) {
-      this.ObtenerVentasDiarias();
-    } else {
-      this.ObtenerIngresosDiarios();
-    }
-  }
-
   ObtenerIngresosDiarios() {
-    if (this.informesForm.valid) {
+     this.resultVentas.informeData = [];
       this.datesSend = new Informe_fechas();
-      this.datesSend.Fecha_Inicial = this.informesForm.controls.FechaInicial.value;
-      this.datesSend.Fecha_Final =  this.informesForm.controls.FechaFinal.value;
+      const dateFormat = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
+      this.datesSend.Fecha_Inicial = dateFormat;
+      this.datesSend.Fecha_Final =   dateFormat;
       this._ingresoService.getIngresosDiarios(this.datesSend).subscribe( result =>{
       
        this.resultVentas.informeData = result;
-       this.openModalInformation.nativeElement.click();
+       this.openModalIngresos.nativeElement.click();
       });
-    } else {
-      this.informesForm.markAllAsTouched();
-      this._notifcaciones.Advertencia('Debe seleccionar un rango de fechas para realizar la consulta');
-    }
   }
 
   ObtenerVentasDiarias() {
-    if (this.informesForm.valid) {
+
       this.resultVentas.informeVenta = [];
       this.datesSend = new Informe_fechas();
-      this.datesSend.Fecha_Inicial = this.informesForm.controls.FechaInicial.value;
-      this.datesSend.Fecha_Final =  this.informesForm.controls.FechaFinal.value;
-      this._ingresoService.getVentasDiarias(this.datesSend).subscribe( result => {
-        this.resultVentas.informeData = result;
-        this._ventasService.GetVentasAll().subscribe( result => {
-          result.forEach((venta: any) => {
-            const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.Id_Concepto);
-            const infoVenta = {
-                descripcion: conpdata === undefined  ? '' : conpdata.Descripcion,
-                value: venta.Valor_Venta
-              }
-            
-            this.resultVentas.informeVenta.push(infoVenta);
-          });
-          
-          this.openModalInformation.nativeElement.click();
-        })
+      const dateFormat = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
+      this.datesSend.Fecha_Inicial = dateFormat;
+      this.datesSend.Fecha_Final =   dateFormat;
+      this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
+        this.resultVentas.informeVenta = result;
+        this.openModalVentas.nativeElement.click();
+      });
+
+  }
+
+  ObtenerPlanesDiarios() {
+    this.resultVentas.informePlanes = [];
+    this.datesSend = new Informe_fechas();
+    const dateFormat = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
+    this.datesSend.Fecha_Inicial = dateFormat;
+    this.datesSend.Fecha_Final =   dateFormat;
+    this._ventasService.GetVentasPlanesDiarios(this.datesSend).subscribe( result => {
+      this.resultVentas.informePlanes = result;
+      this.openModalPlanes.nativeElement.click();
+    })
+  }
+
+  ObtenerHistoricoVentas() {
+    this._ventasService.GetVentasAll().subscribe( result => {
+      result.forEach((venta: any) => {
+        const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.Id_Concepto);
+        const infoVenta = {
+            descripcion: conpdata === undefined  ? '' : conpdata.Descripcion,
+            value: venta.Valor_Venta
+          }
         
+        this.resultVentas.informeHistorico.push(infoVenta);
       });
       
-    } else {
-      this.informesForm.markAllAsTouched();
-      this._notifcaciones.Advertencia('Debe seleccionar un rango de fechas para realizar la consulta')
-    }
+      this.openModalHistorico.nativeElement.click();
+    })
   }
 
   getConceptos() {

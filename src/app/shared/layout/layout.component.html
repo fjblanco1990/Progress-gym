@@ -2,33 +2,28 @@
     <div class="content-item-menu">
         <div class="registro cursor card-menu" routerLink="/clientes/registrarclientes/0">
             <h2>Registros</h2>
-            <img src="../../../assets/img/fuerza.png" alt="">
+            <img src="assets/img/fuerza.png" alt="">
         </div>
         <div class="consultas cursor card-menu" routerLink="/clientes/consultarclientes">
             <h2>Consultas Registros</h2>
-            <img src="../../../assets/img/pesa.png" alt="">
+            <img src="assets/img/pesa.png" alt="">
         </div>
         <div class="consultas cursor card-menu" routerLink="/ingresos/consultar-ingreso">
             <h2>Consultas Ingresos</h2>
-            <img src="../../../assets/img/inside.png" alt="">
-
+            <img src="assets/img/inside.png" alt="">
         </div>
         <div class="ingresos cursor card-menu" routerLink="/ingresos/Informes">
             <h2>Informes</h2>
-            <img src="../../../assets/img/report.png" alt="" width="50">
+            <img src="assets/img/report.png" alt="" width="50">
         </div>
         <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#getInformationModal"
             (click)="desactiveRegistroIngreso()">
             <h2>Ventas</h2>
-            <img src="../../../assets/img/icon-venta.png" alt="" width="50">
+            <img src="assets/img/icon-venta.png" alt="" width="50">
         </div>
-        <div class="proveedores card-menu" routerLink="/proveedores/registrar/form" *ngIf="false">
-            <h2>Proveedore</h2>
-        </div>
-       
         <div class="ingresos cursor card-menu" routerLink="/maestros/configuracion">
             <h2>Config. Maestros</h2>
-            <img src="../../../assets/img/icon-config.png" alt="" width="50">
+            <img src="assets/img/icon-config.png" alt="" width="50">
         </div>
     </div>
 </div>
@@ -70,6 +65,22 @@
                                                     <span class="highlight"></span>
                                                     <span class="bar"></span>
                                                     <label class="label-select">Concepto</label>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="group">
+                                                    <select required formControlName="Id_Usuario"
+                                                       >
+                                                        <!-- <option value="-1">---Seleccione---</option> -->
+                                                        <option [ngValue]="optUser"
+                                                            *ngFor="let optUser of usuariosData">
+                                                            {{optUser.Nombre_completo}}
+                                                        </option>
+                                                    </select>
+                                                    <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="label-select">Usuario</label>
 
                                                 </div>
                                             </div>

@@ -1,12 +1,3 @@
-<!-- <div class="content-form">
-    <div class="form">
-        <p>registrar-ingresos works! cambios</p>
-        <p>1. Cuantas personas Ingresaron al dia</p>
-        <p>2. Cuanto se vendio en el dia (Planes, dia, tiquetera, Etc..)</p>
-
-    </div>
-</div> -->
-
 <div class="content-general">
     <div class="content-form">
         <div class="form">
@@ -51,14 +42,17 @@
             </div>
             <div class="content-ppal">
                 <div class="content-options">
-                    <div class="option" (click)="OpenModalInformation(1)">
+                    <div class="option" (click)="ObtenerIngresosDiarios()">
                         Consultar ingresos diarios
                     </div>
-                    <div class="option" (click)="OpenModalInformation(0)">
+                    <div class="option" (click)="ObtenerVentasDiarias()">
                         Consultar ventas diarias
                     </div>
-                    <div class="option">
-                        +
+                    <div class="option" (click)="ObtenerPlanesDiarios()">
+                        Consultar Planes diarias
+                    </div>
+                    <div class="option" (click)="ObtenerHistoricoVentas()">
+                        Consultar hitorico
                     </div>
                  
                 </div>
@@ -84,39 +78,31 @@
         </div>
     </div>
 </div>
- <button hidden id="openModal" #openModal data-bs-toggle="modal" data-bs-target="#getInformationModal"></button>
-  <!-- Modal -->
-
-  <div class="modal fade" id="getInformationModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+ <button hidden id="openModalIngresos" #openModalIngresos data-bs-toggle="modal" data-bs-target="#getIngresosModal"></button>
+ <button hidden id="openModalVentas" #openModalVentas data-bs-toggle="modal" data-bs-target="#getVentasModal"></button>
+ <button hidden id="openModalPlanes" #openModalPlanes data-bs-toggle="modal" data-bs-target="#getPlanesModal"></button>
+ <button hidden id="openModalHistorico" #openModalHistorico data-bs-toggle="modal" data-bs-target="#getHistoricoModal"></button>
+<!-- Modal ingresos diarios -->
+  <div class="modal fade" id="getIngresosModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
     <div class="modal-dialog  modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Registrar Ingreso</h5>
+          <h5 class="modal-title" id="titleModal">Ingreso Diarios</h5>
           <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
         </div>
         <div class="modal-body">
             <div class="content-table" *ngIf="resultVentas.informeData.length > 0">
-
                 <table class="table table-dark table-hover table-gym">
                 <thead>
-                    <tr >
-                    <th class="table-title-gym">Nombre</th>
-                    <th *ngIf="tipoConsulta == 0" class="table-title-gym">{{'Plan adquirido'}}</th>
-                    <th *ngIf="tipoConsulta == 0" class="table-title-gym">{{'Valor'}}</th>
-
-                    <th *ngIf="tipoConsulta == 1" class="table-title-gym">{{'Fecha de ingreso'}}</th>
+                    <tr>
+                        <th  class="table-title-gym" >Nombre</th>
+                        <th  class="table-title-gym">{{'Fecha de ingreso'}}</th>
                     </tr>
-                
                 </thead>
                 <tbody>
                     <tr *ngFor="let informe of resultVentas.informeData | paginate: { currentPage: p }" class="tr-table cursor">
-
-                    <td *ngIf="tipoConsulta == 0">{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
-                    <td *ngIf="tipoConsulta == 0">{{informe.planes.Descripcion}}</td>
-                    <td *ngIf="tipoConsulta == 0"> {{informe.planes.Valor_Plan }}</td>
-
-                    <td *ngIf="tipoConsulta == 1">{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
-                    <td *ngIf="tipoConsulta == 1">{{informe.ingreso.Fecha_Ingreso}}</td>
+                    <td >{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
+                    <td >{{informe.ingreso.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -129,25 +115,47 @@
                     screenReaderPageLabel="page"
                     screenReaderCurrentLabel="You're on page">
                 </paging-controls>
-
-                <table class="table table-dark table-hover table-gym"  *ngIf="tipoConsulta == 0"> 
+            </div>
+            <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+            </div>
+          
+        </div>
+        <div class="modal-footer footer">
+          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal Ventas diarias -->
+  <div class="modal fade" id="getVentasModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header title-dark">
+          <h5 class="modal-title" id="titleModal">Ventas diarias</h5>
+          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+            <div class="content-table" *ngIf="resultVentas.informeVenta.length > 0">
+                <table class="table table-dark table-hover table-gym"> 
                     <thead >
-                        <tr *ngIf="tipoConsulta == 0">
-                            <th *ngIf="tipoConsulta == 0" class="table-title-gym">Concepto</th>
-                            <th *ngIf="tipoConsulta == 0" class="table-title-gym"></th>
-                            <th *ngIf="tipoConsulta == 0" class="table-title-gym">Valor</th>
-                            </tr>
+                        <tr>
+                            <th class="table-title-gym">Concepto</th>
+                            <th class="table-title-gym">Usuario venta</th>
+                            <th class="table-title-gym">Valor</th>
+                            <th class="table-title-gym"> Hora de la venta</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let informe of resultVentas.informeVenta | paginate: { currentPage: venta }"  class="tr-table cursor">
-
-                            <td *ngIf="tipoConsulta == 0">{{informe.descripcion}} </td>
-                            <td *ngIf="tipoConsulta == 0"></td>
-                            <td *ngIf="tipoConsulta == 0">{{informe.value | currency}}</td>
+                            <td >{{informe.concepto?.Descripcion}} </td>
+                            <td >{{informe.usuario?.Nombre_completo}} </td>
+                            <td >{{informe.venta?.Valor_Venta | currency}}</td>
+                            <td >{{informe.venta?.Hora_Venta }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <paging-controls  *ngIf="tipoConsulta == 0" class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event"
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event"
                     maxSize="12"
                     responsive="true"
                     previousLabel="Anterior"
@@ -158,7 +166,95 @@
                 </paging-controls>
 
             </div>
-            <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
+            <div class="content-errors" *ngIf="resultVentas.informeVenta.length <= 0">
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+            </div>
+        </div>
+        <div class="modal-footer footer">
+          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal Planes diarios -->
+  <div class="modal fade" id="getPlanesModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header title-dark">
+          <h5 class="modal-title" id="titleModal">Planes vendidos</h5>
+          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+            <div class="content-table" *ngIf="resultVentas.informePlanes.length > 0">
+                <table class="table table-dark table-hover table-gym" > 
+                    <thead >
+                        <tr >
+                            <th class="table-title-gym">Nombre cliente</th>
+                            <th class="table-title-gym">Plan</th>
+                            <th class="table-title-gym">Valor</th>
+                            <th class="table-title-gym">Hora</th>
+                            <th class="table-title-gym">Usuario venta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let informe of resultVentas.informePlanes | paginate: { currentPage: plan }"  class="tr-table cursor">
+                            <td >{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
+                            <td >{{informe.plan.Descripcion }}</td>
+                            <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
+                            <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
+                            <td> {{informe.usuario.Nombre_completo }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <paging-controls  *ngIf="tipoConsulta == 0" class="paginator-footer" [isItemsPerPage]="false" (pageChange)="plan = $event"
+                    maxSize="12"
+                    responsive="true"
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination"
+                    screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page">
+                </paging-controls>
+
+            </div>
+            <div class="content-errors" *ngIf="resultVentas.informePlanes.length <= 0">
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+            </div>
+        </div>
+        <div class="modal-footer footer">
+          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal Consulta de todo por fechas -->
+
+  <div class="modal fade" id="getHistoricoModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header title-dark">
+          <h5 class="modal-title" id="titleModal">Historico de ventas</h5>
+          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+            <div>
+                <p> Fechas consultadas </p>
+                <p>{{'01/01/2023'}} al {{'28/02/2023'}}</p>
+
+            </div>
+            <div class="content-table">
+                <div class="content-title-historico">
+                    <div class="title-historico">Planes vendidos</div>
+                    <div class="title-historico">Ventas tienda </div>
+                </div>
+                
+                <div>
+                    <div></div>
+                    <div></div>
+                </div>
+               
+            </div>
+            <div class="content-errors" *ngIf="false">
                     <h4>No se encontraron resultados con los parametros ingresados</h4>
             </div>
           

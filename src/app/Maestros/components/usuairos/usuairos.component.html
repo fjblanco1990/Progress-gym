@@ -1,0 +1,124 @@
+<div class="content-general">
+    <div class="content-form">
+        <div class="form">
+            <form action="" [formGroup]="UsuariosForm">
+            <div class="content-title">
+                <h2 class="cursor">Usuarios</h2>
+            </div>
+            <div class="content-options">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="text" required="required" formControlName="Nombre_completo"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Nombre_completo.errors?.required &&
+                            ( UsuariosForm.controls.Nombre_completo.touched)">
+                                {{ 'El Nombre usuario es obligatoria'}}
+                            </span>
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Nombre usuario</label>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="text" required="required" formControlName="Nick_Name"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Nick_Name.errors?.required &&
+                            ( UsuariosForm.controls.Nick_Name.touched)">
+                                {{'El nick name es obligatorio'}}
+                            </span>
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Nick name</label>
+
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="text" required="required" formControlName="Estado"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Estado.errors?.required &&
+                            ( UsuariosForm.controls.Estado.touched)">
+                                {{'El estado es obligatorio'}}
+                            </span>
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">Estado</label>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="group">
+                            <input type="password" required="required" formControlName="Password"
+                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Password.errors?.required &&
+                            ( UsuariosForm.controls.Password.touched)">
+                                {{'La contraseña es obligatoria'}}
+                            </span>
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="label-title">New password</label>
+
+                           
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                       
+                    </div>
+                    <div class="col-sm content-btn-footer">
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave" (click)="GuardarPlan()">Guardar</button>
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit" (click)="EditarPlan()">Editar</button>
+                        <button type="button" class="btn-gym-dark" (click)="cancelar()">Cancelar</button>
+                    </div>
+                    <div class="col-sm">
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            <div></div>
+            <div class="content-table" *ngIf="usuarioData.length > 0">
+                <!--  -->
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                        <tr>
+                            <th class="table-title-gym">Nombre del usuario</th>
+                            <th class="table-title-gym">Nick name</th>
+                            <th class="table-title-gym">Estado</th>
+                            <th class="table-title-gym">Fecha creacion</th>
+                            <th class="table-title-gym">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- (click)="editarCliente(cliente)" -->
+                        <tr *ngFor="let user of usuarioData | paginate: { currentPage: p }" class="tr-table cursor">
+                            <td>{{user.Nombre_completo}} </td>
+                            <td>{{user.Nick_Name}}</td>
+                            <td>{{user.Estado}}</td>
+                            <td>{{user.Fecha_creacion | date: 'dd/MM/yyyy'}}</td>
+                            <td>
+                                <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapUser(user)"></i>
+                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(user.Id_Usuario)"></i>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                    maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div>
+            <div class="content-errors" *ngIf="usuarioData.length <= 0">
+                <h4>No se encontraron resultados.</h4>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>

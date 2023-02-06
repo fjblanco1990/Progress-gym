@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
 import { PlanModel } from 'src/app/components/class/planes.class';
+import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuarios.class';
 @Component({
   selector: 'app-registrar',
   templateUrl: './registrar.component.html',
@@ -32,6 +33,7 @@ export class RegistrarComponent implements OnInit  {
   updateAvalible: boolean | '';
   fechaInicial: Date = new Date();
   planData: PlanModel[] = [];
+  usuariosData: Usuario_Model[] = [];
   planSelect!: PlanModel;
   formasData: Forma_PagoModel[] = [];
   metodosPago: any;
@@ -70,6 +72,7 @@ export class RegistrarComponent implements OnInit  {
     this.registerClientForm.reset();
     // this.registerClientForm.get('Fecha_fin')?.disable();
     this.getPlanes();
+    this.getUsuarios();
     this.getFormasPago();
     this.registerClientForm.controls.Estado.setValue("-1");
     const edit = this._Activatedroute.snapshot.paramMap.get("edit");
@@ -89,6 +92,10 @@ export class RegistrarComponent implements OnInit  {
 
   getPlanes() {
     this._modalServices.getPlanes().subscribe(result => this.planData = result);
+  }
+
+  getUsuarios() {
+    this._modalServices.getUsuarios().subscribe( result => this.usuariosData = result);
   }
 
   getFormasPago() {
@@ -123,17 +130,16 @@ export class RegistrarComponent implements OnInit  {
   }
 
   guardarCliente() {
-    // this.registerClientForm.controls.Id_Plan.value !== null ? this.registerClientForm.controls.Id_Plan.setValue(this.registerClientForm.controls.Id_Plan.value.Id_Plan): 0;
-    // this.registerClientForm.controls.Id_Forma_pago.value !== null ? this.registerClientForm.controls.Id_Forma_pago.setValue(this.registerClientForm.controls.Id_Forma_pago.value.Id_Forma_Pago): 0;
-    this.registerClientForm.controls.Id_Usuario.setValue(1);
-
     if (!this.registerClientForm.valid) {
       this.registerClientForm.markAllAsTouched();
     } else {
-      
+      if (this.registerClientForm.controls.Id_Usuario.value.Estado) {
+        this.registerClientForm.controls.Id_Usuario.setValue(String(this.registerClientForm.controls.Id_Usuario.value.Id_Usuario));
           this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
           this.registerClientForm.controls.Fecha_fin.setValue(String(this.registerClientForm.controls.Fecha_fin.value));
-    
+          const hora = new Date().getHours().toString() + ':'+ new Date().getMinutes().toString();
+          const hora_format = moment(hora,'H:m:s').format('h:mm a');
+          this.registerClientForm.controls.Hora_Registro.setValue(hora_format);
           const fecha_Up = new Date;
           var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
           this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
@@ -148,7 +154,10 @@ export class RegistrarComponent implements OnInit  {
               this._notifAlert.Advertencia(error.error.EntityValidationErrors[0]._validationErrors[0]._errorMessage);
             }
           )
-        
+          } else {
+            this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
+            this.registerClientForm.controls.Id_Usuario.reset();
+          }
     }
   }
 
@@ -309,6 +318,12 @@ export class RegistrarComponent implements OnInit  {
       );
     }
 
+    else if (name_input === 'forma') {
+      this.formasData.filter(c => c.Id_Forma_Pago == this.registerClientForm.controls[input].value).map(
+        result => this.value_forma_seleccionado = result
+      );
+    }
+
 
   }
 
@@ -336,7 +351,8 @@ export class RegistrarComponent implements OnInit  {
        Fecha_fin: cliente.Fecha_fin,
        Fecha_inicio: cliente.Fecha_inicio,
        Fecha_registro: cliente.Fecha_registro,
-       Fecha_Actualizacion: cliente.Fecha_Actualizacion
+       Fecha_Actualizacion: cliente.Fecha_Actualizacion,
+       Hora_Registro: cliente.Hora_Registro
     }
   }
 
@@ -356,7 +372,8 @@ export class RegistrarComponent implements OnInit  {
       Fecha_inicio: [null, [Validators.required]],
       Fecha_fin: [null, [Validators.required]],
       Reingreso:[null],
-      Fecha_Actualizacion: [null]
+      Fecha_Actualizacion: [null],
+      Hora_Registro: [null]
     });
 
   }

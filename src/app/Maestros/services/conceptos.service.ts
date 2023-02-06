@@ -14,10 +14,21 @@ export class ConceptoService {
 
   private headers!: HttpHeaders;
 
-  constructor(private http: HttpClient, private httpSerivice: HttpServiceService ) { }
+  constructor(private http: HttpClient, private _httpSerivice: HttpServiceService) { }
 
   getConceptos(): Observable<ConceptoModel[]> {
-    return this.httpSerivice.get<ConceptoModel[]>(`${environment.apiUrl}getConceptos`);
+    return this._httpSerivice.get<ConceptoModel[]>(`${environment.apiUrl}getConceptos`);
   }
 
+  guardarConcepto(conceptoForm: any): Observable<any> {
+    return this._httpSerivice.post(`${environment.apiUrl}GuardarConcepto`, JSON.stringify(conceptoForm))
+  }
+
+  editCconcepto(clientesDto: ConceptoModel): Observable<any> {
+    return this._httpSerivice.post(`${environment.apiUrl}EditarConcepto`, JSON.stringify(clientesDto))
+  }
+
+  eliminarConcepto(idConcepto: number): Observable<boolean> {
+    return this._httpSerivice.get<boolean>(`${environment.apiUrl}EliminarConcepto?idConcepto=${idConcepto}`);
+  }
 }

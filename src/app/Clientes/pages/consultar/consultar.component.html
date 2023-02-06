@@ -73,7 +73,8 @@
                         <th class="table-title-gym">Plan</th>
                         <th class="table-title-gym">Forma de pago</th>
                         <th class="table-title-gym">Estado</th>
-                        <th class="table-title-gym">Fecha de registro</th>
+                        <th class="table-title-gym">Fecha de reg.</th>
+                        <th class="table-title-gym">Hora de Reg.</th>
                         <th class="table-title-gym">Usuario</th>
                         <th class="table-title-gym">Fecha de inicio</th>
                         <th class="table-title-gym">Fecha de fin</th>
@@ -92,6 +93,7 @@
                         <td>{{cliente.forma_pago.Descripcion}}</td>
                         <td>{{ (cliente.cliente.Estado === true ? 'Activo': 'In activo')}}</td>
                         <td>{{cliente.cliente.Fecha_registro | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{cliente.cliente.Hora_Registro }}</td>
                         <td>{{cliente.usuario.Nombre_completo}}</td>
                         <td>{{cliente.cliente.Fecha_inicio | date: 'dd/MM/yyyy'}}</td>
                         <td>{{cliente.cliente.Fecha_fin | date: 'dd/MM/yyyy' }}</td>

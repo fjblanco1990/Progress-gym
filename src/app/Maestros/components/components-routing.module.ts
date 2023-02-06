@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MaestrosDashComponent } from '../pages/maestros-dash/maestros-dash.component';
 
 import { ConceptosComponent } from './conceptos/conceptos.component';
 import { PlanesComponent } from './planes/planes.component';
 import { DashComponent } from './dash/dash.component';
+import { UsuairosComponent } from './usuairos/usuairos.component';
 
 const routes: Routes = [
   { path: '', component: DashComponent,
@@ -15,6 +15,9 @@ const routes: Routes = [
       {
         path: 'Conceptos', component: ConceptosComponent 
       },
+      {
+        path: 'Usuarios', component: UsuairosComponent
+      }
 
     ]
    }

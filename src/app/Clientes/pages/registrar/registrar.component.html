@@ -191,6 +191,33 @@
                                 <label class="label-select">Fecha de fin</label>
                             </div>
                         </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Id_Usuario"
+                                    (change)="validarSeleccion('Id_Usuario', 'usuario')">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [ngValue]="usuario" *ngFor="let usuario of usuariosData">
+                                        {{usuario.Nombre_completo}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Usuario.errors?.required &&
+                                    ( registerClientForm.controls.Id_Usuario.touched)">
+                                    {{ 'El usuario que registra Obligatorio , debe seleccionar una opción'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Usuario que registra</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            
+                        </div>
+                        <div class="col-sm">
+                           
+                        </div>
                         <div class="col-sm content-btn-footer">
                             <button type="button" class="btn-gym-progress" *ngIf="!updateAvalible"
                                 (click)="guardarCliente()">Guardar</button>
@@ -200,7 +227,6 @@
                                 (click)="cancelRegisterCliente()">Cancelar</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

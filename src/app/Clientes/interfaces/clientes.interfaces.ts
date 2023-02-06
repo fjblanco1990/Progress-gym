@@ -1,7 +1,8 @@
 import { PlanModel } from "src/app/components/class/planes.class";
 import { Forma_PagoModel } from "src/app/Formas-pago/class/forma-pago.class";
+import { Usuario_Model } from "src/app/Maestros/components/usuairos/class/Usuarios.class";
 
-import { Usuario_Model } from "src/app/Usuarios/class/usuarios.class";
+
 
 export class Clientes {
     Id_Cliente!: number;
@@ -18,6 +19,7 @@ export class Clientes {
     Fecha_inicio!: Date;
     Fecha_fin!: string;
     Fecha_Actualizacion!: string;
+    Hora_Registro!: string;
 }
 
 

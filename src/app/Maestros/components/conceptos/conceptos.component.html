@@ -1,94 +1,97 @@
 <div class="content-general">
     <div class="content-form">
         <div class="form">
-            <div class="content-title">
-                <h2 class="cursor" >Conceptos</h2>
-            </div>
-            <div class="content-options">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="group">
-                            <input type="text" required="required" formControlName="Descripcion"
-                                (focus)="desactiveRegistroIngreso()" />
-                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Nombres.errors?.required &&
-                                ( registerClientForm.controls.Nombres.touched)">
-                                {{ 'Nombres son obligatorio'}}
-                            </span>
+            <form action="" [formGroup]="conceptosForm">
+                <div class="content-title">
+                    <h2 class="cursor">Conceptos</h2>
+                </div>
+                <div class="content-options">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+
+                                <input type="text" required="required" formControlName="Descripcion"
+                                    (focus)="desactiveRegistroIngreso()" />
+                                <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls.Descripcion.errors?.required &&
+                                ( conceptosForm.controls.Descripcion.touched)">
+                                    {{ 'La descripcion es obligatoria'}}
+                                </span><!--
                             <span class="text-danger text-validation-sm"
                                 *ngIf="registerClientForm.controls.Nombres.errors?.pattern">
                                 {{ 'Nombres solo aceptan letras - minimo 2 letras' }}
                             </span> -->
-                            <span class="highlight"></span>
-                            <span class="bar"></span>
-                            <label class="label-title">Descripción</label>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Descripción</label>
+
+                            </div>
 
                         </div>
-
-                    </div>
-                    <div class="col-sm">
-                        <div class="group">
-                            <input type="number" required="required" formControlName="Apellidos"
-                                (focus)="desactiveRegistroIngreso()" />
-                            <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Apellidos.errors?.required &&
-                                ( registerClientForm.controls.Apellidos.touched)">
-                                {{ 'Apellidos son obligatorio'}}
-                            </span>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="number" required="required" formControlName="valor_concepto"
+                                    (focus)="desactiveRegistroIngreso()" />
+                                    <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls.valor_concepto.errors?.required &&
+                                    ( conceptosForm.controls.valor_concepto.touched)">
+                                {{ 'El valor del concepto es obligatorio'}}
+                            </span><!--
                             <span class="text-danger text-validation-sm"
                                 *ngIf="registerClientForm.controls.Apellidos.errors?.pattern">
                                 {{ 'Apellidos solo aceptan letras - minimo 2 letras' }}
                             </span> -->
-                            <span class="highlight"></span>
-                            <span class="bar"></span>
-                            <label class="label-title">Valor del concepto</label>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Valor del concepto</label>
 
+                            </div>
+                        </div>
+                        <div class="col-sm content-btn-footer">
+                            <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave"
+                                (click)="GuardarConcepto()">Guardar</button>
+                            <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit"
+                                (click)="EditarConcepto()">Editar</button>
+                            <button type="button" class="btn-gym-dark" (click)="cancelar()">Cancelar</button>
                         </div>
                     </div>
-                    <div class="col-sm content-btn-footer">
-                        <button type="button" class="btn-gym-progress" 
-                           >Guardar</button>
-                        <button type="button" class="btn-gym-progress" 
-                           >Editar</button>
-                        <button type="button" class="btn-gym-dark"
-                            >Cancelar</button>
-                    </div>
                 </div>
-            </div>
-            <div>
+                <div>
 
-            </div>
-            <div class="content-table" *ngIf="conceptosData.length > 0">
-                <!--  -->
-                <table class="table table-dark table-hover table-gym">
-                    <thead>
-                      <tr >
-                        <th class="table-title-gym">Descripción</th>
-                        <th class="table-title-gym">Valor del concepto</th>
-                        <th class="table-title-gym">Opciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let concepto of conceptosData | paginate: { currentPage: con }" class="tr-table cursor"
-                         >
-                        <td>{{concepto.Descripcion}} </td>
-                        <td>{{concepto.valor_concepto | currency}}</td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="con = $event"
-                      maxSize="12"
-                      responsive="true"
-                      previousLabel="Anterior"
-                      nextLabel="Siguiente"
-                      screenReaderPaginationLabel="Pagination"
-                      screenReaderPageLabel="page"
-                      screenReaderCurrentLabel="You're on page"></paging-controls>
-            </div>
-            <div class="content-errors" *ngIf="conceptosData.length <= 0">
-                
+                </div>
+                <div class="content-table" *ngIf="conceptosData.length > 0">
+                    <!--  -->
+                    <table class="table table-dark table-hover table-gym">
+                        <thead>
+                            <tr>
+                                <th class="table-title-gym">Descripción</th>
+                                <th class="table-title-gym">Valor del concepto</th>
+                                <th class="table-title-gym">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let concepto of conceptosData | paginate: { currentPage: con }"
+                                class="tr-table cursor">
+                                <td>{{concepto.Descripcion}} </td>
+                                <td>{{concepto.valor_concepto | currency}}</td>
+                                <td>
+                                    <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true"
+                                        (click)="mapConceptos(concepto)"></i>
+                                    <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true"
+                                        (click)="EliminarConcepto(concepto.Id_Concepto)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="con = $event"
+                        maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                        screenReaderCurrentLabel="You're on page"></paging-controls>
+                </div>
+                <div class="content-errors" *ngIf="conceptosData.length <= 0">
+
                     <h4>No se encontraron resultados.</h4>
-                
-            </div>
+
+                </div>
+            </form>
         </div>
     </div>
 </div>
