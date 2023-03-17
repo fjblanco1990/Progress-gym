@@ -20,6 +20,16 @@ export class UsuairosComponent implements OnInit {
   usuarioData: Usuario_Model[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
+  public estados = [
+    {
+      value: 1,
+      descripcion: 'Activo'
+    },
+    {
+      value: 0,
+      descripcion: 'In activo'
+    }
+  ]
   constructor(private _usuariosService: UsuariosService, private _build: FormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
@@ -36,6 +46,13 @@ export class UsuairosComponent implements OnInit {
     this.habilitarModal = true;
   }
 
+  validarSeleccion(input: string, name_input: string) {
+    if (this.UsuariosForm.controls[input].value === '-1') {
+      this._notiService.Advertencia('Debe seleccionar una opcion valida');
+      this.UsuariosForm.controls[input].reset();
+    }
+  }
+
   getUsuarios() {
     this._usuariosService.getUsuarios().subscribe(result => this.usuarioData = result);
   }
@@ -45,7 +62,7 @@ export class UsuairosComponent implements OnInit {
     this.showBtnSave = false;
     this.UsuariosForm.get('Id_Usuario')?.setValue(user.Id_Usuario);
     this.UsuariosForm.get('Nombre_completo')?.setValue(user.Nombre_completo);
-    this.UsuariosForm.get('Estado')?.setValue(user.Estado);
+    this.UsuariosForm.get('Estado')?.setValue(user.Estado === true ? 1 : 0);
     this.UsuariosForm.get('Nick_Name')?.setValue(user.Nick_Name);
     this.UsuariosForm.get('Password')?.setValue(user.Password);
     this.UsuariosForm.get('Fecha_creacion')?.setValue(user.Fecha_creacion);
@@ -57,8 +74,9 @@ export class UsuairosComponent implements OnInit {
     this.UsuariosForm.reset();
   }
 
-  GuardarPlan() {
+  GuardarUsuario() {
     if (this.UsuariosForm.valid) {
+      this.UsuariosForm.controls.Estado.setValue( this.UsuariosForm.controls.Estado.value === '1'? true : false);
       this.UsuariosForm.controls.Fecha_creacion.setValue(new Date());
        this._usuariosService.guardarUsuarios(this.UsuariosForm.value).subscribe(result => {
       this._notiService.ExitosoGeneral('El registro se guardo con exito.');
@@ -73,8 +91,8 @@ export class UsuairosComponent implements OnInit {
    
   }
 
-  EditarPlan() {
-    
+  EditarUsuario() {
+    this.UsuariosForm.controls.Estado.setValue( this.UsuariosForm.controls.Estado.value === '1'? true : false);
     this._usuariosService.editarUsuario(this.UsuariosForm.value).subscribe(result => {
       if (result) {
         this._notiService.ExitosoGeneral('El registro se actualizo con exito.');
@@ -86,12 +104,13 @@ export class UsuairosComponent implements OnInit {
     })
   }
 
-  EliminarPlan(idUser: number) {
-    this._notiService.confirmation('¿ Seguro, desea eliminar el usuario ?', 'ELIMINAR', 'CANCELAR').then(reingreso => {
+  EliminarUsuario(user: any) {
+    this._notiService.confirmation('¿ Seguro, desea deshabiltar el usuario ?', 'esto desahabilitara el usuario, no se elimina porque puede que este realzacionado a otros procesos', 'DESHABILITAR', 'CANCELAR').then(reingreso => {
       if (reingreso) {
-        this._usuariosService.eliminarUsuario(idUser).subscribe(result => {
+        user.Estado = false;
+        this._usuariosService.editarUsuario(user).subscribe(result => {
           if (result) {
-            this._notiService.ExitosoGeneral('El registro se elimino con exito.');
+            this._notiService.ExitosoGeneral('El usuario se desahbilito con exito.');
             this.getUsuarios();
           }
         })

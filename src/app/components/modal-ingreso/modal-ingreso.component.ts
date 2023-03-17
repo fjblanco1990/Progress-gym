@@ -1,8 +1,9 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Ingreso } from 'src/app/Ingresos/interfaces/ingresos.interface';
 import { IngresoService } from 'src/app/Ingresos/services/ingreso.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
@@ -10,6 +11,7 @@ import { ClientesService } from '../../Clientes/services/clientes.service';
 import { PlanModel } from '../class/planes.class';
 
 import { ModalIngresoService } from '../services/modal-ingreso.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-modal-ingreso',
@@ -17,7 +19,7 @@ import { ModalIngresoService } from '../services/modal-ingreso.service';
   styleUrls: ['./modal-ingreso.component.scss'],
   providers: [NotificacionesService]
 })
-export class ModalIngresoComponent implements OnInit {
+export class ModalIngresoComponent implements OnInit, OnDestroy {
   @ViewChild('openGetdocumento') openDocumentoModal!: any;
   @Input() HabilitarRegistroIngreso!: boolean;
   documentoString: string = '';
@@ -28,25 +30,26 @@ export class ModalIngresoComponent implements OnInit {
   mensajeError: string = '';
   registerForm!: FormGroup;
   planData: PlanModel[] = [];
+  subscribe!: Subscription;
   constructor(private _formBuilder: FormBuilder, private _clientesService: ClientesService, private _ingresoService: IngresoService,
     private _notifAlert: NotificacionesService, private _modalIngresoService: ModalIngresoService) { }
 
   ngOnInit(): void {
+ 
     this.InicializarFormularios();
-    this.RegistarEntradaCliente();
-    this._modalIngresoService.getPlanes().subscribe((p:any) => this.planData = p);
+    // this.RegistarEntradaCliente();
 
-  }
+    this._modalIngresoService.getPlanes().subscribe((p: any) => this.planData = p);
 
-  private RegistarEntradaCliente() {
-    this.registerForm.reset();
-    const Src2$ = fromEvent<KeyboardEvent>(document, 'keyup');
+    const source = fromEvent(document, 'keyup');
 
-    Src2$.subscribe(evento => {
+    const example = source.pipe(map((event: any) => event));
+
+    this.subscribe = example.subscribe(val => {
       if (this.HabilitarRegistroIngreso) {
-        if (!evento.code.includes("NumpadDivide") && !evento.code.includes("NumpadMultiply") && !evento.code.includes("NumpadDecimal")
-          && !evento.code.includes("NumpadSubtract") && !evento.code.includes("NumpadAdd")) {
-          if (evento.code.includes("Numpad")) {
+        if (!val.code.includes("NumpadDivide") && !val.code.includes("NumpadMultiply") && !val.code.includes("NumpadDecimal")
+          && !val.code.includes("NumpadSubtract") && !val.code.includes("NumpadAdd")) {
+          if (val.code.includes("Numpad")) {
 
             if (this.showError) {
               this.documentoInput = this.documentoString;
@@ -60,23 +63,23 @@ export class ModalIngresoComponent implements OnInit {
               this.openDocumentoModal.nativeElement.click();
             }
 
-            if (evento.code === "NumpadEnter" && !this.inside) {
+            if (val.code === "NumpadEnter" && !this.inside) {
               this.validateRegister();
             }
 
-            if (evento.code !== "NumpadEnter") {
-              this.documentoString = this.documentoString + evento.key;
+            if (val.code !== "NumpadEnter") {
+              this.documentoString = this.documentoString + val.key;
               this.registerForm.controls.documento.setValue(this.documentoString);
             }
           }
 
-          if (evento.code.includes("Backspace")) {
+          if (val.code.includes("Backspace")) {
             let backString = this.documentoString.slice(0, -1);
             this.documentoString = backString;
             this.registerForm.controls.documento.setValue(this.documentoString);
           }
 
-          if (evento.code.includes("Escape")) {
+          if (val.code.includes("Escape")) {
             this.documentoString = '';
             this.openModal = true;
           }
@@ -84,20 +87,26 @@ export class ModalIngresoComponent implements OnInit {
 
         console.log(this.documentoString);
       }
-    });
+    })
+  }
+
+  ngOnDestroy(): void {
+      this.subscribe.unsubscribe();
+
   }
 
   validateRegister() {
     this.inside = true;
+
     this._clientesService.getTClientesByDocument(this.registerForm.controls.documento.value).subscribe(
       result => {
         if (result !== null) {
           if (result.Estado !== false) {
             var fechaActual = new Date();
             var fechaFin = new Date(result.Fecha_fin.toString());
-  
+
             this.showError = fechaFin > fechaActual ? false : true;
-  
+
             if (result.Id_Plan === 2) {
               this._ingresoService.getIngreosById(result.Id_Cliente).subscribe(
                 resultIngreso => {
@@ -106,7 +115,7 @@ export class ModalIngresoComponent implements OnInit {
                     if (resultIngreso.length >= plan || result.Estado === false) {
                       this.ShowMenssageError(`El usuario uso todos los ingresos de la Tiquetera.`);
                       //aqui cambiar el estado a inactivo para poder 
-                      this._ingresoService.editEstadoClients(result,false).subscribe();
+                      this._ingresoService.editEstadoClients(result, false).subscribe();
                     }
                     else {
                       this.Save();
@@ -118,6 +127,7 @@ export class ModalIngresoComponent implements OnInit {
               if (!this.showError) {
                 this.Save();
               } else {
+                this.subscribe.unsubscribe();
                 this.ShowMenssageError('El usuario se encuentra vencido se debe actualizar la membresia.');
               }
             }
@@ -157,9 +167,11 @@ export class ModalIngresoComponent implements OnInit {
       result => {
         const ingreso = new Ingreso();
         ingreso.Id_Cliente = result.Id_Cliente;
-        ingreso.Fecha_Ingreso = new Date();
-        const hora = new Date().getHours().toString() + ':'+ new Date().getMinutes().toString();
-        const hora_format = moment(hora,'H:m:s').format('h:mm a');
+        const fecha_Now = new Date;
+        var fecha_format = moment(fecha_Now.toISOString()).format("YYYY-MM-DD").toString();
+        ingreso.Fecha_Ingreso = fecha_format;
+        const hora = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
+        const hora_format = moment(hora, 'H:m:s').format('h:mm a');
         ingreso.Hora_Ingreso = hora_format;
         this._ingresoService.saveIngreso(ingreso).subscribe(
           result => {

@@ -15,6 +15,7 @@ export class BackBottomComponent implements OnInit {
   }
 
   resetForms() {
+    localStorage.setItem('active', '0');
     if (this.form !== undefined) {
        this.form.reset();
     }

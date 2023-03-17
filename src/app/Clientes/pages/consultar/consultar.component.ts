@@ -8,6 +8,11 @@ import { ClientesService } from '../../services/clientes.service';
 import { Router } from '@angular/router';
 import { SendDataComponentsService } from '../../services/send-data-componentes.service';
 import { IngresoService } from '../../../Ingresos/services/ingreso.service';
+import { ModalIngresoService } from 'src/app/components/services/modal-ingreso.service';
+import { PlanModel } from 'src/app/components/class/planes.class';
+import { Observable } from 'rxjs';
+import { UsuariosService } from '../../../Maestros/services/usuarios.service';
+import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuarios.class';
 
 @Component({
   selector: 'app-consultar',
@@ -25,17 +30,24 @@ export class ConsultarComponent implements OnInit {
   habilitarModal: boolean = true;
   palabra: string  = '';
   p: number = 1;
+  planData: PlanModel[] = [];
+  usuariosData: Usuario_Model[] = [];
   constructor(private _clientesService: ClientesService,
     private _formBuilder: FormBuilder, 
     private _patternsService: PatternsService, 
     private _notifAlert: NotificacionesService,
     private _sendDataComponentsService: SendDataComponentsService,
     private _ingresoService: IngresoService,
-    private _router: Router) { }
+    private _modalIngresoService: ModalIngresoService,
+    private _usuariosService: UsuariosService,
+    private _router: Router) { 
+    }
 
   ngOnInit(): void { 
     this.InicializarFromulario();
-    this.getAllClients();
+    this.getPlanes();
+    this.getUsuarios();
+    localStorage.setItem('active', '0');
   }
 
   getAllClients() {
@@ -56,13 +68,29 @@ export class ConsultarComponent implements OnInit {
                   var fechaFinalFormat = moment(cliente.cliente.Fecha_fin.toString()).format('YYYY/MM/DD').toString();
                   this.clientesCompleto.Vencido = fehcaActualFormat <=  fechaFinalFormat? false: true;
                   if (cliente.plan.Id_Plan === 2) {
-                    const diasFaltantes = this.ObtenerDiasTranscurridos( this.fechaActual.toString(), cliente.cliente.Fecha_fin.toString());
-                    const ingresos = resultIngreso.length;
-                    this.clientesCompleto.DiasFaltantes = (diasFaltantes - ingresos);
-                    this.clientesCompleto.palabra = 'Ingresos';
+                    let plan = this.planData.filter(c => c.Id_Plan == cliente.cliente.Id_Plan).find(c => c.Id_Plan == cliente.cliente.Id_Plan)?.Cantidad_Dias;
+                    if (plan) {
+                      const ingresos = resultIngreso.length;
+                      this.clientesCompleto.DiasFaltantes = (plan - ingresos);
+                      this.clientesCompleto.palabra = 'Ingresos';
+                      if (this.clientesCompleto.DiasFaltantes === 0) {
+                        this.clientesCompleto.Vencido = true;
+                        this.clientesCompleto.porVencer = true;
+                      } else if (this.clientesCompleto.DiasFaltantes <= 3) {
+                        this.clientesCompleto.Vencido = false;
+                        this.clientesCompleto.porVencer = true;
+                      }
+                    }
                   } else {
                     this.clientesCompleto.DiasFaltantes =  (this.ObtenerDiasTranscurridos( this.fechaActual.toString(), cliente.cliente.Fecha_fin.toString()));
                     this.clientesCompleto.palabra = 'días';
+                    if (this.clientesCompleto.DiasFaltantes <= 0) {
+                      this.clientesCompleto.Vencido = true;
+                      this.clientesCompleto.porVencer = true;
+                    } else if (this.clientesCompleto.DiasFaltantes <= 3) {
+                      this.clientesCompleto.Vencido = false;
+                        this.clientesCompleto.porVencer = true;
+                    }
                   }
                   this.clientesModelLst.push(this.clientesCompleto);
                   this.clientesModelLstSearch.push(this.clientesCompleto);
@@ -73,20 +101,23 @@ export class ConsultarComponent implements OnInit {
     );
   }
 
-  filterRangoFechas(FechaInit: string, Fecha_fin: string) {
+  getPlanes() {
+    this._modalIngresoService.getPlanes().subscribe((p:any) => {
+      this.planData = p;
+      this.getAllClients();
+    });
+  }
+
+  getUsuarios() {
+    this._usuariosService.getUsuarios().subscribe( usuario => this.usuariosData = usuario);
+  }
+
+  filterRangoFechas(FechaInit: string) {
     var fechaInicialFormat = moment(FechaInit.toString()).format('YYYY/MM/DD').toString();
-    var fechaFinalFormat = moment(Fecha_fin.toString()).format('YYYY/MM/DD').toString();
     this.clientesModelLstSearch = this.clientesModelLst;
-    if (FechaInit && Fecha_fin) {
-       var result = this.clientesModelLstSearch.filter(c => 
-        
-          moment(c.cliente.Fecha_inicio.toString()).format('YYYY/MM/DD').toString() >= fechaInicialFormat  
-          && 
-          moment(c.cliente.Fecha_fin.toString()).format('YYYY/MM/DD').toString() <= fechaFinalFormat 
-         
-        )
-       this.clientesModelLstSearch = result;
-    }
+    if (FechaInit) 
+      this.clientesModelLstSearch = this.clientesModelLstSearch.filter(c => 
+        moment(c.cliente.Fecha_registro.toString()).format('YYYY/MM/DD').toString() >= fechaInicialFormat)
   }
 
   reset() {
@@ -96,18 +127,21 @@ export class ConsultarComponent implements OnInit {
 
   filterNombre(nombre: string) {
     this.clientesModelLstSearch = this.clientesModelLst;
-    if (nombre) {
-       var result = this.clientesModelLstSearch.filter(c => c.cliente.Nombres.toUpperCase().includes(nombre.toUpperCase()));
-       this.clientesModelLstSearch = result;
-    }
+    if (nombre) 
+      this.clientesModelLstSearch = this.clientesModelLstSearch.filter(c => c.cliente.Nombres.toUpperCase().includes(nombre.toUpperCase()));   
   }
 
   filtrarDocumento(documento: string) {
     this.clientesModelLstSearch = this.clientesModelLst;
-    if (documento) {
-       var result = this.clientesModelLstSearch.filter(c => c.cliente.Documento_identitdad.includes(documento));
-       this.clientesModelLstSearch = result;
-    }
+    if (documento) 
+      this.clientesModelLstSearch = this.clientesModelLstSearch.filter(c => c.cliente.Documento_identitdad.includes(documento));
+  }
+
+  filtrarUsuario() {
+    var usuario = this.consultarClientForm.controls.Usuario.value.Id_Usuario;
+    this.clientesModelLstSearch = this.clientesModelLst;
+    if (usuario) 
+      this.clientesModelLstSearch = this.clientesModelLstSearch.filter(c => c.usuario.Id_Usuario === usuario);
   }
 
   ObtenerDiasTranscurridos(fechaInicial: string, fechaFinal: string): number {
@@ -131,14 +165,20 @@ export class ConsultarComponent implements OnInit {
     this.habilitarModal = true;
   }  
 
+  validarSeleccion(input: string, name_input: string) {
+    if (this.consultarClientForm.controls[input].value === '-1') {
+      this._notifAlert.Advertencia('Debe seleccionar una opcion valida');
+      this.consultarClientForm.controls[input].reset();
+    }
+  }
+
   InicializarFromulario() {
     this.consultarClientForm = this._formBuilder.group({
       Nombre: [null],
       Documento: [null, [Validators.pattern(this._patternsService.patternOnlyStringSpace)]],
       FechaInicial: [null, [ Validators.pattern(this._patternsService.patternOnlyStringSpace)]],
       FechaFinal: [null, [ Validators.pattern(this._patternsService.patternOnlyStringSpace)]],
-      
-    
+      Usuario:[null]
     });
 
   }

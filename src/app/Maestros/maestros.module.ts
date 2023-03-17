@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MaestrosRoutingModule } from './maestros-routing.module';
 import { MaestrosDashComponent } from './pages/maestros-dash/maestros-dash.component';
 import { ComponentsModule } from '../components/components.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ComponentsModule } from '../components/components.module';
   imports: [
     CommonModule,
     MaestrosRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    ReactiveFormsModule
   ]
 })
 export class MaestrosModule { }

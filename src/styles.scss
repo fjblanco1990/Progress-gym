@@ -259,3 +259,68 @@ select > option {
     letter-spacing: 4px;
     font-weight: 800;
 }
+
+
+.title-dark {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #333;
+    color: white;
+}
+
+ 
+.btn-x {
+    background: none !important;
+    color: white;
+    float: right;
+    font-size: 30px;
+    margin-top: -60px;
+    width: auto;
+    margin-right: 10px;
+    &::after {
+        color: white;
+        background: white;
+    }
+}
+
+
+
+.input-get-doc {
+    font-size: 20px !important;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    display: block;
+    margin: 0px auto;
+
+}
+
+#titleModal {
+    font-family: 'OptiAgencyGothicMedium';  
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.msj-error {
+    text-align: center;
+    margin: 0px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.content-general-venta {
+    width: 100%;
+}
+
+.content-item-menu {
+    width: 95%;
+    margin-top: 260px;
+    margin-left: 280px;
+}

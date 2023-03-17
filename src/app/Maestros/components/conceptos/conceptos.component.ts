@@ -78,7 +78,7 @@ export class ConceptosComponent implements OnInit {
   }
 
   EliminarConcepto(idConcepto: number) {
-    this._notiService.confirmation('¿ Seguro, desea eliminar el concepto ?','ELIMINAR', 'CANCELAR').then( reingreso => {
+    this._notiService.confirmation('¿ Seguro, desea eliminar el concepto ?','','ELIMINAR', 'CANCELAR').then( reingreso => {
       if (reingreso) {
         this._conceptoService.eliminarConcepto(idConcepto).subscribe( result => {
             if (result) {

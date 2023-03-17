@@ -1,0 +1,240 @@
+<div class="content-general">
+    <div class="content-form">
+        <div class="form">
+            <app-back-bottom></app-back-bottom>
+            <h2>Deudas</h2>
+
+            <div class="content-options" data-bs-toggle="modal" data-bs-target="#getInformationModal"
+                (click)="desactiveRegistroIngreso()">
+                <div class="optiosn-link">
+                    Registrar deuda a cliente
+                </div>
+            </div>
+            <div class="container">
+                <form [formGroup]="deudasConsultaForm">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Documento"
+                                    (input)="filtrarDocumento(deudasConsultaForm.controls.Documento.value)"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Documento</label>
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="text" required="required" formControlName="Nombre"
+                                    (input)="filtrarNombre(deudasConsultaForm.controls.Nombre.value)"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-title">Nombre</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Usuario" (change)=" filtrarUsuario()">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [ngValue]="usuario" *ngFor="let usuario of usuariosData">
+                                        {{usuario.Nombre_completo}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="deudasConsultaForm.controls.Usuario.errors?.required &&
+                                    ( deudasConsultaForm.controls.Usuario.touched)">
+                                    {{ 'El usuario que registra Obligatorio'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Usuario</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="Fecha_deuda"
+                                    (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha </label>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="group">
+                                <div class="col-sm content-btn-footer">
+                                    <button type="button" class="btn-gym-progress" title="Consultar"
+                                        (click)="filterRangoFechas(deudasConsultaForm.controls.Fecha_deuda.value)">Consultar</button>
+                                    <button type="button" class="btn-gym-dark" (click)="reset()">Limpiar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="content-table" *ngIf="deudasModelLstSearch.length > 0">
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                        <tr>
+                            <th class="table-title-gym">Usuario</th>
+                            <th class="table-title-gym">Cliente</th>
+                            <th class="table-title-gym">Descripción</th>
+                            <th class="table-title-gym">Valor deuda</th>
+                            <th class="table-title-gym">Fecha registro</th>
+                            <th class="table-title-gym">Hora deuda</th>
+                            <th class="table-title-gym">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let deuda of deudasModelLstSearch | paginate: { currentPage: p }"
+                            class="tr-table cursor">
+                            <td>{{deuda.usuario.Nombre_completo}}</td>
+                            <td>{{deuda.cliente.Nombres}} {{deuda.cliente.Apellidos}} </td>
+                            <td>{{deuda.deuda.descripcion}}</td>
+                            <td>{{deuda.deuda.Valor_deuda | currency}}</td>
+                            <td>{{deuda.deuda.Fecha_deuda | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{deuda.deuda.Hora_deuda}}</td>
+                            <td>
+                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true"
+                                    (click)="EliminarDeudaByCliente(deuda.deuda.Id_Deuda)"></i>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            
+                            <td><strong>TOTAL DEUDAS </strong> </td>
+                            <td>
+                              {{ totalDeudas | currency}}
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+
+                    </tbody>
+                </table>
+                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                    maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                    screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div>
+            <div class="content-errors" *ngIf="deudasModelLstSearch.length <= 0">
+
+                <h4>No se encontraron resultados con los parametros ingresados</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="getInformationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header title-dark">
+                <h5 class="modal-title" id="titleModal">Registrar deuda a cliente</h5>
+                <button type="button" class="btn-close btn-x" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso()">X</button>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="content-form"> -->
+                <form [formGroup]="deudasForm">
+                    <div class="content-general-venta">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Cliente">
+                                            <!-- <option value="-1">---Seleccione---</option> -->
+                                            <option [ngValue]="optCliente.cliente"
+                                                *ngFor="let optCliente of clientesData">
+                                                {{optCliente.cliente.Nombres}} {{optCliente.cliente.Apellidos}}
+                                            </option>
+                                        </select>
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Id_Cliente.errors?.required &&
+                                                    ( deudasForm.controls.Id_Cliente.touched)">
+                                            {{ 'El cliente es obligatorio'}}
+                                        </span>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Cliente</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Usuario">
+                                            <!-- <option value="-1">---Seleccione---</option> -->
+                                            <option [ngValue]="optUser" *ngFor="let optUser of usuariosData">
+                                                {{optUser.Nombre_completo}}
+                                            </option>
+                                        </select>
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Id_Usuario.errors?.required &&
+                                                    ( deudasForm.controls.Id_Usuario.touched)">
+                                            {{ 'El usuario es obligatorio'}}
+                                        </span>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Usuario</label>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <input type="text" required="required" formControlName="descripcion"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.descripcion.errors?.required &&
+                                                    ( deudasForm.controls.descripcion.touched)">
+                                            {{ 'La descripción de obligatoria'}}
+                                        </span>
+
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-title">Descripción</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <input type="number" required="required" formControlName="Valor_deuda"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Valor_deuda.errors?.required &&
+                                                    ( deudasForm.controls.Valor_deuda.touched)">
+                                            {{ 'El valor de la deuda es obligatorio'}}
+                                        </span>
+
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-title">Valor deuda</label>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- </div> -->
+            </div>
+            <div class="modal-footer footer">
+                <button type="button" class="btn btn-primary btn-progress" (click)="GuardarDeuda()">Save deuda</button>
+                <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>
+<ngx-loading [show]="loading"></ngx-loading>

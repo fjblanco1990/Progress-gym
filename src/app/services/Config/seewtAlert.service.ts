@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class NotificacionesService {
@@ -24,7 +23,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'success',
-            title: 'El ' + mensaje + ' se guardo con exito'
+            title: 'El ' + mensaje + ' se guardo con exito',
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -43,7 +47,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'success',
-            title:  mensaje
+            title:  mensaje,
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -62,7 +71,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'success',
-            title: 'El ' + mensaje + ' se actualizo con exito.'
+            title: 'El ' + mensaje + ' se actualizo con exito.',
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -81,7 +95,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'success',
-            title: 'El ' + mensaje + ' se elimino con exito.'
+            title: 'El ' + mensaje + ' se elimino con exito.',
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -100,7 +119,12 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'error',
-            title: mensaje
+            title: mensaje,
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
@@ -144,13 +168,19 @@ export class NotificacionesService {
 
         Toast.fire({
             icon: 'info',
-            title: mensaje
+            title: mensaje,
+            customClass: {
+               
+                title: 'title-gym-progress',
+       
+            },
         });
     }
 
-    confirmation(text: string, textBtnConfirm: string, textBtnCancel: string): Promise<boolean> {
+    confirmation(text: string, textSub: string, textBtnConfirm: string, textBtnCancel: string): Promise<boolean> {
        var algo = Swal.fire({
             title: text,
+            text: textSub,
             icon: 'warning',
             showCancelButton: true,
             iconColor: '#144959',
@@ -171,4 +201,53 @@ export class NotificacionesService {
           return algo;
     }
 
+    confirmationNotBtnConfirm(text: string, textSub: string, textBtnCancel: string): Promise<boolean> {
+        var algo = Swal.fire({
+             title: text,
+             text: textSub,
+             icon: 'warning',
+             showCancelButton: true,
+             iconColor: '#144959',
+             confirmButtonText: textBtnCancel,
+             showConfirmButton: true,
+             customClass: {
+                 popup : 'my-popup-class', 
+                 title: 'title-gym-progress',
+                 confirmButton: 'btn-gym-progress',
+                 cancelButton: 'btn-gym-dark '
+               }
+           }).then((result) => {
+             if (result.isConfirmed) {
+                 return true;
+             } else {
+             return false;
+             }
+           });
+           return algo;
+    }
+
+    confirmationNotBtnCancel(text: string, textSub: string, textBtnConfirm: string,): Promise<boolean> {
+        var algo = Swal.fire({
+             title: text,
+             text: textSub,
+             icon: 'warning',
+             showCancelButton: true,
+             iconColor: '#144959',
+             showCloseButton: false,
+             confirmButtonText: textBtnConfirm,
+             customClass: {
+                 popup : 'my-popup-class', 
+                 title: 'title-gym-progress',
+                 confirmButton: 'btn-gym-progress',
+                 cancelButton: 'btn-gym-dark '
+               }
+           }).then((result) => {
+             if (result.isConfirmed) {
+                 return true;
+             } else {
+              return false;
+             }
+           });
+           return algo;
+    }
 }

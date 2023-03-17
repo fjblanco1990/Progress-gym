@@ -38,15 +38,20 @@
                     </div>
                     <div class="col-sm">
                         <div class="group">
-                            <input type="text" required="required" formControlName="Estado"
-                            (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Estado.errors?.required &&
+                            <select required formControlName="Estado"
+                            (change)="validarSeleccion('Estado', 'estado')">
+                            <option value="-1">---Seleccione---</option>
+                            <option value="{{estado.value}}" *ngFor="let estado of estados">
+                                {{estado.descripcion}}
+                            </option>
+                        </select>
+                        <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Estado.errors?.required &&
                             ( UsuariosForm.controls.Estado.touched)">
-                                {{'El estado es obligatorio'}}
-                            </span>
-                            <span class="highlight"></span>
-                            <span class="bar"></span>
-                            <label class="label-title">Estado</label>
+                            {{ 'Estado es Obligatoria'}}
+                        </span>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label class="label-select">Estado</label>
                         </div>
                     </div>
                     <div class="col-sm">
@@ -71,8 +76,8 @@
                        
                     </div>
                     <div class="col-sm content-btn-footer">
-                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave" (click)="GuardarPlan()">Guardar</button>
-                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit" (click)="EditarPlan()">Editar</button>
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave" (click)="GuardarUsuario()">Guardar</button>
+                        <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit" (click)="EditarUsuario()">Editar</button>
                         <button type="button" class="btn-gym-dark" (click)="cancelar()">Cancelar</button>
                     </div>
                     <div class="col-sm">
@@ -99,11 +104,11 @@
                         <tr *ngFor="let user of usuarioData | paginate: { currentPage: p }" class="tr-table cursor">
                             <td>{{user.Nombre_completo}} </td>
                             <td>{{user.Nick_Name}}</td>
-                            <td>{{user.Estado}}</td>
+                            <td>{{user.Estado === true ? 'Activo': 'In activo'}}</td>
                             <td>{{user.Fecha_creacion | date: 'dd/MM/yyyy'}}</td>
                             <td>
                                 <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapUser(user)"></i>
-                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(user.Id_Usuario)"></i>
+                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarUsuario(user)"></i>
                             </td>
                         </tr>
 

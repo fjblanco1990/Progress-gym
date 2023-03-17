@@ -39,7 +39,7 @@ export class ConsultarIngresosComponent implements OnInit {
     
     this.InicializarFromulario();
     this.getAllIngresos();
-
+    localStorage.setItem('active', '0');
   }
 
   pageChanged(event: any){

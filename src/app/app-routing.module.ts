@@ -25,6 +25,14 @@ const routes: Routes = [
     loadChildren: () => import('./Maestros/maestros.module').then(module => module.MaestrosModule)
   },
   {
+    path: 'deudas',
+    loadChildren: () => import('./DeduasByCliente/deudas.module').then(module => module.DeudasModule)
+  },
+  {
+    path: 'reportes',
+    loadChildren: () => import('./reportes/reportes.module').then(module => module.ReportesModule)
+  },
+  {
     path: '*',
     redirectTo: 'home',
     pathMatch: 'full'

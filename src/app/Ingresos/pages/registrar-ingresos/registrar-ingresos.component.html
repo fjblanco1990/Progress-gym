@@ -1,270 +1,295 @@
 <div class="content-general">
-    <div class="content-form">
-        <div class="form">
-            <app-back-bottom></app-back-bottom>
-            <h2>Informes Ventas</h2>
-            <div class="content-form-dates">
-                <form [formGroup]="informesForm">
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="group">
-                                <input type="date" required="required" formControlName="FechaInicial" (focus)="desactiveRegistroIngreso()"
-                                (blur)="habilitarRegistroIngreso()" />
-                                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaInicial.errors?.required &&
+  <div class="content-form">
+    <div class="form">
+      <app-back-bottom></app-back-bottom>
+      <h2>Informes Ventas</h2>
+      <div class="content-form-dates">
+        <form [formGroup]="informesForm">
+          <div class="row">
+            <div class="col-sm">
+              <div class="group">
+                <input type="date" required="required" formControlName="FechaInicial"
+                  (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
+                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaInicial.errors?.required &&
                                     ( informesForm.controls.FechaInicial.touched)">
-                                    {{ 'Fecha de inicio es Obligatoria'}}
-                                    </span>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="label-select">Fecha de inicio</label>
-                            
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="group">
-                                <input type="date" required="required"  formControlName="FechaFinal" (focus)="desactiveRegistroIngreso()" 
-                                (blur)="habilitarRegistroIngreso()"/>
-                                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaFinal.errors?.required &&
+                  {{ 'Fecha de inicio es Obligatoria'}}
+                </span>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="label-select">Fecha de inicio</label>
+
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="group">
+                <input type="date" required="required" formControlName="FechaFinal" (focus)="desactiveRegistroIngreso()"
+                  (blur)="habilitarRegistroIngreso()" />
+                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaFinal.errors?.required &&
                                 ( informesForm.controls.FechaFinal.touched)">
-                                {{ 'Fecha fin es Obligatoria'}}
-                                </span>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="label-select">Fecha de fin</label>
-                            </div>
-                        </div>
-                        <div class="col-sm content-btn">
-                            <button type="button" class="btn-gym-progress"
-                            (click)="getInformeDiarioGeneral()">Consultar</button>
-                        </div>
-                    </div>
-                </form>
+                  {{ 'Fecha fin es Obligatoria'}}
+                </span>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="label-select">Fecha de fin</label>
+              </div>
             </div>
-            <div class="content-ppal">
-                <div class="content-options">
-                    <div class="option" (click)="ObtenerIngresosDiarios()">
-                        Consultar ingresos diarios
-                    </div>
-                    <div class="option" (click)="ObtenerVentasDiarias()">
-                        Consultar ventas diarias
-                    </div>
-                    <div class="option" (click)="ObtenerPlanesDiarios()">
-                        Consultar Planes diarias
-                    </div>
-                    <div class="option" (click)="ObtenerHistoricoVentas()">
-                        Consultar hitorico
-                    </div>
-                 
-                </div>
-                <div class="content-information">
-                        <div class="info-plan">
-                            <p> <span> Ingresos diarios (Planes): </span> <strong> {{informeGeneral?.Cantidad_Ingresos}} </strong></p>
-                            <p> <span> Ingresos diarios (dia): </span> <strong> {{Totla_ingresosDia}} </strong></p>
-                            <p> <span> ventas diarias planes: </span> <strong>  {{informeGeneral?.Total_Ventas | currency}} </strong></p>
-                            <p> <span> Ventas diarias suministros: </span> <strong>{{ resultVentasSuminitros | currency}} </strong></p>
-                            <p> <span> Total Ventas Diarias:</span> <strong>{{ (informeGeneral?.Total_Ventas +  resultVentasSuminitros) | currency }}</strong></p>
-                            <p> <span class="sub-title"> Planes </span> </p>
-                            <p class="total"> <span> Tiquetera: </span>  <strong>{{ informeGeneral?.Tiquetera }}</strong>  </p>
-                            <p class="total"> <span> Mensual: </span>  <strong>{{ informeGeneral?.Mensual }}</strong>  </p>
-                            <p class="total"> <span> Bimestral: </span>  <strong>{{ informeGeneral?.Bimestral }}</strong>  </p>
-                            <p class="total"> <span> Trimestral: </span> <strong>{{ informeGeneral?.Trimestral }}</strong> </p>
-                            <p class="total"> <span> Semestral: </span>  <strong>{{ informeGeneral?.Semestral }}</strong> </p>
-                            <p class="total"> <span> Anual: </span>  <strong>{{ informeGeneral?.Anual}}</strong> </p>
-                        </div>
-            
-                  
-                </div>
+            <div class="col-sm content-btn">
+              <button type="button" class="btn-gym-progress" (click)="getInformeDiarioGeneral()">Consultar</button>
             </div>
+          </div>
+        </form>
+      </div>
+      <div class="content-ppal">
+        <div class="content-options">
+          <div class="option" (click)="ObtenerIngresosDiarios()">
+            Consultar ingresos diarios
+          </div>
+          <div class="option" (click)="ObtenerVentasDiarias()">
+            Consultar ventas diarias
+          </div>
+          <div class="option" (click)="ObtenerPlanesDiarios()">
+            Consultar Planes diarias
+          </div>
+          <div class="option" (click)="ObtenerHistoricoVentas()">
+            Consultar hitorico
+          </div>
+
         </div>
+        <div class="content-information">
+          <div class="info">
+            <p> <span class="sub-title"> Ventas </span> </p>
+            <p> <span> Ingresos diarios (Planes): </span> <strong> {{informeGeneral?.Cantidad_Ingresos}} </strong></p>
+            <p> <span> Ingresos diarios (dia): </span> <strong> {{Totla_ingresosDia}} </strong></p>
+            <p> <span> ventas diarias planes: </span> <strong> {{informeGeneral?.Total_Ventas | currency}} </strong></p>
+            <p> <span> Ventas diarias Ingresos unicos: </span> <strong>{{ totalIngresoUnicoDiarios | currency}} </strong></p>
+            <p> <span> Ventas diarias suministros: </span> <strong>{{ resultVentasSuminitros | currency}} </strong></p>
+            <p> <span> Total Ventas Diarias:</span> <strong>{{ (informeGeneral?.Total_Ventas + resultVentasSuminitros +totalIngresoUnicoDiarios) | currency }}</strong></p>
+          </div>
+          <div class="info">
+            <p> <span class="sub-title"> Planes </span> </p>
+            <p class="total"> <span> Tiquetera: </span> <strong>{{ informeGeneral?.Tiquetera }}</strong> </p>
+            <p class="total"> <span> Mensual: </span> <strong>{{ informeGeneral?.Mensual }}</strong> </p>
+            <p class="total"> <span> Bimestral: </span> <strong>{{ informeGeneral?.Bimestral }}</strong> </p>
+            <p class="total"> <span> Trimestral: </span> <strong>{{ informeGeneral?.Trimestral }}</strong> </p>
+            <p class="total"> <span> Semestral: </span> <strong>{{ informeGeneral?.Semestral }}</strong> </p>
+            <p class="total"> <span> Anual: </span> <strong>{{ informeGeneral?.Anual}}</strong> </p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
- <button hidden id="openModalIngresos" #openModalIngresos data-bs-toggle="modal" data-bs-target="#getIngresosModal"></button>
- <button hidden id="openModalVentas" #openModalVentas data-bs-toggle="modal" data-bs-target="#getVentasModal"></button>
- <button hidden id="openModalPlanes" #openModalPlanes data-bs-toggle="modal" data-bs-target="#getPlanesModal"></button>
- <button hidden id="openModalHistorico" #openModalHistorico data-bs-toggle="modal" data-bs-target="#getHistoricoModal"></button>
+<button hidden id="openModalIngresos" #openModalIngresos data-bs-toggle="modal"
+  data-bs-target="#getIngresosModal"></button>
+<button hidden id="openModalVentas" #openModalVentas data-bs-toggle="modal" data-bs-target="#getVentasModal"></button>
+<button hidden id="openModalPlanes" #openModalPlanes data-bs-toggle="modal" data-bs-target="#getPlanesModal"></button>
+<button hidden id="openModalHistorico" #openModalHistorico data-bs-toggle="modal"
+  data-bs-target="#getHistoricoModal"></button>
 <!-- Modal ingresos diarios -->
-  <div class="modal fade" id="getIngresosModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog  modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Ingreso Diarios</h5>
-          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+<div class="modal fade" id="getIngresosModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header title-dark">
+        <h5 class="modal-title" id="titleModal">Ingreso Diarios</h5>
+        <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="content-table" *ngIf="resultVentas.informeData.length > 0">
+          <table class="table table-dark table-hover table-gym">
+            <thead>
+              <tr>
+                <th class="table-title-gym">Nombre</th>
+                <th class="table-title-gym">{{'Fecha de ingreso'}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let informe of resultVentas.informeData | paginate: { currentPage: ing }"
+                class="tr-table cursor">
+                <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
+                <td>{{informe.ingreso.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="ing = $event" maxSize="12"
+            responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+          </paging-controls>
         </div>
-        <div class="modal-body">
-            <div class="content-table" *ngIf="resultVentas.informeData.length > 0">
-                <table class="table table-dark table-hover table-gym">
-                <thead>
-                    <tr>
-                        <th  class="table-title-gym" >Nombre</th>
-                        <th  class="table-title-gym">{{'Fecha de ingreso'}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let informe of resultVentas.informeData | paginate: { currentPage: p }" class="tr-table cursor">
-                    <td >{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
-                    <td >{{informe.ingreso.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
-                    </tr>
-                </tbody>
-                </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event" *ngIf="resultVentas.informeData.length > 5"
-                    maxSize="12"
-                    responsive="true"
-                    previousLabel="Anterior"
-                    nextLabel="Siguiente"
-                    screenReaderPaginationLabel="Pagination"
-                    screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page">
-                </paging-controls>
-            </div>
-            <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
-                    <h4>No se encontraron resultados con los parametros ingresados</h4>
-            </div>
-          
+        <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
+          <h4>No se encontraron resultados con los parametros ingresados</h4>
         </div>
-        <div class="modal-footer footer">
-          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
-        </div>
+
+      </div>
+      <div class="modal-footer footer">
+        <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 <!-- Modal Ventas diarias -->
-  <div class="modal fade" id="getVentasModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog  modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Ventas diarias</h5>
-          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
-        </div>
-        <div class="modal-body">
-            <div class="content-table" *ngIf="resultVentas.informeVenta.length > 0">
-                <table class="table table-dark table-hover table-gym"> 
-                    <thead >
-                        <tr>
-                            <th class="table-title-gym">Concepto</th>
-                            <th class="table-title-gym">Usuario venta</th>
-                            <th class="table-title-gym">Valor</th>
-                            <th class="table-title-gym"> Hora de la venta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let informe of resultVentas.informeVenta | paginate: { currentPage: venta }"  class="tr-table cursor">
-                            <td >{{informe.concepto?.Descripcion}} </td>
-                            <td >{{informe.usuario?.Nombre_completo}} </td>
-                            <td >{{informe.venta?.Valor_Venta | currency}}</td>
-                            <td >{{informe.venta?.Hora_Venta }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event"
-                    maxSize="12"
-                    responsive="true"
-                    previousLabel="Anterior"
-                    nextLabel="Siguiente"
-                    screenReaderPaginationLabel="Pagination"
-                    screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page">
-                </paging-controls>
+<div class="modal fade" id="getVentasModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header title-dark">
+        <h5 class="modal-title" id="titleModal">Ventas diarias</h5>
+        <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="content-table" *ngIf="resultVentas.informeVenta.length > 0">
+          <table class="table table-dark table-hover table-gym">
+            <thead>
+              <tr>
+                <th class="table-title-gym">Concepto</th>
+                <th class="table-title-gym">Usuario venta</th>
+                <th class="table-title-gym">Valor</th>
+                <th class="table-title-gym"> Hora de la venta</th>
+                <th class="table-title-gym">Metodo pago</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let informe of resultVentas.informeVenta | paginate: { currentPage: venta }"
+                class="tr-table cursor">
+                <td>{{informe.concepto?.Descripcion}} </td>
+                <td>{{informe.usuario?.Nombre_completo}} </td>
+                <td>{{informe.venta?.Valor_Venta | currency}}</td>
+                <td>{{informe.venta?.Hora_Venta }}</td>
+                <td>{{informe.formas?.Descripcion }}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>TOTAL </strong> </td>
+                <td></td>
+                <td>
+                  {{ totalVentasDiarias | currency}}
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event" maxSize="12"
+            responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+          </paging-controls>
 
-            </div>
-            <div class="content-errors" *ngIf="resultVentas.informeVenta.length <= 0">
-                    <h4>No se encontraron resultados con los parametros ingresados</h4>
-            </div>
         </div>
-        <div class="modal-footer footer">
-          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        <div class="content-errors" *ngIf="resultVentas.informeVenta.length <= 0">
+          <h4>No se encontraron resultados con los parametros ingresados</h4>
         </div>
+      </div>
+      <div class="modal-footer footer">
+        <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 <!-- Modal Planes diarios -->
-  <div class="modal fade" id="getPlanesModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog  modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Planes vendidos</h5>
-          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
-        </div>
-        <div class="modal-body">
-            <div class="content-table" *ngIf="resultVentas.informePlanes.length > 0">
-                <table class="table table-dark table-hover table-gym" > 
-                    <thead >
-                        <tr >
-                            <th class="table-title-gym">Nombre cliente</th>
-                            <th class="table-title-gym">Plan</th>
-                            <th class="table-title-gym">Valor</th>
-                            <th class="table-title-gym">Hora</th>
-                            <th class="table-title-gym">Usuario venta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let informe of resultVentas.informePlanes | paginate: { currentPage: plan }"  class="tr-table cursor">
-                            <td >{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
-                            <td >{{informe.plan.Descripcion }}</td>
-                            <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
-                            <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
-                            <td> {{informe.usuario.Nombre_completo }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <paging-controls  *ngIf="tipoConsulta == 0" class="paginator-footer" [isItemsPerPage]="false" (pageChange)="plan = $event"
-                    maxSize="12"
-                    responsive="true"
-                    previousLabel="Anterior"
-                    nextLabel="Siguiente"
-                    screenReaderPaginationLabel="Pagination"
-                    screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page">
-                </paging-controls>
+<div class="modal fade" id="getPlanesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header title-dark">
+        <h5 class="modal-title" id="titleModal">Planes vendidos</h5>
+        <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="content-table" *ngIf="resultVentas.informePlanes.length > 0">
+          <table class="table table-dark table-hover table-gym">
+            <thead>
+              <tr>
+                <th class="table-title-gym">Nombre cliente</th>
+                <th class="table-title-gym">Plan</th>
+                <th class="table-title-gym">Valor</th>
+                <th class="table-title-gym">Hora</th>
+                <th class="table-title-gym">Usuario venta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let informe of resultVentas.informePlanes | paginate: { currentPage: plan }"
+                class="tr-table cursor">
+                <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
+                <td>{{informe.plan.Descripcion }}</td>
+                <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
+                <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
+                <td> {{informe.usuario.Nombre_completo }}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>TOTAL </strong> </td>
+                <td>
+                  {{ totalPlanesDiarios | currency}}
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="plan = $event" maxSize="12"
+            responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+          </paging-controls>
 
-            </div>
-            <div class="content-errors" *ngIf="resultVentas.informePlanes.length <= 0">
-                    <h4>No se encontraron resultados con los parametros ingresados</h4>
-            </div>
         </div>
-        <div class="modal-footer footer">
-          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        <div class="content-errors" *ngIf="resultVentas.informePlanes.length <= 0">
+          <h4>No se encontraron resultados con los parametros ingresados</h4>
         </div>
+      </div>
+      <div class="modal-footer footer">
+        <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 <!-- Modal Consulta de todo por fechas -->
 
-  <div class="modal fade" id="getHistoricoModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-    <div class="modal-dialog  modal-lg">
-      <div class="modal-content">
-        <div class="modal-header title-dark">
-          <h5 class="modal-title" id="titleModal">Historico de ventas</h5>
-          <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
-        </div>
-        <div class="modal-body">
-            <div>
-                <p> Fechas consultadas </p>
-                <p>{{'01/01/2023'}} al {{'28/02/2023'}}</p>
+<div class="modal fade" id="getHistoricoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg">
+    <div class="modal-content">
+      <div class="modal-header title-dark">
+        <h5 class="modal-title" id="titleModal">Historico de ventas</h5>
+        <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="content-table" *ngIf="resultVentas.informeHistorico.length > 0">
+          <table class="table table-dark table-hover table-gym">
+            <thead>
+              <tr>
+                <th class="table-title-gym">Descripcion</th>
+                <th class="table-title-gym">Valor</th>
+                <th class="table-title-gym">Usuario</th>
+                <th class="table-title-gym">Fecha venta</th>
+                <th class="table-title-gym">Hora venta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let informe of resultVentas.informeHistorico | paginate: { currentPage: hist }"
+                class="tr-table cursor">
+                <td>{{informe.descripcion}} </td>
+                <td>{{informe.value }}</td>
+                <td> {{informe.usuario }}</td>
+                <td> {{informe.Fecha_Ingreso | date : 'dd/MM/yyyy' }}</td>
+                <td> {{informe.Hora }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="hist = $event" maxSize="12"
+            responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+          </paging-controls>
 
-            </div>
-            <div class="content-table">
-                <div class="content-title-historico">
-                    <div class="title-historico">Planes vendidos</div>
-                    <div class="title-historico">Ventas tienda </div>
-                </div>
-                
-                <div>
-                    <div></div>
-                    <div></div>
-                </div>
-               
-            </div>
-            <div class="content-errors" *ngIf="false">
-                    <h4>No se encontraron resultados con los parametros ingresados</h4>
-            </div>
-          
         </div>
-        <div class="modal-footer footer">
-          <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal" >Close</button>
+        <div class="content-errors" *ngIf="false">
+          <h4>No se encontraron resultados con los parametros ingresados</h4>
         </div>
+
+      </div>
+      <div class="modal-footer footer">
+        <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 
 <app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>
-

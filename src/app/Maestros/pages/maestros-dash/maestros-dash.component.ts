@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
+import { UsuariosService } from '../../services/usuarios.service';
+import { Usuario_Model } from 'src/app/Maestros/components/usuairos/class/Usuarios.class';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-maestros-dash',
@@ -7,9 +12,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaestrosDashComponent implements OnInit {
 
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit(): void {
+
+   
   }
 
+
+ 
+  
 }

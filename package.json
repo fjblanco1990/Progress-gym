@@ -23,6 +23,7 @@
     "jquery": "^3.6.1",
     "jw-angular-pagination": "^1.2.0",
     "moment": "^2.29.4",
+    "ngx-loading": "^1.0.14",
     "ngx-pagination": "^6.0.3",
     "ngx-table-pagination": "^1.1.5",
     "popper.js": "^1.16.1",

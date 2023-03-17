@@ -80,7 +80,7 @@ export class PlanesComponent implements OnInit {
   }
 
   EliminarPlan(idPlan: number) {
-    this._notiService.confirmation('¿ Seguro, desea eliminar el plan ?', 'ELIMINAR', 'CANCELAR').then(reingreso => {
+    this._notiService.confirmation('¿ Seguro, desea eliminar el plan ?','', 'ELIMINAR', 'CANCELAR').then(reingreso => {
       if (reingreso) {
         this._planService.eliminarPlan(idPlan).subscribe(result => {
           if (result) {

@@ -1,0 +1,143 @@
+<div class="content-general">
+    <div class="content-form">
+        <div class="form">
+            <app-back-bottom></app-back-bottom>
+            <h2>Reportes por usuario<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script></h2>
+            <div class="container">
+                <form [formGroup]="reportesForm">
+                    <div class="row">
+                        
+                        <div class="col-sm">
+                            <div class="group">
+                                <select required formControlName="Id_Usuario">
+                                    <option [ngValue]="optUser.Id_Usuario" *ngFor="let optUser of usuariosData">
+                                        {{optUser.Nombre_completo}}
+                                    </option>
+                                </select>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Usuario</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
+                                <input type="date" required="required" formControlName="fechaConsulta" 
+                                (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Fecha Inicial</label>
+                            
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm">
+                            <div class="group">
+                                <div class="col-sm content-btn-footer">
+                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="getRepotByUser()">Consultar</button>
+                                    <button type="button" class="btn-gym-dark" (click)="clear()" >Limpiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </form>
+            </div>
+            <div class="content-general-table">
+               <div class="content-table" *ngIf="dataReportVenta.length > 0" >
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                      <tr >
+                        <th class="table-title-gym">Usuario</th>
+                        <th class="table-title-gym">Concepto</th>
+                        <th class="table-title-gym">Forma pago</th>
+                        <th class="table-title-gym">Valor venta</th>
+                        <th class="table-title-gym">Fecha venta</th>
+                        <th class="table-title-gym">Hora venta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let report of dataReportVenta | paginate: { currentPage: p }" class="tr-table cursor">
+                            <td>{{report.usuario.Nombre_completo}}</td>
+                            <td>{{report.concepto.Descripcion}}</td>
+                            <td>{{report.formas.Descripcion}}</td>
+                            <td>{{report.venta.Valor_Venta | currency}}</td>
+                            <td>{{report.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{report.venta.Hora_Venta}}</td>
+                        </tr>
+                     
+                      
+                    </tbody>
+                  </table>
+                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                      maxSize="12"
+                      responsive="true"
+                      previousLabel="Anterior"
+                      nextLabel="Siguiente"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div>
+            <div class="content-table" *ngIf="dataReportPlan.length > 0" >
+                <table class="table table-dark table-hover table-gym">
+                    <thead>
+                      <tr >
+                        <th class="table-title-gym">Plan</th>
+                        <th class="table-title-gym">Valor venta</th>
+                        <th class="table-title-gym">Fecha venta</th>
+                        <th class="table-title-gym">Hora venta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let report of dataReportPlan | paginate: { currentPage: v }" class="tr-table cursor">
+                           
+                            <td>{{report.Plan?.Descripcion}}</td>
+                            <td>{{report.Plan?.Valor_Plan | currency}}</td>
+                            <td>{{report.Ventas_Cliente?.Fecha | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{report.Ventas_Cliente?.Hora_Venta_Cliente}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Total ventas: </td>
+                            <td>{{ totalVentaUsuarioReport | currency}}</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="v = $event"
+                      maxSize="12"
+                      responsive="true"
+                      previousLabel="Anterior"
+                      nextLabel="Siguiente"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></paging-controls>
+            </div> 
+            </div>
+            
+            <div class="content-errors" *ngIf="dataReportVenta.length <= 0">
+                
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="informativo">
+        <h2>Informacion plan</h2>
+        <div class="info-plan">
+            <p> <span> Nombre completo: </span> {{registerClientForm.controls.Nombres.value}}
+                {{registerClientForm.controls.Apellidos.value}} </p>
+            <p> <span> Fecha registro: </span> {{registerClientForm.controls.Fecha_registro.value}} </p>
+            <p> <span> Plan: </span> </p>
+            <p> <span>Metodo de pago: </span> </p>
+            <p> <span> Valor a pagar: </span> </p>
+        </div>
+
+    </div> -->
+</div>
+
+<app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>

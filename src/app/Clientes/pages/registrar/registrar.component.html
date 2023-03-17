@@ -62,8 +62,8 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="tetx" required="required" formControlName="Documento_identitdad"
-                                    [disabled]="updateAvalible" (focus)="desactiveRegistroIngreso()"
-                                    (blur)="habilitarRegistroIngreso()" />
+                                    (focus)="desactiveRegistroIngreso()"
+                                    (blur)="habilitarRegistroIngreso(); validarCambioDocumento()"  />
                                 <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Documento_identitdad.errors?.required &&
                                     ( registerClientForm.controls.Documento_identitdad.touched)">
                                     {{ 'Documento es obligatorio'}}
@@ -157,7 +157,7 @@
                         </div>
                         <div class="col-sm">
                             <div class="group">
-                                <input type="date" required="required" formControlName="Fecha_registro"
+                                <input type="date" required="required" disabled formControlName="Fecha_registro"
                                     [disabled]="updateAvalible" (focus)="desactiveRegistroIngreso()"
                                     (blur)="habilitarRegistroIngreso()" />
                                 <span class="highlight"></span>
@@ -170,8 +170,8 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="date" required="required" formControlName="Fecha_inicio"
-                                    (focus)="desactiveRegistroIngreso()" (blur)="setFechaFinal()"
-                                    (blur)="habilitarRegistroIngreso()" />
+                                    (focus)="desactiveRegistroIngreso()"
+                                    (blur)="habilitarRegistroIngreso(); validationFechaInicial()" [disabled]="null"/>
                                 <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Fecha_inicio.errors?.required &&
                                 ( registerClientForm.controls.Fecha_inicio.touched)">
                                     {{ 'Fecha de inicio es Obligatoria'}}
@@ -194,9 +194,9 @@
                         <div class="col-sm">
                             <div class="group">
                                 <select required formControlName="Id_Usuario"
-                                    (change)="validarSeleccion('Id_Usuario', 'usuario')">
+                                    (change)="validarSeleccion('Id_Usuario', 'usuario')" (change)="validarUsuario(registerClientForm.controls.Id_Usuario.value)">
                                     <!-- <option value="-1">---Seleccione---</option> -->
-                                    <option [ngValue]="usuario" *ngFor="let usuario of usuariosData">
+                                    <option [value]="usuario.Id_Usuario" *ngFor="let usuario of usuariosData">
                                         {{usuario.Nombre_completo}}
                                     </option>
                                 </select>
@@ -249,3 +249,56 @@
 
 
 <app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>
+<ngx-loading [show]="loading"></ngx-loading>
+
+
+<!--Modal Seguridad-->
+<button #openSeguridad data-bs-toggle="modal" data-bs-target="#seguridadModal"></button>
+
+
+
+<div class="modal fade" id="seguridadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header title-dark">
+                <h5 class="modal-title" id="titleModal">Ingrese la contraseña</h5>
+                <button #closeModal type="button" class="btn-close btn-x" hidden data-bs-dismiss="modal">X</button>
+                <button #closeModalSeguridad type="button" class="btn-close btn-x" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso(); closeSeguridad()">X</button>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="content-form"> -->
+                <form [formGroup]="seguridadForm">
+                    <div class="content-general-venta">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <input type="password" required="required" formControlName="password"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="seguridadForm.controls.password.errors?.required &&
+                                                    ( seguridadForm.controls.password.touched)">
+                                            {{ 'El  password es obligatorio'}}
+                                        </span>
+
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-title">Password</label>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- </div> -->
+            </div>
+            <div class="modal-footer footer">
+                <button type="button" class="btn btn-primary btn-progress" (click)="validarIdentidad()">Validate</button>
+                <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso(); closeSeguridad();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

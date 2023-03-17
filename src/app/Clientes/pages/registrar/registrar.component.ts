@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
 import { PlanModel } from 'src/app/components/class/planes.class';
 import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuarios.class';
+import { UsuariosService } from 'src/app/Maestros/services/usuarios.service';
 @Component({
   selector: 'app-registrar',
   templateUrl: './registrar.component.html',
@@ -22,15 +23,22 @@ import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuar
   providers: [ClientesService, PatternsService, NotificacionesService]
 })
 
-export class RegistrarComponent implements OnInit  {
+export class RegistrarComponent implements OnInit {
   @ViewChild('openGetdocumento') openDocumentoModal!: any;
-
+  @ViewChild('openSeguridad') openSeguridad!: any;
+  @ViewChild('closeModalSeguridad') closeModalSeguridad!: any;
+  @ViewChild('closeModal') closeModal!: any;
+  public loading = false;
   documentoString: string = '';
   documentoInput: string = '';
   openModal = true;
   registerClientForm!: FormGroup;
+  seguridadForm!: FormGroup;
   habilitarModal: boolean = true;
   updateAvalible: boolean | '';
+  disabledFechaInicio!: boolean | '';
+  fechaInicialAntigua: string = '';
+  documentoAntiguo: string  = '';
   fechaInicial: Date = new Date();
   planData: PlanModel[] = [];
   usuariosData: Usuario_Model[] = [];
@@ -53,6 +61,9 @@ export class RegistrarComponent implements OnInit  {
   value_plan_seleccionado!: PlanModel;
   value_forma_seleccionado!: Forma_PagoModel;
   isEdit: boolean = false;
+  editaFechaInicial: boolean = false;
+  editaDocumento: boolean = false;
+  usuarios: Usuario_Model[] = [];
   constructor(private _formBuilder: FormBuilder,
     private _clientesService: ClientesService,
     private _patternsService: PatternsService,
@@ -61,14 +72,16 @@ export class RegistrarComponent implements OnInit  {
     private _formaPagoService: FormaPagoService,
     private _sendDataComponentsService: SendDataComponentsService,
     private _router: Router,
-    private _Activatedroute: ActivatedRoute
+    private _Activatedroute: ActivatedRoute,
+    private _usuariosService: UsuariosService
   ) {
     this.updateAvalible = false;
+
   }
 
   ngOnInit(): void {
-
     this.InicializarFromulario();
+    this.initialiceFormSeguridad();
     this.registerClientForm.reset();
     // this.registerClientForm.get('Fecha_fin')?.disable();
     this.getPlanes();
@@ -76,18 +89,32 @@ export class RegistrarComponent implements OnInit  {
     this.getFormasPago();
     this.registerClientForm.controls.Estado.setValue("-1");
     const edit = this._Activatedroute.snapshot.paramMap.get("edit");
-    if ( edit === '1') {
-        this.isEdit = true;
-        this.subcription = this._sendDataComponentsService.clientDataObservable.subscribe(
-          clienteModel => {
-            this.MapperFormCliente(clienteModel);
-          }
-        );
+    if (edit === '1') {
+      this.loading = true;
+      this.isEdit = true;
+      this.subcription = this._sendDataComponentsService.clientDataObservable.subscribe(
+        clienteModel => {
+          this.MapperFormCliente(clienteModel);
+        }, error => {
+          this.loading = false;
+        }
+      );
     } else {
+      this.loading = false;
       this.isEdit = false;
+      this.SetFechaRegistro();
     }
-    
 
+    localStorage.setItem('active', '0');
+
+  }
+
+  private SetFechaRegistro() {
+    const fecha_Now = new Date;
+    var fecha_format = moment(fecha_Now.toISOString()).format("YYYY-MM-DD").toString();
+    this.registerClientForm.controls.Fecha_registro.setValue(fecha_format);
+    this.registerClientForm.controls.Fecha_inicio.setValue(fecha_format);
+    this.registerClientForm.controls.Estado.setValue(1);
   }
 
   getPlanes() {
@@ -95,7 +122,7 @@ export class RegistrarComponent implements OnInit  {
   }
 
   getUsuarios() {
-    this._modalServices.getUsuarios().subscribe( result => this.usuariosData = result);
+    this._modalServices.getUsuarios().subscribe(result => this.usuariosData = result);
   }
 
   getFormasPago() {
@@ -116,10 +143,43 @@ export class RegistrarComponent implements OnInit  {
         }
       });
     }
+   
   }
 
-  consultarClientes() {
+  validationFechaInicial() {
+    const fechaInicio = this.registerClientForm.controls.Fecha_inicio.value;
+    const documento = this.registerClientForm.controls.Fecha_inicio.value;
+    const fechaActual = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
+    const fechaActualMenos = moment(fechaActual).add(-3, 'days').toString();
+    var fechaFormat = new Date(fechaActualMenos);
+    var fecha_Actual_format = moment(fechaFormat.toISOString()).format("YYYY-MM-DD").toString();
 
+    if (this.fechaInicialAntigua !== fechaInicio) {
+      if (fechaInicio < fecha_Actual_format) {
+          this._notifAlert.Advertencia('La fecha de inicio , no puede ser menor a 3 dias como maximo de la fecha actual.');
+          this.registerClientForm.controls.Fecha_inicio.reset();
+        }
+  
+      this.setFechaFinal();
+    }
+
+    if (this.isEdit) {
+      if (this.fechaInicialAntigua !== fechaInicio) {
+        this.editaFechaInicial = true;
+        this.openSeguridad.nativeElement.click();
+      }
+    }
+
+  }
+
+  validarCambioDocumento() {
+    const fechaInicio = this.registerClientForm.controls.Documento_identitdad.value;
+    if (this.isEdit) {
+      if (this.documentoAntiguo !== fechaInicio) {
+        this.editaDocumento = true;
+        this.openSeguridad.nativeElement.click();
+      }
+    }
   }
 
   consultarClienteCedula(documento: string) {
@@ -131,145 +191,176 @@ export class RegistrarComponent implements OnInit  {
 
   guardarCliente() {
     if (!this.registerClientForm.valid) {
+      this.loading = false;
       this.registerClientForm.markAllAsTouched();
     } else {
-      if (this.registerClientForm.controls.Id_Usuario.value.Estado) {
-        this.registerClientForm.controls.Id_Usuario.setValue(String(this.registerClientForm.controls.Id_Usuario.value.Id_Usuario));
-          this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
-          this.registerClientForm.controls.Fecha_fin.setValue(String(this.registerClientForm.controls.Fecha_fin.value));
-          const hora = new Date().getHours().toString() + ':'+ new Date().getMinutes().toString();
-          const hora_format = moment(hora,'H:m:s').format('h:mm a');
-          this.registerClientForm.controls.Hora_Registro.setValue(hora_format);
-          const fecha_Up = new Date;
-          var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
-          this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
-    
-          this._clientesService.saveClientes(this.mapperCliente(this.registerClientForm.value)).subscribe(
-            result => {
-              this._notifAlert.Exitoso('registro');
-              this.registerClientForm.reset();
-            }, error => {
-              console.log(error);
-    
-              this._notifAlert.Advertencia(error.error.EntityValidationErrors[0]._validationErrors[0]._errorMessage);
-            }
-          )
-          } else {
-            this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
-            this.registerClientForm.controls.Id_Usuario.reset();
-          }
+      this.loading = true;
+      this.registerClientForm.controls.Id_Usuario.setValue(String(this.registerClientForm.controls.Id_Usuario.value));
+      this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
+      this.registerClientForm.controls.Fecha_fin.setValue(String(this.registerClientForm.controls.Fecha_fin.value));
+      const hora = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
+      const hora_format = moment(hora, 'H:m:s').format('h:mm a');
+      this.registerClientForm.controls.Hora_Registro.setValue(hora_format);
+      const fecha_Up = new Date;
+      var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
+      this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
+
+      this._clientesService.saveClientes(this.mapperCliente(this.registerClientForm.value)).subscribe(
+        result => {
+          this.loading = false;
+          this._notifAlert.Exitoso('registro');
+          this.registerClientForm.reset();
+          this.SetFechaRegistro();
+        }, error => {
+          this.loading = false;
+          this._notifAlert.Advertencia(error.error.EntityValidationErrors[0]._validationErrors[0]._errorMessage);
+        }
+      )
+    }
+  }
+
+  validarUsuario(id: any) {
+    if (id !== 0 && id !== null && id !== undefined) {
+      const usuario = this.usuariosData.filter(c => c.Id_Usuario == id);
+      if (!usuario[0].Estado) {
+        this.loading = false;
+        this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
+        this.registerClientForm.controls.Id_Usuario.reset();
+      }
+
     }
   }
 
   editarCliente() {
-    this.registerClientForm.controls.Id_Usuario.setValue(1);
-
     if (!this.registerClientForm.valid) {
       this.registerClientForm.markAllAsTouched();
     } else {
-      this._notifAlert.confirmation('¿ Que deseas hacer ?','NUEVO PAGO', 'EDITAR USUARIO').then( reingreso => {
-        if (reingreso) {
-          this.EditClientPrivate(reingreso);
-        } else {
-          this.EditClientPrivate(reingreso);
-        }
-      })
-     
+      const fechaNewInicial = this.registerClientForm.controls.Fecha_inicio.value;
+      if (this.fechaInicialAntigua !== fechaNewInicial) {
+        this._notifAlert.confirmationNotBtnCancel('¿ Que deseas hacer ?', '', 'NUEVO PAGO').then(reingreso => {
+          if (reingreso) {
+            this.EditClientPrivate(reingreso);
+          }
+        })
+      } else {
+        this._notifAlert.confirmationNotBtnConfirm('¿ Que deseas hacer ?', '', 'EDITAR USUARIO').then(reingreso => {
+          if (reingreso) {
+            reingreso = false;
+            this.EditClientPrivate(reingreso);
+          }
+        })
+      }
       // var algo = this._clienteMapService.mapperClienteForm(this.registerClientForm.value);
     }
-
-    
   }
 
   private EditClientPrivate(reingreso: boolean) {
 
-    this.registerClientForm.controls.Estado.setValue(Number(this.registerClientForm.controls.Estado.value));
-    this.registerClientForm.controls.Id_Plan.setValue(Number(this.registerClientForm.controls.Id_Plan.value));
-    this.registerClientForm.controls.Id_Forma_pago.setValue(Number(this.registerClientForm.controls.Id_Forma_pago.value));
-    this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
-    this.registerClientForm.controls.Reingreso.setValue(reingreso);
-    const fecha_Up = new Date;
-    var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
-    this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
-  
-    this._clientesService.editClients(this.registerClientForm.value, this.registerClientForm.controls.Fecha_fin.value).subscribe(
-      result => {
-        this.updateAvalible = false;
-        this._notifAlert.ExitosoActualizar('registro');
-        this.registerClientForm.reset();
-        setTimeout(() => { this._router.navigateByUrl('/clientes/consultarclientes'); }, 2000);
-      }, error => {
-        console.log(error);
+    // if (this.fechaInicialAntigua === this.registerClientForm.value.Fecha_inicio) {
+    //   this._notifAlert.Advertencia('Debe seleccionar una nueva fecha de incio.');
+    // } else {
+      this.loading = true;
+      this.registerClientForm.controls.Estado.setValue(Number(this.registerClientForm.controls.Estado.value));
+      this.registerClientForm.controls.Id_Plan.setValue(Number(this.registerClientForm.controls.Id_Plan.value));
+      this.registerClientForm.controls.Id_Forma_pago.setValue(Number(this.registerClientForm.controls.Id_Forma_pago.value));
+      this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
+      this.registerClientForm.controls.Id_Usuario.setValue(this.registerClientForm.controls.Id_Usuario.value);
+      this.registerClientForm.controls.Reingreso.setValue(reingreso);
+      const fecha_Up = new Date;
+      var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
+      this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
 
-        this._notifAlert.Advertencia(error.error.EntityValidationErrors[0]._validationErrors[0]._errorMessage);
-      }
-    );
+      this._clientesService.editClients(this.registerClientForm.value, this.registerClientForm.controls.Fecha_fin.value).subscribe(
+        result => {
+          this.loading = false;
+          this.updateAvalible = false;
+          this.disabledFechaInicio = false;
+          this._notifAlert.ExitosoActualizar('registro');
+          this.registerClientForm.reset();
+          this.editaDocumento = false;
+          this.editaFechaInicial = false;
+          setTimeout(() => { this._router.navigateByUrl('/clientes/consultarclientes'); }, 2000);
+        }, error => {
+          this.loading = false;
+          console.log(error);
+          this._notifAlert.Advertencia(error.error.Message);
+        }
+      );
+    // }
   }
 
   cancelRegisterCliente() {
     this.updateAvalible = false;
+    this.disabledFechaInicio = false;
     this.registerClientForm.reset();
     this.habilitarModal = true;
     this.fechaInicial = new Date();
-  }
-
-  eliminarCliente(id: number) {
-
+    this.SetFechaRegistro();
   }
 
   setFechaFinal() {
-    console.log(this.planData);
+    this.planData.filter(c => c.Id_Plan === +this.registerClientForm.controls.Id_Plan.value).map(data => this.planSelect = data);
+    const fechaInicio = this.registerClientForm.controls.Fecha_inicio.value;
 
-    this.planData.filter( c => c.Id_Plan === +this.registerClientForm.controls.Id_Plan.value).map( data => this.planSelect = data);
-    
-    //let plan = this.planData.find(c => c.Id_Plan === this.registerClientForm.controls.Id_Plan.value)?.Id_Plan;
-    switch (this.planSelect.Id_Plan) {
-      case 1: //Mensualidad
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(1, 'months').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      case 2: //Tiquetera
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(13, 'days').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      case 3: //Bimestral
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(2, 'months').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      case 4: //Trimestral
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(3, 'months').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      case 5: //Semestral
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(6, 'months').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      case 6: //Anual
-        var fechaInicial = new Date(this.registerClientForm.controls.Fecha_inicio.value);
-        var fechaFinal = moment(fechaInicial).add(11, 'months').toString();
-        var fechaFinalFormat = new Date(fechaFinal);
-        var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-        this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
-        break;
-      default:
-        break;
-    }
+    const fechaActual = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
+    const fechaActualMenos = moment(fechaActual).add(-3, 'days').toString();
+    var fechaFormat = new Date(fechaActualMenos);
+    var fecha_Actual_format = moment(fechaFormat.toISOString()).format("YYYY-MM-DD").toString();
 
+    // if (fechaInicio < fecha_Actual_format) {
+    //   this._notifAlert.Advertencia('La fecha de inicio , no puede ser menor a 3 dias como maximo de la fecha actual.');
+    //   this.registerClientForm.controls.Fecha_inicio.reset();
+    // } else {
+      //let plan = this.planData.find(c => c.Id_Plan === this.registerClientForm.controls.Id_Plan.value)?.Id_Plan;
+      if (this.planSelect !== undefined) {
+        switch (this.planSelect.Id_Plan) {
+          case 1: //Mensualidad
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(29, 'days').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          case 2: //Tiquetera
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(29, 'days').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          case 3: //Bimestral
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(2, 'months').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          case 4: //Trimestral
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(3, 'months').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          case 5: //Semestral
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(6, 'months').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          case 6: //Anual
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(11, 'months').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+          default:
+            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(this.planSelect.Cantidad_Dias - 1, 'days').toString();
+            var fechaFinalFormat = new Date(fechaFinal);
+            var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
+            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            break;
+        }
+      } else {
+        this._notifAlert.Advertencia('debe seleccionar un plan.');
+      }
+    // }
   }
 
   MapperFormCliente(clienteModel: Clientes_Completo) {
@@ -277,30 +368,48 @@ export class RegistrarComponent implements OnInit  {
       this.registerClientForm.get('Id_Cliente')?.setValue(clienteModel.cliente.Id_Cliente);
       this.registerClientForm.get('Nombres')?.setValue(clienteModel.cliente.Nombres);
       this.registerClientForm.get('Apellidos')?.setValue(clienteModel.cliente.Apellidos);
-      this.registerClientForm.get('Fecha_nacimiento')?.setValue(this.formatSetDateInputs(clienteModel.cliente.Fecha_nacimiento.toString()));
+      this.registerClientForm.get('Fecha_nacimiento')?.setValue(moment(clienteModel.cliente.Fecha_nacimiento.toString()).format("YYYY-MM-DD").toString());
       this.registerClientForm.get('Documento_identitdad')?.setValue(clienteModel.cliente.Documento_identitdad);
       this.registerClientForm.get('Celular')?.setValue(clienteModel.cliente.Celular);
       this.registerClientForm.get('Id_Plan')?.setValue(clienteModel.plan.Id_Plan);
       this.registerClientForm.get('Id_Forma_pago')?.setValue(clienteModel.forma_pago.Id_Forma_Pago);
-      this.registerClientForm.get('Estado')?.setValue(clienteModel.cliente.Estado == false ? '0': '1');
-      this.registerClientForm.get('Fecha_registro')?.setValue(this.formatSetDateInputs(clienteModel.cliente.Fecha_registro.toString()));
-      this.registerClientForm.get('Id_Usuario')?.setValue(clienteModel.cliente.Id_Usuario);
-      this.registerClientForm.get('Fecha_inicio')?.setValue(this.formatSetDateInputs(clienteModel.cliente.Fecha_inicio.toString()));
-      this.registerClientForm.get('Fecha_fin')?.setValue(this.formatSetDateInputs(clienteModel.cliente.Fecha_fin.toString()));
-     
-      console.log(this.registerClientForm.value);
+      this.registerClientForm.get('Estado')?.setValue(clienteModel.cliente.Estado == false ? '0' : '1');
+      this.registerClientForm.get('Fecha_registro')?.setValue(moment(clienteModel.cliente.Fecha_registro.toString()).format("YYYY-MM-DD").toString());
+      this.registerClientForm.get('Id_Usuario')?.setValue(clienteModel.usuario.Id_Usuario);
+      this.registerClientForm.get('Fecha_inicio')?.setValue(moment(clienteModel.cliente.Fecha_inicio.toString()).format("YYYY-MM-DD").toString());
+      this.registerClientForm.get('Fecha_fin')?.setValue(moment(clienteModel.cliente.Fecha_fin.toString()).format("YYYY-MM-DD").toString());
+
+      this.fechaInicialAntigua = this.registerClientForm.get('Fecha_inicio')?.value;
+      this.documentoAntiguo = this.registerClientForm.get('Documento_identitdad')?.value;
+
+      if (clienteModel.Vencido && clienteModel.porVencer) {
+        this.disabledFechaInicio = false;
+      } 
+      else {
+        this.disabledFechaInicio = true;
+      }
+
       this.updateAvalible = true;
       this.disabledInputs();
+      this.loading = false;
+    } else {
+      this.loading = false;
     }
   }
 
   private disabledInputs() {
-    this.registerClientForm.get('Documento_identitdad')?.dirty;
-    this.registerClientForm.get('Documento_identitdad')?.touched;
-    this.registerClientForm.get('Documento_identitdad')?.pristine;
+    // this.registerClientForm.get('Documento_identitdad')?.dirty;
+    // this.registerClientForm.get('Documento_identitdad')?.touched;
+    // this.registerClientForm.get('Documento_identitdad')?.pristine;
+    // this.registerClientForm.get('Documento_identitdad')?.disable();
 
+    // if (this.disabledFechaInicio) {
+    //   this.registerClientForm.get('Fecha_inicio')?.dirty;
+    //   this.registerClientForm.get('Fecha_inicio')?.touched;
+    //   this.registerClientForm.get('Fecha_inicio')?.pristine;
+    //   this.registerClientForm.get('Fecha_inicio')?.disable();
+    // }
     this.registerClientForm.get('Fecha_registro')?.disable();
-    this.registerClientForm.get('Documento_identitdad')?.disable();
   }
 
   validarSeleccion(input: string, name_input: string) {
@@ -310,8 +419,12 @@ export class RegistrarComponent implements OnInit  {
     }
     if (name_input === 'plan') {
       this.planData.filter(c => c.Id_Plan == this.registerClientForm.controls[input].value).map(
-        result => this.value_plan_seleccionado = result
+        result => {
+          this.value_plan_seleccionado = result;
+          this.setFechaFinal();
+        }
       );
+
     } else if (name_input === 'forma') {
       this.formasData.filter(c => c.Id_Forma_Pago == this.registerClientForm.controls[input].value).map(
         result => this.value_forma_seleccionado = result
@@ -327,33 +440,59 @@ export class RegistrarComponent implements OnInit  {
 
   }
 
-  private formatSetDateInputs(date: string): string {
-    moment(this.registerClientForm.controls.Fecha_inicio.value, 'YYYY-MM-DD')
-    var newFecha = new Date(date);
-    var fechaMoment = moment(newFecha).toString(); //.add(1, 'months')
-    var fechaFormat = new Date(fechaMoment);
-    var fechaSetformat = moment(fechaFormat.toISOString()).format("YYYY-MM-DD").toString();
-    return fechaSetformat;
-  }
-
   private mapperCliente(cliente: any): Clientes {
     return {
-       Nombres: cliente.Nombres,
-       Apellidos: cliente.Apellidos,
-       Celular: cliente.Celular,
-       Documento_identitdad: cliente.Documento_identitdad,
-       Estado: cliente.Estado === '1' ? true : false,
-       Fecha_nacimiento: cliente.Fecha_nacimiento,
-       Id_Plan: cliente.Id_Plan,
-       Id_Forma_pago: cliente.Id_Forma_pago,
-       Id_Cliente: cliente.Id_Cliente,
-       Id_Usuario: cliente.Id_Usuario,
-       Fecha_fin: cliente.Fecha_fin,
-       Fecha_inicio: cliente.Fecha_inicio,
-       Fecha_registro: cliente.Fecha_registro,
-       Fecha_Actualizacion: cliente.Fecha_Actualizacion,
-       Hora_Registro: cliente.Hora_Registro
+      Nombres: cliente.Nombres,
+      Apellidos: cliente.Apellidos,
+      Celular: cliente.Celular,
+      Documento_identitdad: cliente.Documento_identitdad,
+      Estado: cliente.Estado === 1 ? true : false,
+      Fecha_nacimiento: cliente.Fecha_nacimiento,
+      Id_Plan: cliente.Id_Plan,
+      Id_Forma_pago: cliente.Id_Forma_pago,
+      Id_Cliente: cliente.Id_Cliente,
+      Id_Usuario: cliente.Id_Usuario,
+      Fecha_fin: cliente.Fecha_fin,
+      Fecha_inicio: cliente.Fecha_inicio,
+      Fecha_registro: cliente.Fecha_registro,
+      Fecha_Actualizacion: cliente.Fecha_Actualizacion,
+      Hora_Registro: cliente.Hora_Registro
     }
+  }
+
+  validarIdentidad() {
+    if (this.seguridadForm.valid) {
+      const pass = this.seguridadForm.controls.password.value;
+      this._usuariosService.getUsuarios().subscribe(
+        result => {
+          this.usuarios = result;
+          const identidad = this.usuarios.filter(u => u.Password === pass && u.Id_Usuario === 1);
+          if (identidad.length > 0) {
+            this.closeModal.nativeElement.click();
+          } else {
+            if (this.editaFechaInicial) {
+              this.seguridadForm.controls.password.reset();
+            } else if( this.editaDocumento){
+              this.registerClientForm.controls.Documento_identitdad.reset();
+            }
+            this._notifAlert.Advertencia('No cuenta con los permisos o la contraseña es incorrecta');
+            
+          }
+        }
+      )
+    } else {
+      this.seguridadForm.markAllAsTouched();
+    }
+  }
+
+  closeSeguridad() {
+    this.seguridadForm.reset();
+    if (this.editaFechaInicial) {
+       this.registerClientForm.get('Fecha_inicio')?.reset();
+    } else if (this.editaDocumento) {
+       this.registerClientForm.get('Documento_identitdad')?.reset();
+    }
+   
   }
 
   InicializarFromulario() {
@@ -371,9 +510,17 @@ export class RegistrarComponent implements OnInit  {
       Id_Usuario: [null, [Validators.required]],
       Fecha_inicio: [null, [Validators.required]],
       Fecha_fin: [null, [Validators.required]],
-      Reingreso:[null],
+      Reingreso: [null],
       Fecha_Actualizacion: [null],
       Hora_Registro: [null]
+    });
+
+  }
+
+  initialiceFormSeguridad() {
+    this.seguridadForm = this._formBuilder.group({
+      password: [null, [Validators.required]],
+
     });
 
   }

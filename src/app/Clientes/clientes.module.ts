@@ -9,6 +9,7 @@ import { RegistrarComponent } from './pages/registrar/registrar.component';
 import { ConsultarComponent } from './pages/consultar/consultar.component';
 import { SharedModule } from "../shared/shared.module";
 import { NgxTablePaginationModule } from 'ngx-table-pagination';
+import { LoadingModule } from 'ngx-loading';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { NgxTablePaginationModule } from 'ngx-table-pagination';
         ClientesRoutingModule,
         SharedModule,
         ComponentsModule,
-        NgxTablePaginationModule
+        NgxTablePaginationModule,
+        LoadingModule
     ],
     exports: [
         RegistrarComponent,

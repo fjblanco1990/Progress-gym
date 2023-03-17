@@ -32,6 +32,25 @@
                         </div>
                         <div class="col-sm">
                             <div class="group">
+                                <select required formControlName="Usuario"
+                                    (change)="validarSeleccion('Usuario', 'usuario'); filtrarUsuario()">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [ngValue]="usuario" *ngFor="let usuario of usuariosData">
+                                        {{usuario.Nombre_completo}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="consultarClientForm.controls.Usuario.errors?.required &&
+                                    ( consultarClientForm.controls.Usuario.touched)">
+                                    {{ 'El usuario que registra Obligatorio , debe seleccionar una opción'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Usuario</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
                                 <input type="date" required="required" formControlName="FechaInicial" 
                                 (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
                                 <span class="highlight"></span>
@@ -40,20 +59,11 @@
                             
                             </div>
                         </div>
-                        <div class="col-sm">
-                            <div class="group">
-                                <input type="date" required="required" formControlName="FechaFinal"
-                                (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label class="label-select">Fecha final</label>
-                            
-                            </div>
-                        </div>
+                        
                         <div class="col-sm">
                             <div class="group">
                                 <div class="col-sm content-btn-footer">
-                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="filterRangoFechas(consultarClientForm.controls.FechaInicial.value,consultarClientForm.controls.FechaFinal.value)">Consultar</button>
+                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="filterRangoFechas(consultarClientForm.controls.FechaInicial.value)">Consultar</button>
                                     <button type="button" class="btn-gym-dark" (click)="reset()" >Limpiar</button>
                                 </div>
                             </div>
@@ -82,7 +92,7 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let cliente of clientesModelLstSearch | paginate: { currentPage: p }" class="tr-table cursor"
-                          [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido, 'color-normal': !cliente.porVencer &&  !cliente.Vencido , 'color-danger ': cliente.Vencido && cliente.porVencer }"
+                          [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido && cliente.DiasFaltantes < 3, 'color-normal': !cliente.porVencer &&  !cliente.Vencido &&  cliente.DiasFaltantes > 3, 'color-danger ': cliente.Vencido && cliente.porVencer && cliente.DiasFaltantes <= 0 }"
                           [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' ' + cliente.palabra: 'Le quedan '+ cliente.DiasFaltantes +' '+ cliente.palabra "
                            (click)="editarCliente(cliente)">
                         <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>

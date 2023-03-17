@@ -3,7 +3,7 @@ import { Clientes } from "src/app/Clientes/interfaces/clientes.interfaces";
 export class Ingreso  {
     Id_Ingreso!: number;
     Id_Cliente!: number;
-    Fecha_Ingreso!: Date;
+    Fecha_Ingreso!: string;
     Hora_Ingreso!: string;
 }
 

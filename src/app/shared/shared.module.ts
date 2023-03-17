@@ -6,6 +6,7 @@ import { FooterComponent } from './footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
+import { NgxTablePaginationModule } from 'ngx-table-pagination';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ComponentsModule } from '../components/components.module';
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    ComponentsModule
+    ComponentsModule,
+    NgxTablePaginationModule
   ],
   exports: [
     NavbarComponent,

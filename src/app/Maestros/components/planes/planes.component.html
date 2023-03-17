@@ -53,8 +53,7 @@
                     <div class="col-sm content-btn-footer">
                         <button type="button" class="btn-gym-progress" *ngIf="!showBtnEdit && showBtnSave" (click)="GuardarPlan()">Guardar</button>
                         <button type="button" class="btn-gym-progress" *ngIf="!showBtnSave && showBtnEdit" (click)="EditarPlan()">Editar</button>
-                        <button type="button" class="btn-gym-dark"
-                            >Cancelar</button>
+                        <button type="button" class="btn-gym-dark" (click)="cancelar()" >Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -78,7 +77,7 @@
                             <td>{{plan.Cantidad_Dias}}</td>
                             <td>
                                 <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapPlan(plan)"></i>
-                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(plan.Id_Plan)"></i>
+                                <!-- <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(plan.Id_Plan)"></i> -->
                             </td>
                         </tr>
 

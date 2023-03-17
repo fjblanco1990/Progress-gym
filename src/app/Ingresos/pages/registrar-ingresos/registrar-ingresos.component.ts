@@ -8,6 +8,9 @@ import { VentasService } from 'src/app/shared/services/ventas.service';
 import { Informe_fechas } from '../../interfaces/informes.interface';
 import { Ingreso_completo } from '../../interfaces/ingresos.interface';
 import { IngresoService } from '../../services/ingreso.service';
+import { UsuariosService } from '../../../Maestros/services/usuarios.service';
+import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuarios.class';
+import { ConceptoModel } from '../../../components/class/conceptos.class';
 
 @Component({
   selector: 'app-registrar-ingresos',
@@ -25,9 +28,10 @@ export class RegistrarIngresosComponent implements OnInit {
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
-  p: number = 1;
+  ing: number = 1;
   venta: number = 1;
   plan: number = 1
+  hist: number = 1;
   datesSend!: Informe_fechas;
   informeGeneral: any;
   resultVentas = { 
@@ -44,26 +48,34 @@ export class RegistrarIngresosComponent implements OnInit {
     informeHistorico: [
       {
         descripcion: '',
-        value: 0
+        value: 0,
+        usuario: '',
+        Fecha_Ingreso: '',
+        Hora: ''
       }
     ]
   }
-  conceptosData: any[] = [];
+  conceptosData: ConceptoModel[] = [];
+  usuariosData: Usuario_Model[] = [];
   resultVentasSuminitros = 0;
   Totla_ingresosDia = 0;
+  totalVentasDiarias = 0;
+  totalPlanesDiarios = 0;
+  totalIngresoUnicoDiarios = 0;
   tipoConsulta!: number;
   constructor(
-    private _formBuilder: FormBuilder, 
-    private _patternsService: PatternsService, 
+    private _formBuilder: FormBuilder,  
     private _ingresoService : IngresoService,
-    private _notifcaciones: NotificacionesService,
-    private _ventasService: VentasService) { 
+    private _ventasService: VentasService,
+    private _usuariosService: UsuariosService) { 
      
     }
 
   ngOnInit(): void {
     this.InicializarFromulario();
     this.getConceptos();
+    this.getUsuarios();
+    localStorage.setItem('active', '0');
   }
 
   pageChanged(event: any){
@@ -90,12 +102,16 @@ export class RegistrarIngresosComponent implements OnInit {
   ObtenerVentasDiarias() {
 
       this.resultVentas.informeVenta = [];
+      this.totalVentasDiarias = 0;
       this.datesSend = new Informe_fechas();
       const dateFormat = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
       this.datesSend.Fecha_Inicial = dateFormat;
       this.datesSend.Fecha_Final =   dateFormat;
       this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
         this.resultVentas.informeVenta = result;
+        result.forEach(({...venta}) => {
+          this.totalVentasDiarias = this.totalVentasDiarias + venta.venta.Valor_Venta;
+        });
         this.openModalVentas.nativeElement.click();
       });
 
@@ -103,23 +119,32 @@ export class RegistrarIngresosComponent implements OnInit {
 
   ObtenerPlanesDiarios() {
     this.resultVentas.informePlanes = [];
+    this.totalPlanesDiarios = 0;
     this.datesSend = new Informe_fechas();
     const dateFormat = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
     this.datesSend.Fecha_Inicial = dateFormat;
     this.datesSend.Fecha_Final =   dateFormat;
     this._ventasService.GetVentasPlanesDiarios(this.datesSend).subscribe( result => {
       this.resultVentas.informePlanes = result;
+      result.forEach(({...ventasClientes }) => {
+        this.totalPlanesDiarios = this.totalPlanesDiarios + ventasClientes.ventasClientes.Valor_Venta;
+      });
       this.openModalPlanes.nativeElement.click();
     })
   }
 
   ObtenerHistoricoVentas() {
+    this.resultVentas.informeHistorico = [];
     this._ventasService.GetVentasAll().subscribe( result => {
       result.forEach((venta: any) => {
         const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.Id_Concepto);
+        const userData = this.usuariosData.find( c => c.Id_Usuario == venta.Id_Usuario)
         const infoVenta = {
             descripcion: conpdata === undefined  ? '' : conpdata.Descripcion,
-            value: venta.Valor_Venta
+            value: venta.Valor_Venta,
+            usuario: userData === undefined ? '': userData?.Nombre_completo,
+            Fecha_Ingreso: venta.Fecha_Ingreso,
+            Hora: venta.Hora_Venta
           }
         
         this.resultVentas.informeHistorico.push(infoVenta);
@@ -133,8 +158,14 @@ export class RegistrarIngresosComponent implements OnInit {
     this._ventasService.getConceptos().subscribe( result => this.conceptosData = result);
   }
 
+  getUsuarios() {
+    this._usuariosService.getUsuarios().subscribe( result => this.usuariosData = result);
+  }
+
   getInformeDiarioGeneral() {
     this.resultVentasSuminitros = 0;
+    this.Totla_ingresosDia = 0;
+    this.totalIngresoUnicoDiarios = 0;
     this.informeGeneral = [];
     if (this.informesForm.valid) {
      
@@ -145,7 +176,7 @@ export class RegistrarIngresosComponent implements OnInit {
         this._ingresoService.getInformeDiarioGeneral(this.datesSend).subscribe( result => this.informeGeneral = result);
         this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
           result.forEach((venta: any) => {
-            this.resultVentasSuminitros = this.resultVentasSuminitros + venta.venta.Valor_Venta;
+            this.resultVentasSuminitros = this.resultVentasSuminitros + (venta.venta.Id_Concepto !== 6 ? venta.venta.Valor_Venta: 0);
             const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.venta.Id_Concepto);
             
             this.Totla_ingresosDia = venta.venta.Id_Concepto === 6 ? this.Totla_ingresosDia+1: this.Totla_ingresosDia+0;
@@ -157,13 +188,19 @@ export class RegistrarIngresosComponent implements OnInit {
             
             this.resultVentas.informeVenta.push(infoVenta);
           });
-      
+        });
+        this._ingresoService.getInformeIngresosVentasDiarios(this.datesSend).subscribe( result => {
+          result.forEach((diarios: any) => {
+            this.totalIngresoUnicoDiarios = this.totalIngresoUnicoDiarios + diarios.venta.Valor_Venta;
+          })
         })
     } else {
       this.informesForm.markAllAsTouched();
     }
   
   }
+
+  
 
   desactiveRegistroIngreso() {
     this.habilitarModal = false;

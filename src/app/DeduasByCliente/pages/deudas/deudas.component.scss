@@ -1,0 +1,160 @@
+.mestros-dash {
+    margin-top: 138px;
+    position: absolute;
+}
+
+.content-general {
+    display: flex;
+    width: 100%;
+    justify-items: center;
+    margin: 0px auto;
+    padding: 0px;
+    margin: 0px;
+    justify-content: center;
+    flex-direction: row;
+
+}
+.content-form { 
+      display: block;
+      margin-top: 140px;
+      width: 85%;
+      height: 950px;
+      
+}
+.form {
+    width: 80%;
+    margin: 0px auto;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 40px;
+    text-align: center;
+    font-family: 'OptiAgencyGothicMedium'; 
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.content-options {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.optiosn-link {
+    width: 45%;
+    border: 1px solid;
+    height: 50px;
+    text-align: center;
+    line-height: 45px;
+    margin-right: 10px;
+    overflow: auto;
+    font-family: 'OptiAgencyGothicMedium'; 
+    letter-spacing: 3px;
+    font-size: 25px;
+    background: #35a2a2 !important;
+    color: white !important;
+    transition: all 500ms;
+    &:hover {
+        cursor: pointer;
+        background: #333 !important;
+        color: white !important;
+    }
+}
+
+.content-btn {
+    text-align: center;
+    margin-top: 25px;
+}
+
+
+.title-dark {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #333;
+    color: white;
+}
+
+ 
+.btn-x {
+    background: none !important;
+    color: white;
+    float: right;
+    font-size: 30px;
+    margin-top: -60px;
+    width: auto;
+    margin-right: 10px;
+    &::after {
+        color: white;
+        background: white;
+    }
+}
+
+.btn-progress {
+    border: 1px solid rgba(53,162,162,1);
+    background-color: rgba(53,162,162,1);
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid rgb(38, 114, 114);
+        background: rgb(38, 114, 114);
+        font-size: 21px;
+    }
+}
+.btn-dark {
+    border: 1px solid #333;
+    background-color: #333;
+    height: 50px;
+    font-family: 'OptiAgencyGothicMedium';
+    font-size: 20px;
+    letter-spacing: 2px;
+    transition: 300ms all;
+    &:hover {
+        border: 1px solid #333333cf;
+        background: #333333cf;
+        font-size: 21px;
+    }
+}
+
+.input-get-doc {
+    font-size: 20px !important;
+    text-align: center;
+    align-items: center;
+    width: 50%;
+    display: block;
+    margin: 0px auto;
+
+}
+
+#titleModal {
+    font-family: 'OptiAgencyGothicMedium';  
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.msj-error {
+    text-align: center;
+    margin: 0px auto;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.content-general-venta {
+    width: 100%;
+}
+
+.content-item-menu {
+    width: 95%;
+    margin-top: 260px;
+    margin-left: 280px;
+}

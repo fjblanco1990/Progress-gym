@@ -52,6 +52,10 @@ export class IngresoService {
     getInformeDiarioGeneral(datesDto: Informe_fechas ): Observable<any> {
       return this.httpSerivice.post(`${environment.apiUrl}GetInformeDiarioGeneral`, JSON.stringify(datesDto)) 
     }
+
+    getInformeIngresosVentasDiarios(datesDto: Informe_fechas): Observable<any> {
+      return this.httpSerivice.post(`${environment.apiUrl}GetVentasIngresosUnicos`, JSON.stringify(datesDto))
+    }
   // EliminarTopesSoat(id: number): Observable<Clientes[]> {
   //   return this.http.get<Clientes[]>(`${environment.apiUrl}/EliminarCliente/${id}`);
   // }

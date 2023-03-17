@@ -2,34 +2,50 @@
     <div class="content-item-menu">
         <div class="registro cursor card-menu" routerLink="/clientes/registrarclientes/0">
             <h2>Registros</h2>
-            <img src="assets/img/fuerza.png" alt="">
+            <img src="assets/img/musculos.png" alt="" width="50">
         </div>
         <div class="consultas cursor card-menu" routerLink="/clientes/consultarclientes">
-            <h2>Consultas Registros</h2>
-            <img src="assets/img/pesa.png" alt="">
+            <h2>Registros</h2>
+            <img src="assets/img/peso.png" alt="" width="60">
         </div>
         <div class="consultas cursor card-menu" routerLink="/ingresos/consultar-ingreso">
-            <h2>Consultas Ingresos</h2>
-            <img src="assets/img/inside.png" alt="">
+            <h2>Ingresos</h2>
+            <img src="assets/img/puerta-de-salida.png" alt="" width="60">
         </div>
         <div class="ingresos cursor card-menu" routerLink="/ingresos/Informes">
             <h2>Informes</h2>
-            <img src="assets/img/report.png" alt="" width="50">
+            <img src="assets/img/informe-de-negocio.png" alt="" width="50">
+        </div>
+        <div class="ingresos cursor card-menu" routerLink="/reportes/usuarios-report">
+            <!--  -->
+            <h2>Reportes</h2>
+            <img src="assets/img/reporte.png" alt="" width="50">
+        </div>
+        <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#ModalCierre"
+            (click)="desactiveRegistroIngreso()">
+            <h2>Cierre</h2>
+            <img src="assets/img/firmar.png" alt="" width="50">
         </div>
         <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#getInformationModal"
             (click)="desactiveRegistroIngreso()">
             <h2>Ventas</h2>
-            <img src="assets/img/icon-venta.png" alt="" width="50">
+            <img src="assets/img/grafico-de-barras.png" alt="" width="50">
         </div>
-        <div class="ingresos cursor card-menu" routerLink="/maestros/configuracion">
-            <h2>Config. Maestros</h2>
-            <img src="assets/img/icon-config.png" alt="" width="50">
+        <div class="ingresos cursor card-menu" routerLink="/deudas/deuda">
+            <h2>Deudas</h2>
+            <img src="assets/img/pedir-prestado.png" alt="" width="50">
         </div>
+
+        <div class="ingresos cursor card-menu" data-bs-toggle="modal" data-bs-target="#seguridadModal">
+            <h2>Configuraciones</h2>
+            <img src="assets/img/configuraciones.png" alt="" width="50">
+        </div>
+        
     </div>
 </div>
 
 
-<!-- Modal -->
+<!-- Modal ventas-->
 
 <div class="modal fade" id="getInformationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -41,73 +57,76 @@
                     (click)="habilitarRegistroIngreso()">X</button>
             </div>
             <div class="modal-body">
-                <div class="content-form">
-                    <form [formGroup]="ventasForm">
-                        <div class="content-general-venta">
-                            <div class="content-form">
-                                <div class="form">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm">
-                                                <div class="group">
-                                                    <select required formControlName="Id_Concepto"
-                                                        (change)="validarSeleccion('Id_Concepto', 'concepto')">
-                                                        <!-- <option value="-1">---Seleccione---</option> -->
-                                                        <option [ngValue]="optPlan"
-                                                            *ngFor="let optPlan of conceptoData">
-                                                            {{optPlan.Descripcion}}
-                                                        </option>
-                                                    </select>
-                                                    <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Plan.errors?.required &&
+                <!-- <div class="content-form"> -->
+                <form [formGroup]="ventasForm">
+                    <div class="content-general-venta">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Concepto"
+                                            (change)="validarSeleccion('Id_Concepto', 'concepto')">
+                                            <option [ngValue]="optPlan" *ngFor="let optPlan of conceptoData">
+                                                {{optPlan.Descripcion}}
+                                            </option>
+                                        </select>
+                                        <!-- <span class="text-danger text-validation-sm" *ngIf="registerClientForm.controls.Id_Plan.errors?.required &&
                                                 ( registerClientForm.controls.Id_Plan.touched)">
                                                     {{ 'Plan es obligatorio , debe seleccionar una opción'}}
                                                 </span> -->
-                                                    <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="label-select">Concepto</label>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Concepto</label>
 
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="group">
-                                                    <select required formControlName="Id_Usuario"
-                                                       >
-                                                        <!-- <option value="-1">---Seleccione---</option> -->
-                                                        <option [ngValue]="optUser"
-                                                            *ngFor="let optUser of usuariosData">
-                                                            {{optUser.Nombre_completo}}
-                                                        </option>
-                                                    </select>
-                                                    <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="label-select">Usuario</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Usuario">
+                                            <!-- <option value="-1">---Seleccione---</option> -->
+                                            <option [ngValue]="optUser" *ngFor="let optUser of usuariosData">
+                                                {{optUser.Nombre_completo}}
+                                            </option>
+                                        </select>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Usuario</label>
 
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="group">
-                                                    <input type="number" required="required"
-                                                        formControlName="Valor_Venta"
-                                                        (focus)="desactiveRegistroIngreso()" />
-                                                    <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls.Valor_Venta.errors?.required &&
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Forma_pago">
+                                            <option [value]="optForm.Id_Forma_Pago" *ngFor="let optForm of formasData">
+                                                {{optForm.Descripcion}}
+                                            </option>
+                                        </select>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Metodo pago</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <input type="number" required="required" formControlName="Valor_Venta"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls.Valor_Venta.errors?.required &&
                                                     ( ventasForm.controls.Valor_Venta.touched)">
-                                                        {{ 'El valor de la venta es obligatorio'}}
-                                                    </span>
+                                            {{ 'El valor de la venta es obligatorio'}}
+                                        </span>
 
-                                                    <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="label-title">Valor venta</label>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-title">Valor venta</label>
 
-                                                </div>
-                                            </div>
-
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+                <!-- </div> -->
             </div>
             <div class="modal-footer footer">
                 <button type="button" class="btn btn-primary btn-progress" (click)="saveVenta()">Save sale</button>
@@ -117,5 +136,183 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Deudas -->
+
+<div class="modal fade" id="ModalCierre" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header title-dark">
+                <h5 class="modal-title" id="titleModal">Informacion de cierre</h5>
+                <button type="button" class="btn-close btn-x" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso(); limpiar()">X</button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="ventasForm">
+                    <div class="content-general-venta">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Usuario">
+                                            <!-- <option value="-1">---Seleccione---</option> -->
+                                            <option [ngValue]="optUser.Id_Usuario" *ngFor="let optUser of usuariosData">
+                                                {{optUser.Nombre_completo}}
+                                            </option>
+                                        </select>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Usuario</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <div class="col-sm content-btn-footer">
+                                            <button type="button" class="btn-gym-progress"
+                                                (click)="ConsultarCierre()">Consultar</button>
+                                            <button type="button" class="btn-gym-dark"
+                                                (click)="limpiar()">Limpiar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="content-table" *ngIf="dataDiarios.length > 0">
+                    <table class="table table-dark table-hover table-gym">
+                        <thead>
+                            <tr>
+                                <th class="table-title-gym">Concepto</th>
+                                <th class="table-title-gym">Valor venta</th>
+                                <th class="table-title-gym">Usuario</th>
+                                <th class="table-title-gym">Fecha venta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let diarios of dataDiarios | paginate: { currentPage: dia , id: 'first'}"
+                                class="tr-table cursor">
+                                <td>{{diarios.concepto.Descripcion}}</td>
+                                <td>{{diarios.venta.Valor_Venta | currency}}</td>
+                                <td>{{diarios.usuario.Nombre_completo}}</td>
+                                <td>{{diarios.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td><strong>TOTAL </strong></td>
+                                <td> {{ totalVentasDiarias | currency}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="dia = $event"
+                        id="first" maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                        screenReaderCurrentLabel="You're on page">
+                    </paging-controls>
+                </div>
+                <div class="content-table" *ngIf="dataPlanes.length > 0">
+                    <table class="table table-dark table-hover table-gym">
+                        <thead>
+                            <tr>
+                                <th class="table-title-gym">Plan</th>
+                                <th class="table-title-gym">Valor del plan</th>
+                                <th class="table-title-gym">Fecha venta</th>
+                                <th class="table-title-gym">Hora venta</th>
+                                <th class="table-title-gym">Cliente</th>
+                                <th class="table-title-gym">Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let planes of dataPlanes | paginate: { currentPage: pla , id: 'second'}"
+                                class="tr-table cursor">
+                                <td>{{planes.Plan.Descripcion}}</td>
+                                <td>{{planes.Plan.Valor_Plan | currency}}</td>
+                                <td>{{planes.Ventas_Cliente.Fecha | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{planes.Ventas_Cliente.Hora_Venta_Cliente}}</td>
+                                <td>{{planes.Cliente.Nombres}} {{planes.Cliente.Apellidos}}</td>
+                                <td>{{planes.Usuario.Nombre_completo}}</td>
+
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>TOTAL </strong></td>
+                                <td> {{ totalVentasPlanes | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="pla = $event"
+                        id="second" maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
+                        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                        screenReaderCurrentLabel="You're on page">
+                    </paging-controls>
+                </div>
+                <div class="content-errors" *ngIf="dataPlanes.length <= 0 && dataDiarios.length <= 0">
+                    <h4>No se encontraron resultados con los parametros ingresados</h4>
+                </div>
+            </div>
+            <div class="modal-footer footer">
+                <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso(); limpiar()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Seguridad-->
+<button #openSeguridad data-bs-toggle="modal" data-bs-target="#seguridadModel"></button>
+
+<div class="modal fade" id="seguridadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header title-dark">
+                <h5 class="modal-title" id="titleModal">Ingrese la contraseña</h5>
+                <button #closeModalSeguridad type="button" class="btn-close btn-x" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso()">X</button>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="content-form"> -->
+                <form [formGroup]="seguridadForm">
+                    <div class="content-general-venta">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <input type="password" required="required" formControlName="password"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="seguridadForm.controls.password.errors?.required &&
+                                                    ( seguridadForm.controls.password.touched)">
+                                            {{ 'El password es obligatorio'}}
+                                        </span>
+
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-title">Password</label>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- </div> -->
+            </div>
+            <div class="modal-footer footer">
+                <button type="button" class="btn btn-primary btn-progress"
+                    (click)="validarIdentidad()">Validate</button>
+                <button type="button" class="btn btn-secondary btn-dark" data-bs-dismiss="modal"
+                    (click)="habilitarRegistroIngreso(); close();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <app-modal-ingreso [HabilitarRegistroIngreso]="habilitarIngreso"></app-modal-ingreso>
