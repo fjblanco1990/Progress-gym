@@ -33,3 +33,11 @@ export class Clientes_Completo {
     DiasFaltantes: number = 0;
     palabra!: string;
 }
+
+export class LogUsuarioModel {
+    Id_LogRegistro!: number;
+    Id_Usuario!: number;
+    Fecha_registro!: Date;
+    Accion!: string;
+    info_data!: string;
+}

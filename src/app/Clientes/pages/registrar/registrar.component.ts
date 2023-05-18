@@ -9,7 +9,7 @@ import { FormaPagoService } from '../../../Formas-pago/services/forma-pago.servi
 import { Forma_PagoModel } from 'src/app/Formas-pago/class/forma-pago.class';
 
 import { SendDataComponentsService } from '../../services/send-data-componentes.service';
-import { Clientes, Clientes_Completo } from '../../interfaces/clientes.interfaces';
+import { Clientes, Clientes_Completo, LogUsuarioModel } from '../../interfaces/clientes.interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
@@ -64,6 +64,7 @@ export class RegistrarComponent implements OnInit {
   editaFechaInicial: boolean = false;
   editaDocumento: boolean = false;
   usuarios: Usuario_Model[] = [];
+  logUsuario!: LogUsuarioModel;
   constructor(private _formBuilder: FormBuilder,
     private _clientesService: ClientesService,
     private _patternsService: PatternsService,
@@ -272,6 +273,12 @@ export class RegistrarComponent implements OnInit {
 
       this._clientesService.editClients(this.registerClientForm.value, this.registerClientForm.controls.Fecha_fin.value).subscribe(
         result => {
+          this.logUsuario = new LogUsuarioModel;
+          this.logUsuario.Accion = (reingreso) ? 'Reingreso cliente': 'Editar cliente';
+          this.logUsuario.Fecha_registro = this.registerClientForm.controls.Fecha_Actualizacion.value;
+          this.logUsuario.Id_Usuario = this.registerClientForm.controls.Id_Usuario.value;
+          this.logUsuario.info_data = JSON.stringify(this.registerClientForm.value);
+          this._usuariosService.guardarLogUsuario(this.logUsuario).subscribe();
           this.loading = false;
           this.updateAvalible = false;
           this.disabledFechaInicio = false;
@@ -280,6 +287,8 @@ export class RegistrarComponent implements OnInit {
           this.editaDocumento = false;
           this.editaFechaInicial = false;
           setTimeout(() => { this._router.navigateByUrl('/clientes/consultarclientes'); }, 2000);
+          
+         
         }, error => {
           this.loading = false;
           console.log(error);
@@ -466,8 +475,9 @@ export class RegistrarComponent implements OnInit {
       this._usuariosService.getUsuarios().subscribe(
         result => {
           this.usuarios = result;
-          const identidad = this.usuarios.filter(u => u.Password === pass && u.Id_Usuario === 1);
+          const identidad = this.usuarios.filter(u => u.Password === pass );
           if (identidad.length > 0) {
+            this.registerClientForm.controls['Id_Usuario'].setValue(identidad[0].Id_Usuario);
             this.closeModal.nativeElement.click();
           } else {
             if (this.editaFechaInicial) {

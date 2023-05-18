@@ -111,7 +111,7 @@ export class ModalIngresoComponent implements OnInit, OnDestroy {
               this._ingresoService.getIngreosById(result.Id_Cliente).subscribe(
                 resultIngreso => {
                   let plan = this.planData.filter(c => c.Id_Plan == result.Id_Plan).find(c => c.Id_Plan == result.Id_Plan)?.Cantidad_Dias;
-                  if (plan) {
+                  if (plan && !this.showError) {
                     if (resultIngreso.length >= plan || result.Estado === false) {
                       this.ShowMenssageError(`El usuario uso todos los ingresos de la Tiquetera.`);
                       //aqui cambiar el estado a inactivo para poder 
@@ -120,6 +120,8 @@ export class ModalIngresoComponent implements OnInit, OnDestroy {
                     else {
                       this.Save();
                     }
+                  } else {
+                    this.ShowMenssageError('El usuario se encuentra vencido se debe actualizar la membresia.');
                   }
                 }
               );

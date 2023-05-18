@@ -12,8 +12,6 @@ import { Ingreso_completo } from '../interfaces/ingresos.interface';
 })
 export class IngresoService {
 
-  private headers!: HttpHeaders;
-
   constructor(private http: HttpClient, private httpSerivice: HttpServiceService ) { }
 
   getIngresosAll(): Observable<Ingreso_completo[]> {

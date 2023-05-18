@@ -30,4 +30,8 @@ export class UsuariosService {
     return this._httpSerivice.get<boolean>(`${environment.apiUrl}EliminarUsuario?idUsuario=${idUsuario}`);
   }
 
+  guardarLogUsuario(usuariosLog: any): Observable<any> {
+    return this._httpSerivice.post(`${environment.apiUrl}GuardarLogUsuario`, JSON.stringify(usuariosLog))
+  }
+
 }
