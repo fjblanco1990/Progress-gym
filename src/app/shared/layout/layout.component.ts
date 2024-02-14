@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import * as moment from 'moment';
@@ -21,7 +21,7 @@ import { VentasService } from '../services/ventas.service';
 export class LayoutComponent implements OnInit {
 
   habilitarIngreso: boolean = true;
-  ventasForm!: FormGroup;
+  ventasForm!: UntypedFormGroup;
   conceptoData: any;
   usuariosData: any;
   dataDiarios: any[] = [];
@@ -30,13 +30,13 @@ export class LayoutComponent implements OnInit {
   dia: number = 1;
   totalVentasDiarias: number = 0;
   totalVentasPlanes: number = 0;
-  seguridadForm!: FormGroup;
+  seguridadForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   usuarios: Usuario_Model[] = [];
   formasData: Forma_PagoModel[] = [];
   @ViewChild('openSeguridad') openSeguridad!: any;
   @ViewChild('closeModalSeguridad') closeModalSeguridad!: any;
-  constructor(private _formBuilder: FormBuilder, private _notifAlert: NotificacionesService, private _ventasService: VentasService,
+  constructor(private _formBuilder: UntypedFormBuilder, private _notifAlert: NotificacionesService, private _ventasService: VentasService,
     private _modalServices: ModalIngresoService,private _usuariosService: UsuariosService, private route: Router,
     private _formaPagoService: FormaPagoService) { }
 

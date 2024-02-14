@@ -1,6 +1,6 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { fromEvent, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -28,10 +28,10 @@ export class ModalIngresoComponent implements OnInit, OnDestroy {
   showError: boolean = false;
   inside: boolean = false;
   mensajeError: string = '';
-  registerForm!: FormGroup;
+  registerForm!: UntypedFormGroup;
   planData: PlanModel[] = [];
   subscribe!: Subscription;
-  constructor(private _formBuilder: FormBuilder, private _clientesService: ClientesService, private _ingresoService: IngresoService,
+  constructor(private _formBuilder: UntypedFormBuilder, private _clientesService: ClientesService, private _ingresoService: IngresoService,
     private _notifAlert: NotificacionesService, private _modalIngresoService: ModalIngresoService) { }
 
   ngOnInit(): void {

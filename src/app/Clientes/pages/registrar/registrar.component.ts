@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { PatternsService } from 'src/app/services/Config/patterns.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
@@ -32,8 +32,8 @@ export class RegistrarComponent implements OnInit {
   documentoString: string = '';
   documentoInput: string = '';
   openModal = true;
-  registerClientForm!: FormGroup;
-  seguridadForm!: FormGroup;
+  registerClientForm!: UntypedFormGroup;
+  seguridadForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   updateAvalible: boolean | '';
   disabledFechaInicio!: boolean | '';
@@ -65,7 +65,7 @@ export class RegistrarComponent implements OnInit {
   editaDocumento: boolean = false;
   usuarios: Usuario_Model[] = [];
   logUsuario!: LogUsuarioModel;
-  constructor(private _formBuilder: FormBuilder,
+  constructor(private _formBuilder: UntypedFormBuilder,
     private _clientesService: ClientesService,
     private _patternsService: PatternsService,
     private _notifAlert: NotificacionesService,

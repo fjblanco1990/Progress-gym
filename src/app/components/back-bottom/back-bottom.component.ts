@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-back-bottom',
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class BackBottomComponent implements OnInit {
 
-  @Input() form!: FormGroup;
+  @Input() form!: UntypedFormGroup;
   constructor() { }
 
   ngOnInit(): void {

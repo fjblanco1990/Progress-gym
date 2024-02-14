@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Informe_fechas_user } from 'src/app/Ingresos/interfaces/informes.interface';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
@@ -16,7 +16,7 @@ export class ReporteUsuarioComponent implements OnInit {
   habilitarModal: boolean = true;
   p: number  = 0;
   v: number = 0;
-  reportesForm!: FormGroup;
+  reportesForm!: UntypedFormGroup;
   usuariosData: any[] = [];
   dataReportVenta: any[] = [];
   dataReportPlan: any[] = [];
@@ -24,7 +24,7 @@ export class ReporteUsuarioComponent implements OnInit {
   dataReportLst: any[] = [];
   constructor(
     // private _clientesService: ClientesService,
-    private _formBuilder: FormBuilder, 
+    private _formBuilder: UntypedFormBuilder, 
     private _modalServices: ModalIngresoService,
     private _ventasServices: VentasService
     // private _patternsService: PatternsService, 

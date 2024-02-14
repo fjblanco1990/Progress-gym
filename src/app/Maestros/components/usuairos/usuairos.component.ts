@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PlanModel } from 'src/app/components/class/planes.class';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { PlanesService } from '../../services/planes.service';
@@ -14,7 +14,7 @@ import { Usuario_Model } from './class/Usuarios.class';
 })
 export class UsuairosComponent implements OnInit {
 
-  UsuariosForm!: FormGroup;
+  UsuariosForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   p: number = 1;
   usuarioData: Usuario_Model[] = [];
@@ -30,7 +30,7 @@ export class UsuairosComponent implements OnInit {
       descripcion: 'In activo'
     }
   ]
-  constructor(private _usuariosService: UsuariosService, private _build: FormBuilder, private _notiService: NotificacionesService) { }
+  constructor(private _usuariosService: UsuariosService, private _build: UntypedFormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
     this.initializarFormulario();

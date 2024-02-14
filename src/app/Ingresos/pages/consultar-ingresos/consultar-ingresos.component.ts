@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { Clientes_Completo } from 'src/app/Clientes/interfaces/clientes.interfaces';
@@ -20,13 +20,13 @@ export class ConsultarIngresosComponent implements OnInit {
   // clientesModelLstSearch: Clientes_Completo[] = [];
   // clientesCompleto: Clientes_Completo = new Clientes_Completo();
   // clientesModel!: Clientes;
-  consultarIngresosForm!: FormGroup;
+  consultarIngresosForm!: UntypedFormGroup;
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
   p: number = 1;
   constructor(
-    private _formBuilder: FormBuilder, 
+    private _formBuilder: UntypedFormBuilder, 
     private _patternsService: PatternsService, 
     private _notifAlert: NotificacionesService,
 

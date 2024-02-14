@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConceptoService } from '../../services/conceptos.service';
 import { ConceptoModel } from '../../../components/class/conceptos.class';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { NotificacionesService } from '../../../services/Config/seewtAlert.service';
 
 @Component({
@@ -11,13 +11,13 @@ import { NotificacionesService } from '../../../services/Config/seewtAlert.servi
   providers:[NotificacionesService]
 })
 export class ConceptosComponent implements OnInit {
-  conceptosForm!: FormGroup;
+  conceptosForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   con: number = 1;
   conceptosData: ConceptoModel[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
-  constructor(private _conceptoService: ConceptoService, private _build: FormBuilder, private _notiService: NotificacionesService) { }
+  constructor(private _conceptoService: ConceptoService, private _build: UntypedFormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
     this.getConceptos();

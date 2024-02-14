@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { PatternsService } from 'src/app/services/Config/patterns.service';
@@ -24,7 +24,7 @@ export class RegistrarIngresosComponent implements OnInit {
   @ViewChild('openModalVentas', {static: true}) openModalVentas!: ElementRef;
   @ViewChild('openModalPlanes', {static: true}) openModalPlanes!: ElementRef;
   @ViewChild('openModalHistorico', {static: true}) openModalHistorico!: ElementRef;
-  informesForm!: FormGroup;
+  informesForm!: UntypedFormGroup;
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
@@ -64,7 +64,7 @@ export class RegistrarIngresosComponent implements OnInit {
   totalIngresoUnicoDiarios = 0;
   tipoConsulta!: number;
   constructor(
-    private _formBuilder: FormBuilder,  
+    private _formBuilder: UntypedFormBuilder,  
     private _ingresoService : IngresoService,
     private _ventasService: VentasService,
     private _usuariosService: UsuariosService) { 

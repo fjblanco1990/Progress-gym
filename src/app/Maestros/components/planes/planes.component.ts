@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlanesService } from '../../services/planes.service';
 import { PlanModel } from '../../../components/class/planes.class';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { NotificacionesService } from '../../../services/Config/seewtAlert.service';
 
 @Component({
@@ -11,13 +11,13 @@ import { NotificacionesService } from '../../../services/Config/seewtAlert.servi
   providers: [NotificacionesService]
 })
 export class PlanesComponent implements OnInit {
-  PlanesForm!: FormGroup;
+  PlanesForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   p: number = 1;
   planesData: PlanModel[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
-  constructor(private _planService: PlanesService, private _build: FormBuilder, private _notiService: NotificacionesService) { }
+  constructor(private _planService: PlanesService, private _build: UntypedFormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
     this.initializarFormulario();

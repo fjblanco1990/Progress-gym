@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalIngresoService } from 'src/app/components/services/modal-ingreso.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { Usuario_Model } from '../../../Maestros/components/usuairos/class/Usuarios.class';
@@ -17,8 +17,8 @@ import { Deudas_Model_Completo } from '../../interfaces/deudas.class';
 })
 export class DeudasComponent implements OnInit {
 
-  deudasForm!: FormGroup;
-  deudasConsultaForm!: FormGroup;
+  deudasForm!: UntypedFormGroup;
+  deudasConsultaForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
   usuariosData: Usuario_Model[] = [];
   clientesData: Clientes_Completo[] = [];
@@ -27,7 +27,7 @@ export class DeudasComponent implements OnInit {
   p: number = 1;
   loading: boolean = false;
   totalDeudas = 0;
-  constructor(private _formBuilder: FormBuilder, private _modalServices: ModalIngresoService, private _notifAlert: NotificacionesService,
+  constructor(private _formBuilder: UntypedFormBuilder, private _modalServices: ModalIngresoService, private _notifAlert: NotificacionesService,
     private _clientesService: ClientesService, private _deudasService: DeudasService) { }
 
   ngOnInit(): void {

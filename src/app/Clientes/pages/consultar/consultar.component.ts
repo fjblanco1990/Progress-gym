@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { PatternsService } from 'src/app/services/Config/patterns.service';
 import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
@@ -25,7 +25,7 @@ export class ConsultarComponent implements OnInit {
   clientesModelLstSearch: Clientes_Completo[] = [];
   clientesCompleto: Clientes_Completo = new Clientes_Completo();
   clientesModel!: Clientes;
-  consultarClientForm!: FormGroup;
+  consultarClientForm!: UntypedFormGroup;
   fechaActual!: Date;
   habilitarModal: boolean = true;
   palabra: string  = '';
@@ -33,7 +33,7 @@ export class ConsultarComponent implements OnInit {
   planData: PlanModel[] = [];
   usuariosData: Usuario_Model[] = [];
   constructor(private _clientesService: ClientesService,
-    private _formBuilder: FormBuilder, 
+    private _formBuilder: UntypedFormBuilder, 
     private _patternsService: PatternsService, 
     private _notifAlert: NotificacionesService,
     private _sendDataComponentsService: SendDataComponentsService,
