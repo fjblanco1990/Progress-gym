@@ -88,7 +88,7 @@ export class RegistrarComponent implements OnInit {
     this.getPlanes();
     this.getUsuarios();
     this.getFormasPago();
-    this.registerClientForm.controls.Estado.setValue("-1");
+    this.registerClientForm.controls['Estado'].setValue("-1");
     const edit = this._Activatedroute.snapshot.paramMap.get("edit");
     if (edit === '1') {
       this.loading = true;
@@ -113,9 +113,9 @@ export class RegistrarComponent implements OnInit {
   private SetFechaRegistro() {
     const fecha_Now = new Date;
     var fecha_format = moment(fecha_Now.toISOString()).format("YYYY-MM-DD").toString();
-    this.registerClientForm.controls.Fecha_registro.setValue(fecha_format);
-    this.registerClientForm.controls.Fecha_inicio.setValue(fecha_format);
-    this.registerClientForm.controls.Estado.setValue(1);
+    this.registerClientForm.controls['Fecha_registro'].setValue(fecha_format);
+    this.registerClientForm.controls['Fecha_inicio'].setValue(fecha_format);
+    this.registerClientForm.controls['Estado'].setValue(1);
   }
 
   getPlanes() {
@@ -137,10 +137,10 @@ export class RegistrarComponent implements OnInit {
   habilitarRegistroIngreso() {
     this.habilitarModal = true;
     if (!this.isEdit) {
-      this._clientesService.validDocumentCliente(this.registerClientForm.controls.Documento_identitdad.value).subscribe(result => {
+      this._clientesService.validDocumentCliente(this.registerClientForm.controls['Documento_identitdad'].value).subscribe(result => {
         if (result >= 1) {
           this._notifAlert.Advertencia('El numero de documento ingresado ya se encuentra registrado.');
-          this.registerClientForm.controls.Documento_identitdad.reset();
+          this.registerClientForm.controls['Documento_identitdad'].reset();
         }
       });
     }
@@ -148,8 +148,8 @@ export class RegistrarComponent implements OnInit {
   }
 
   validationFechaInicial() {
-    const fechaInicio = this.registerClientForm.controls.Fecha_inicio.value;
-    const documento = this.registerClientForm.controls.Fecha_inicio.value;
+    const fechaInicio = this.registerClientForm.controls['Fecha_inicio'].value;
+    const documento = this.registerClientForm.controls['Fecha_inicio'].value;
     const fechaActual = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
     const fechaActualMenos = moment(fechaActual).add(-3, 'days').toString();
     var fechaFormat = new Date(fechaActualMenos);
@@ -158,7 +158,7 @@ export class RegistrarComponent implements OnInit {
     if (this.fechaInicialAntigua !== fechaInicio) {
       if (fechaInicio < fecha_Actual_format) {
           this._notifAlert.Advertencia('La fecha de inicio , no puede ser menor a 3 dias como maximo de la fecha actual.');
-          this.registerClientForm.controls.Fecha_inicio.reset();
+          this.registerClientForm.controls['Fecha_inicio'].reset();
         }
   
       this.setFechaFinal();
@@ -174,7 +174,7 @@ export class RegistrarComponent implements OnInit {
   }
 
   validarCambioDocumento() {
-    const fechaInicio = this.registerClientForm.controls.Documento_identitdad.value;
+    const fechaInicio = this.registerClientForm.controls['Documento_identitdad'].value;
     if (this.isEdit) {
       if (this.documentoAntiguo !== fechaInicio) {
         this.editaDocumento = true;
@@ -196,15 +196,15 @@ export class RegistrarComponent implements OnInit {
       this.registerClientForm.markAllAsTouched();
     } else {
       this.loading = true;
-      this.registerClientForm.controls.Id_Usuario.setValue(String(this.registerClientForm.controls.Id_Usuario.value));
-      this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
-      this.registerClientForm.controls.Fecha_fin.setValue(String(this.registerClientForm.controls.Fecha_fin.value));
+      this.registerClientForm.controls['Id_Usuario'].setValue(String(this.registerClientForm.controls['Id_Usuario'].value));
+      this.registerClientForm.controls['Documento_identitdad'].setValue(String(this.registerClientForm.controls['Documento_identitdad'].value));
+      this.registerClientForm.controls['Fecha_fin'].setValue(String(this.registerClientForm.controls['Fecha_fin'].value));
       const hora = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
       const hora_format = moment(hora, 'H:m:s').format('h:mm a');
-      this.registerClientForm.controls.Hora_Registro.setValue(hora_format);
+      this.registerClientForm.controls['Hora_Registro'].setValue(hora_format);
       const fecha_Up = new Date;
       var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
-      this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
+      this.registerClientForm.controls['Fecha_Actualizacion'].setValue(fecha_update_format);
 
       this._clientesService.saveClientes(this.mapperCliente(this.registerClientForm.value)).subscribe(
         result => {
@@ -226,7 +226,7 @@ export class RegistrarComponent implements OnInit {
       if (!usuario[0].Estado) {
         this.loading = false;
         this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
-        this.registerClientForm.controls.Id_Usuario.reset();
+        this.registerClientForm.controls['Id_Usuario'].reset();
       }
 
     }
@@ -236,7 +236,7 @@ export class RegistrarComponent implements OnInit {
     if (!this.registerClientForm.valid) {
       this.registerClientForm.markAllAsTouched();
     } else {
-      const fechaNewInicial = this.registerClientForm.controls.Fecha_inicio.value;
+      const fechaNewInicial = this.registerClientForm.controls['Fecha_inicio'].value;
       if (this.fechaInicialAntigua !== fechaNewInicial) {
         this._notifAlert.confirmationNotBtnCancel('¿ Que deseas hacer ?', '', 'NUEVO PAGO').then(reingreso => {
           if (reingreso) {
@@ -261,22 +261,22 @@ export class RegistrarComponent implements OnInit {
     //   this._notifAlert.Advertencia('Debe seleccionar una nueva fecha de incio.');
     // } else {
       this.loading = true;
-      this.registerClientForm.controls.Estado.setValue(Number(this.registerClientForm.controls.Estado.value));
-      this.registerClientForm.controls.Id_Plan.setValue(Number(this.registerClientForm.controls.Id_Plan.value));
-      this.registerClientForm.controls.Id_Forma_pago.setValue(Number(this.registerClientForm.controls.Id_Forma_pago.value));
-      this.registerClientForm.controls.Documento_identitdad.setValue(String(this.registerClientForm.controls.Documento_identitdad.value));
-      this.registerClientForm.controls.Id_Usuario.setValue(this.registerClientForm.controls.Id_Usuario.value);
-      this.registerClientForm.controls.Reingreso.setValue(reingreso);
+      this.registerClientForm.controls['Estado'].setValue(Number(this.registerClientForm.controls['Estado'].value));
+      this.registerClientForm.controls['Id_Plan'].setValue(Number(this.registerClientForm.controls['Id_Plan'].value));
+      this.registerClientForm.controls['Id_Forma_pago'].setValue(Number(this.registerClientForm.controls['Id_Forma_pago'].value));
+      this.registerClientForm.controls['Documento_identitdad'].setValue(String(this.registerClientForm.controls['Documento_identitdad'].value));
+      this.registerClientForm.controls['Id_Usuario'].setValue(this.registerClientForm.controls['Id_Usuario'].value);
+      this.registerClientForm.controls['Reingreso'].setValue(reingreso);
       const fecha_Up = new Date;
       var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
-      this.registerClientForm.controls.Fecha_Actualizacion.setValue(fecha_update_format);
+      this.registerClientForm.controls['Fecha_Actualizacion'].setValue(fecha_update_format);
 
-      this._clientesService.editClients(this.registerClientForm.value, this.registerClientForm.controls.Fecha_fin.value).subscribe(
+      this._clientesService.editClients(this.registerClientForm.value, this.registerClientForm.controls['Fecha_fin'].value).subscribe(
         result => {
           this.logUsuario = new LogUsuarioModel;
           this.logUsuario.Accion = (reingreso) ? 'Reingreso cliente': 'Editar cliente';
-          this.logUsuario.Fecha_registro = this.registerClientForm.controls.Fecha_Actualizacion.value;
-          this.logUsuario.Id_Usuario = this.registerClientForm.controls.Id_Usuario.value;
+          this.logUsuario.Fecha_registro = this.registerClientForm.controls['Fecha_Actualizacion'].value;
+          this.logUsuario.Id_Usuario = this.registerClientForm.controls['Id_Usuario'].value;
           this.logUsuario.info_data = JSON.stringify(this.registerClientForm.value);
           this._usuariosService.guardarLogUsuario(this.logUsuario).subscribe();
           this.loading = false;
@@ -308,8 +308,8 @@ export class RegistrarComponent implements OnInit {
   }
 
   setFechaFinal() {
-    this.planData.filter(c => c.Id_Plan === +this.registerClientForm.controls.Id_Plan.value).map(data => this.planSelect = data);
-    const fechaInicio = this.registerClientForm.controls.Fecha_inicio.value;
+    this.planData.filter(c => c.Id_Plan === +this.registerClientForm.controls['Id_Plan'].value).map(data => this.planSelect = data);
+    const fechaInicio = this.registerClientForm.controls['Fecha_inicio'].value;
 
     const fechaActual = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
     const fechaActualMenos = moment(fechaActual).add(-3, 'days').toString();
@@ -324,46 +324,46 @@ export class RegistrarComponent implements OnInit {
       if (this.planSelect !== undefined) {
         switch (this.planSelect.Id_Plan) {
           case 1: //Mensualidad
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(29, 'days').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(29, 'days').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           case 2: //Tiquetera
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(29, 'days').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(29, 'days').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           case 3: //Bimestral
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(2, 'months').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(2, 'months').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           case 4: //Trimestral
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(3, 'months').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(3, 'months').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           case 5: //Semestral
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(6, 'months').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(6, 'months').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           case 6: //Anual
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(11, 'months').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(11, 'months').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
           default:
-            var fechaFinal = moment(this.registerClientForm.controls.Fecha_inicio.value).add(this.planSelect.Cantidad_Dias - 1, 'days').toString();
+            var fechaFinal = moment(this.registerClientForm.controls['Fecha_inicio'].value).add(this.planSelect.Cantidad_Dias - 1, 'days').toString();
             var fechaFinalFormat = new Date(fechaFinal);
             var fecha_fin_format = moment(fechaFinalFormat.toISOString()).format("YYYY-MM-DD").toString();
-            this.registerClientForm.controls.Fecha_fin.setValue(fecha_fin_format);
+            this.registerClientForm.controls['Fecha_fin'].setValue(fecha_fin_format);
             break;
         }
       } else {
@@ -471,7 +471,7 @@ export class RegistrarComponent implements OnInit {
 
   validarIdentidad() {
     if (this.seguridadForm.valid) {
-      const pass = this.seguridadForm.controls.password.value;
+      const pass = this.seguridadForm.controls['password'].value;
       this._usuariosService.getUsuarios().subscribe(
         result => {
           this.usuarios = result;
@@ -481,9 +481,9 @@ export class RegistrarComponent implements OnInit {
             this.closeModal.nativeElement.click();
           } else {
             if (this.editaFechaInicial) {
-              this.seguridadForm.controls.password.reset();
+              this.seguridadForm.controls['password'].reset();
             } else if( this.editaDocumento){
-              this.registerClientForm.controls.Documento_identitdad.reset();
+              this.registerClientForm.controls['Documento_identitdad'].reset();
             }
             this._notifAlert.Advertencia('No cuenta con los permisos o la contraseña es incorrecta');
             
