@@ -63,6 +63,15 @@ export class RegistrarIngresosComponent implements OnInit {
   totalPlanesDiarios = 0;
   totalIngresoUnicoDiarios = 0;
   tipoConsulta!: number;
+  page = 0;
+  pageOne = 1;
+  pageTwo = 1;
+  pageThree = 1;
+  pageSize = 4;
+  collectionSize = 0;
+  collectionSizeOne = 0;
+  collectionSizeTwo = 0;
+  collectionSizeThree = 0;
   constructor(
     private _formBuilder: UntypedFormBuilder,  
     private _ingresoService : IngresoService,
@@ -95,6 +104,7 @@ export class RegistrarIngresosComponent implements OnInit {
       this._ingresoService.getIngresosDiarios(this.datesSend).subscribe( result =>{
       
        this.resultVentas.informeData = result;
+       this.collectionSize= this.resultVentas.informeData.length;
        this.openModalIngresos.nativeElement.click();
       });
   }
@@ -110,8 +120,9 @@ export class RegistrarIngresosComponent implements OnInit {
       this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
         this.resultVentas.informeVenta = result;
         result.forEach(({...venta}) => {
-          this.totalVentasDiarias = this.totalVentasDiarias + venta.venta.Valor_Venta;
+          this.totalVentasDiarias = this.totalVentasDiarias + venta['venta'].Valor_Venta;
         });
+        this.collectionSizeOne = this.resultVentas.informeVenta.length;
         this.openModalVentas.nativeElement.click();
       });
 
@@ -127,8 +138,9 @@ export class RegistrarIngresosComponent implements OnInit {
     this._ventasService.GetVentasPlanesDiarios(this.datesSend).subscribe( result => {
       this.resultVentas.informePlanes = result;
       result.forEach(({...ventasClientes }) => {
-        this.totalPlanesDiarios = this.totalPlanesDiarios + ventasClientes.ventasClientes.Valor_Venta;
+        this.totalPlanesDiarios = this.totalPlanesDiarios + ventasClientes['ventasClientes'].Valor_Venta;
       });
+      this.collectionSizeTwo = this.resultVentas.informePlanes.length;
       this.openModalPlanes.nativeElement.click();
     })
   }
@@ -149,7 +161,7 @@ export class RegistrarIngresosComponent implements OnInit {
         
         this.resultVentas.informeHistorico.push(infoVenta);
       });
-      
+      this.collectionSizeThree = this.resultVentas.informeHistorico.length;
       this.openModalHistorico.nativeElement.click();
     })
   }
@@ -171,8 +183,8 @@ export class RegistrarIngresosComponent implements OnInit {
      
       this.resultVentas.informeVenta = [];
         this.datesSend = new Informe_fechas();
-        this.datesSend.Fecha_Inicial = this.informesForm.controls.FechaInicial.value;
-        this.datesSend.Fecha_Final =  this.informesForm.controls.FechaFinal.value;
+        this.datesSend.Fecha_Inicial = this.informesForm.controls['FechaInicial'].value;
+        this.datesSend.Fecha_Final =  this.informesForm.controls['FechaFinal'].value;
         this._ingresoService.getInformeDiarioGeneral(this.datesSend).subscribe( result => this.informeGeneral = result);
         this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
           result.forEach((venta: any) => {

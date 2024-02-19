@@ -6,7 +6,7 @@ import { ReporteUsuarioComponent } from './pages/reporte-usuario/reporte-usuario
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
 import { NgxTablePaginationModule } from 'ngx-table-pagination';
-import { LoadingModule } from 'ngx-loading';
+// import { NgxLoadingModule } from 'ngx-loading';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -19,8 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReportesRoutingModule,
     SharedModule,
     ComponentsModule,
-    NgxTablePaginationModule,
-    LoadingModule,
+    //NgxTablePaginationModule,
+    //NgxLoadingModule.forRoot({}),
     ReactiveFormsModule
   ]
 })

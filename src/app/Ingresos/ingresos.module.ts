@@ -7,7 +7,9 @@ import { ConsultarIngresosComponent } from './pages/consultar-ingresos/consultar
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxTablePaginationModule } from 'ngx-table-pagination';
+import { NgxTablePaginationModule } from 'ngx-table-pagination/lib/pagination.module';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { NgxTablePaginationModule } from 'ngx-table-pagination';
         SharedModule,
         ComponentsModule,
         ReactiveFormsModule,
-        NgxTablePaginationModule
+        NgbPaginationModule
+        //NgxTablePaginationModule,
+       //NgxLoadingModule.forRoot({})
     ]
 })
 export class IngresosModule { }

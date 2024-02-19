@@ -5,7 +5,7 @@
             <img src="assets/img/musculos.png" alt="" width="50">
         </div>
         <div class="consultas cursor card-menu" routerLink="/clientes/consultarclientes">
-            <h2>Registros</h2>
+            <h2>Consultar</h2>
             <img src="assets/img/peso.png" alt="" width="60">
         </div>
         <div class="consultas cursor card-menu" routerLink="/ingresos/consultar-ingreso">
@@ -49,7 +49,7 @@
 
 <div class="modal fade" id="getInformationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg modal-dialog-centered">
+    <div class="modal-dialog  modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header title-dark">
                 <h5 class="modal-title" id="titleModal">Registrar venta</h5>
@@ -83,7 +83,6 @@
                                 <div class="col-sm">
                                     <div class="group">
                                         <select required formControlName="Id_Usuario">
-                                            <!-- <option value="-1">---Seleccione---</option> -->
                                             <option [ngValue]="optUser" *ngFor="let optUser of usuariosData">
                                                 {{optUser.Nombre_completo}}
                                             </option>
@@ -91,6 +90,19 @@
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label class="label-select">Usuario</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="group">
+                                        <select required formControlName="Id_Cliente">
+                                            <option [ngValue]="optCliente.cliente" *ngFor="let optCliente of clientesData">
+                                                {{optCliente.cliente.Nombre }} {{optCliente.cliente.Apellidos}}
+                                            </option>
+                                        </select>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="label-select">Cliente</label>
 
                                     </div>
                                 </div>
@@ -111,8 +123,8 @@
                                     <div class="group">
                                         <input type="number" required="required" formControlName="Valor_Venta"
                                             (focus)="desactiveRegistroIngreso()" />
-                                        <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls.Valor_Venta.errors?.required &&
-                                                    ( ventasForm.controls.Valor_Venta.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls['Valor_Venta'].errors?.['required'] &&
+                                                    ( ventasForm.controls['Valor_Venta'].touched)">
                                             {{ 'El valor de la venta es obligatorio'}}
                                         </span>
 
@@ -286,8 +298,8 @@
                                     <div class="group">
                                         <input type="password" required="required" formControlName="password"
                                             (focus)="desactiveRegistroIngreso()" />
-                                        <span class="text-danger text-validation-sm" *ngIf="seguridadForm.controls.password.errors?.required &&
-                                                    ( seguridadForm.controls.password.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="seguridadForm.controls['password'].errors?.['required'] &&
+                                                    ( seguridadForm.controls['password'].touched)">
                                             {{ 'El password es obligatorio'}}
                                         </span>
 

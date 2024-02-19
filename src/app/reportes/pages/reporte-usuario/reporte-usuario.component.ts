@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+
 import { Informe_fechas_user } from 'src/app/Ingresos/interfaces/informes.interface';
-import { NotificacionesService } from 'src/app/services/Config/seewtAlert.service';
 import { ModalIngresoService } from '../../../components/services/modal-ingreso.service';
 import { VentasService } from '../../../shared/services/ventas.service';
 import { Ventas_usuarios_Model } from '../../interfaces/reporte.interface';
 import { map, tap } from 'rxjs/operators';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-reporte-usuario',
@@ -51,9 +51,9 @@ export class ReporteUsuarioComponent implements OnInit {
     this.totalVentaUsuarioReport = 0;
     const dataReportObj = new Ventas_usuarios_Model();
     const data = new Informe_fechas_user();
-    data.Fecha_Inicial =  this.reportesForm.controls.fechaConsulta.value;
-    data.Fecha_Final =  this.reportesForm.controls.fechaConsulta.value;
-    data.idUsuario = this.reportesForm.controls.Id_Usuario.value;
+    data.Fecha_Inicial =  this.reportesForm.controls['fechaConsulta'].value;
+    data.Fecha_Final =  this.reportesForm.controls['fechaConsulta'].value;
+    data.idUsuario = this.reportesForm.controls['Id_Usuario'].value;
     this._ventasServices.GetReporteByUser(data).pipe(
       tap( ({...resul}) => console.log(resul)),
       map(({...result}) => {

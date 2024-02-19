@@ -1,4 +1,3 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
@@ -69,14 +68,14 @@ export class ModalIngresoComponent implements OnInit, OnDestroy {
 
             if (val.code !== "NumpadEnter") {
               this.documentoString = this.documentoString + val.key;
-              this.registerForm.controls.documento.setValue(this.documentoString);
+              this.registerForm.controls['documento'].setValue(this.documentoString);
             }
           }
 
           if (val.code.includes("Backspace")) {
             let backString = this.documentoString.slice(0, -1);
             this.documentoString = backString;
-            this.registerForm.controls.documento.setValue(this.documentoString);
+            this.registerForm.controls['documento'].setValue(this.documentoString);
           }
 
           if (val.code.includes("Escape")) {
@@ -98,7 +97,7 @@ export class ModalIngresoComponent implements OnInit, OnDestroy {
   validateRegister() {
     this.inside = true;
 
-    this._clientesService.getTClientesByDocument(this.registerForm.controls.documento.value).subscribe(
+    this._clientesService.getTClientesByDocument(this.registerForm.controls['documento'].value).subscribe(
       result => {
         if (result !== null) {
           if (result.Estado !== false) {

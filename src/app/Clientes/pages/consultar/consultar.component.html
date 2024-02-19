@@ -11,7 +11,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="text" required="required" formControlName="Documento"
-                                 (input)="filtrarDocumento(consultarClientForm.controls.Documento.value)"
+                                 (input)="filtrarDocumento(consultarClientForm.controls['Documento'].value)"
                                  (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-sm">
                             <div class="group">
-                                <input type="text" required="required" formControlName="Nombre" (input)="filterNombre(consultarClientForm.controls.Nombre.value)"
+                                <input type="text" required="required" formControlName="Nombre" (input)="filterNombre(consultarClientForm.controls['Nombre'].value)"
                                 (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -39,8 +39,8 @@
                                         {{usuario.Nombre_completo}}
                                     </option>
                                 </select>
-                                <span class="text-danger text-validation-sm" *ngIf="consultarClientForm.controls.Usuario.errors?.required &&
-                                    ( consultarClientForm.controls.Usuario.touched)">
+                                <span class="text-danger text-validation-sm" *ngIf="consultarClientForm.controls['Usuario'].errors?.['required'] &&
+                                    ( consultarClientForm.controls['Usuario'].touched)">
                                     {{ 'El usuario que registra Obligatorio , debe seleccionar una opción'}}
                                 </span>
                                 <span class="highlight"></span>
@@ -63,7 +63,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <div class="col-sm content-btn-footer">
-                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="filterRangoFechas(consultarClientForm.controls.FechaInicial.value)">Consultar</button>
+                                    <button type="button" class="btn-gym-progress" title="Consultar" (click)="filterRangoFechas(consultarClientForm.controls['FechaInicial'].value)">Consultar</button>
                                     <button type="button" class="btn-gym-dark" (click)="reset()" >Limpiar</button>
                                 </div>
                             </div>
@@ -91,34 +91,63 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let cliente of clientesModelLstSearch | paginate: { currentPage: p }" class="tr-table cursor"
-                          [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido && cliente.DiasFaltantes < 3, 'color-normal': !cliente.porVencer &&  !cliente.Vencido &&  cliente.DiasFaltantes > 3, 'color-danger ': cliente.Vencido && cliente.porVencer && cliente.DiasFaltantes <= 0 }"
-                          [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' ' + cliente.palabra: 'Le quedan '+ cliente.DiasFaltantes +' '+ cliente.palabra "
-                           (click)="editarCliente(cliente)">
-                        <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>
-                        <td>{{cliente.cliente.Documento_identitdad}}</td>
-                        <td >{{cliente.cliente.Fecha_nacimiento | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{cliente.cliente.Celular}}</td>    
-                        <td>{{cliente.plan.Descripcion}}</td>
-                        <td>{{cliente.forma_pago.Descripcion}}</td>
-                        <td>{{ (cliente.cliente.Estado === true ? 'Activo': 'In activo')}}</td>
-                        <td>{{cliente.cliente.Fecha_registro | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{cliente.cliente.Hora_Registro }}</td>
-                        <td>{{cliente.usuario.Nombre_completo}}</td>
-                        <td>{{cliente.cliente.Fecha_inicio | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{cliente.cliente.Fecha_fin | date: 'dd/MM/yyyy' }}</td>
-                      </tr>
+                        <!-- slice: (page-1) * pageSize : page * pageSize; track item -->
+                      
+
+                           @for (cliente of clientesModelLstSearch  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                            <tr class="tr-table cursor"
+                            [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido && cliente.DiasFaltantes < 3, 'color-normal': !cliente.porVencer &&  !cliente.Vencido &&  cliente.DiasFaltantes > 3, 'color-danger ': cliente.Vencido && cliente.porVencer && cliente.DiasFaltantes <= 0 }"
+                            [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' ' + cliente.palabra: 'Le quedan '+ cliente.DiasFaltantes +' '+ cliente.palabra "
+                            (click)="editarCliente(cliente)">
+                                <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>
+                                <td>{{cliente.cliente.Documento_identitdad}}</td>
+                                <td >{{cliente.cliente.Fecha_nacimiento | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{cliente.cliente.Celular}}</td>    
+                                <td>{{cliente.plan.Descripcion}}</td>
+                                <td>{{cliente.forma_pago.Descripcion}}</td>
+                                <td>{{ (cliente.cliente.Estado === true ? 'Activo': 'In activo')}}</td>
+                                <td>{{cliente.cliente.Fecha_registro | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{cliente.cliente.Hora_Registro }}</td>
+                                <td>{{cliente.usuario.Nombre_completo}}</td>
+                                <td>{{cliente.cliente.Fecha_inicio | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{cliente.cliente.Fecha_fin | date: 'dd/MM/yyyy' }}</td>
+                            </tr>
+                           }
+                        
+                     
                       
                     </tbody>
-                  </table>
-                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                  </table>  
+                  <div class="d-flex justify-content-between p-2">
+                    <!-- <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="handlePageChange();">
+                    </ngb-pagination>
+                  
+                    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="handlePageChange();">
+                      <option [ngValue]="2">2 items per page</option>
+                      <option [ngValue]="4">4 items per page</option>
+                      <option [ngValue]="6">6 items per page</option>
+                    </select> -->
+                    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page"
+                                    [pageSize]="pageSize"></ngb-pagination>
+                  </div>
+                  <!-- <div class="d-flex justify-content-between p-2">
+                    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="getPremiumData();">
+                    </ngb-pagination>
+                  
+                    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="getPremiumData();">
+                      <option [ngValue]="2">2 items per page</option>
+                      <option [ngValue]="4">4 items per page</option>
+                      <option [ngValue]="6">6 items per page</option>
+                    </select>
+                  </div> -->
+                  <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
                       maxSize="12"
                       responsive="true"
                       previousLabel="Anterior"
                       nextLabel="Siguiente"
                       screenReaderPaginationLabel="Pagination"
                       screenReaderPageLabel="page"
-                      screenReaderCurrentLabel="You're on page"></paging-controls>
+                      screenReaderCurrentLabel="You're on page"></paging-controls> -->
             </div>
             <div class="content-errors" *ngIf="clientesModelLstSearch.length <= 0">
                 

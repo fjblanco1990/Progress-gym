@@ -11,8 +11,8 @@
                         <div class="group">
                             <input type="text" required="required" formControlName="Nombre_completo"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Nombre_completo.errors?.required &&
-                            ( UsuariosForm.controls.Nombre_completo.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls['Nombre_completo'].errors?.['required'] &&
+                            ( UsuariosForm.controls['Nombre_completo'].touched)">
                                 {{ 'El Nombre usuario es obligatoria'}}
                             </span>
                             <span class="highlight"></span>
@@ -26,8 +26,8 @@
                         <div class="group">
                             <input type="text" required="required" formControlName="Nick_Name"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Nick_Name.errors?.required &&
-                            ( UsuariosForm.controls.Nick_Name.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls['Nick_Name'].errors?.['required'] &&
+                            ( UsuariosForm.controls['Nick_Name'].touched)">
                                 {{'El nick name es obligatorio'}}
                             </span>
                             <span class="highlight"></span>
@@ -45,8 +45,8 @@
                                 {{estado.descripcion}}
                             </option>
                         </select>
-                        <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Estado.errors?.required &&
-                            ( UsuariosForm.controls.Estado.touched)">
+                        <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls['Estado'].errors?.['required'] &&
+                            ( UsuariosForm.controls['Estado'].touched)">
                             {{ 'Estado es Obligatoria'}}
                         </span>
                         <span class="highlight"></span>
@@ -58,8 +58,8 @@
                         <div class="group">
                             <input type="password" required="required" formControlName="Password"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls.Password.errors?.required &&
-                            ( UsuariosForm.controls.Password.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="UsuariosForm.controls['Password'].errors?.['required'] &&
+                            ( UsuariosForm.controls['Password'].touched)">
                                 {{'La contraseña es obligatoria'}}
                             </span>
                             <span class="highlight"></span>

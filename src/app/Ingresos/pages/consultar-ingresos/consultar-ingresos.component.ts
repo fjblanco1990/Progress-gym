@@ -24,7 +24,9 @@ export class ConsultarIngresosComponent implements OnInit {
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
-  p: number = 1;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(
     private _formBuilder: UntypedFormBuilder, 
     private _patternsService: PatternsService, 
@@ -52,6 +54,7 @@ export class ConsultarIngresosComponent implements OnInit {
       result => {
         this.data = result;
         this.clientesModelLst = result;
+        this.collectionSize = this.data.length;
       }
     )
   }

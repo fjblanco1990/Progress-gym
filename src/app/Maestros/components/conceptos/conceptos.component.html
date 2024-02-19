@@ -12,8 +12,8 @@
 
                                 <input type="text" required="required" formControlName="Descripcion"
                                     (focus)="desactiveRegistroIngreso()" />
-                                <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls.Descripcion.errors?.required &&
-                                ( conceptosForm.controls.Descripcion.touched)">
+                                <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls['Descripcion'].errors?.['required'] &&
+                                ( conceptosForm.controls['Descripcion'].touched)">
                                     {{ 'La descripcion es obligatoria'}}
                                 </span><!--
                             <span class="text-danger text-validation-sm"
@@ -31,8 +31,8 @@
                             <div class="group">
                                 <input type="number" required="required" formControlName="valor_concepto"
                                     (focus)="desactiveRegistroIngreso()" />
-                                    <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls.valor_concepto.errors?.required &&
-                                    ( conceptosForm.controls.valor_concepto.touched)">
+                                    <span class="text-danger text-validation-sm" *ngIf="conceptosForm.controls['valor_concepto'].errors?.['required'] &&
+                                    ( conceptosForm.controls['valor_concepto'].touched)">
                                 {{ 'El valor del concepto es obligatorio'}}
                             </span><!--
                             <span class="text-danger text-validation-sm"

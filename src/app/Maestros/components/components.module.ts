@@ -5,7 +5,7 @@ import { ComponentsRoutingModule } from './components-routing.module';
 import { PlanesComponent } from './planes/planes.component';
 import { ConceptosComponent } from './conceptos/conceptos.component';
 import { DashComponent } from './dash/dash.component';
-import { NgxTablePaginationModule } from 'ngx-table-pagination';
+
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UsuairosComponent } from './usuairos/usuairos.component';
@@ -21,7 +21,7 @@ import { UsuairosComponent } from './usuairos/usuairos.component';
   imports: [
     CommonModule,
     ComponentsRoutingModule,
-    NgxTablePaginationModule,
+    //NgxTablePaginationModule,
     ComponentsModule,
     ReactiveFormsModule,
     

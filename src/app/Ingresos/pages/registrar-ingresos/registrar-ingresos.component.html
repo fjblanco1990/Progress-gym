@@ -10,8 +10,8 @@
               <div class="group">
                 <input type="date" required="required" formControlName="FechaInicial"
                   (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaInicial.errors?.required &&
-                                    ( informesForm.controls.FechaInicial.touched)">
+                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls['FechaInicial'].errors?.['required'] &&
+                                    ( informesForm.controls['FechaInicial'].touched)">
                   {{ 'Fecha de inicio es Obligatoria'}}
                 </span>
                 <span class="highlight"></span>
@@ -24,8 +24,8 @@
               <div class="group">
                 <input type="date" required="required" formControlName="FechaFinal" (focus)="desactiveRegistroIngreso()"
                   (blur)="habilitarRegistroIngreso()" />
-                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls.FechaFinal.errors?.required &&
-                                ( informesForm.controls.FechaFinal.touched)">
+                <span class="text-danger text-validation-sm" *ngIf="informesForm.controls['FechaFinal'].errors?.['required'] &&
+                                ( informesForm.controls['FechaFinal'].touched)">
                   {{ 'Fecha fin es Obligatoria'}}
                 </span>
                 <span class="highlight"></span>
@@ -104,17 +104,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let informe of resultVentas.informeData | paginate: { currentPage: ing }"
-                class="tr-table cursor">
+              @for (informe of resultVentas.informeData  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+              <tr class="tr-table cursor">
                 <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}}</td>
                 <td>{{informe.ingreso.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
               </tr>
+            }
             </tbody>
           </table>
-          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="ing = $event" maxSize="12"
+          <ngb-pagination [collectionSize]="collectionSize" [(page)]="page"
+          [pageSize]="pageSize"></ngb-pagination>
+          <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="ing = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
             screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
-          </paging-controls>
+          </paging-controls> -->
         </div>
         <div class="content-errors" *ngIf="resultVentas.informeData.length <= 0">
           <h4>No se encontraron resultados con los parametros ingresados</h4>
@@ -149,14 +152,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let informe of resultVentas.informeVenta | paginate: { currentPage: venta }"
-                class="tr-table cursor">
-                <td>{{informe.concepto?.Descripcion}} </td>
-                <td>{{informe.usuario?.Nombre_completo}} </td>
-                <td>{{informe.venta?.Valor_Venta | currency}}</td>
-                <td>{{informe.venta?.Hora_Venta }}</td>
-                <td>{{informe.formas?.Descripcion }}</td>
-              </tr>
+              @for (informe of resultVentas.informeVenta | slice: (pageOne-1) * pageSize : pageOne * pageSize; track item ) {
+                <tr class="tr-table cursor">
+                  <td>{{informe.concepto?.Descripcion}} </td>
+                  <td>{{informe.usuario?.Nombre_completo}} </td>
+                  <td>{{informe.venta?.Valor_Venta | currency}}</td>
+                  <td>{{informe.venta?.Hora_Venta }}</td>
+                  <td>{{informe.formas?.Descripcion }}</td>
+                </tr>
+              }
               <tr>
                 <td></td>
                 <td><strong>TOTAL </strong> </td>
@@ -168,10 +172,12 @@
               </tr>
             </tbody>
           </table>
-          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event" maxSize="12"
+          <ngb-pagination [collectionSize]="collectionSizeOne" [(page)]="pageOne"
+          [pageSize]="pageSize"></ngb-pagination>
+          <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
             screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
-          </paging-controls>
+          </paging-controls> -->
 
         </div>
         <div class="content-errors" *ngIf="resultVentas.informeVenta.length <= 0">
@@ -206,14 +212,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let informe of resultVentas.informePlanes | paginate: { currentPage: plan }"
-                class="tr-table cursor">
-                <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
-                <td>{{informe.plan.Descripcion }}</td>
-                <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
-                <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
-                <td> {{informe.usuario.Nombre_completo }}</td>
-              </tr>
+              @for (informe of resultVentas.informePlanes | slice: (pageTwo-1) * pageSize : pageTwo * pageSize; track item ) {
+                <tr class="tr-table cursor">
+                  <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
+                  <td>{{informe.plan.Descripcion }}</td>
+                  <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
+                  <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
+                  <td> {{informe.usuario.Nombre_completo }}</td>
+                </tr>
+              }
               <tr>
                 <td></td>
                 <td><strong>TOTAL </strong> </td>
@@ -225,11 +232,12 @@
               </tr>
             </tbody>
           </table>
-          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="plan = $event" maxSize="12"
+          <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="plan = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
             screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
-          </paging-controls>
-
+          </paging-controls> -->
+          <ngb-pagination [collectionSize]="collectionSizeTwo" [(page)]="pageTwo"
+          [pageSize]="pageSize"></ngb-pagination>
         </div>
         <div class="content-errors" *ngIf="resultVentas.informePlanes.length <= 0">
           <h4>No se encontraron resultados con los parametros ingresados</h4>
@@ -264,20 +272,24 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let informe of resultVentas.informeHistorico | paginate: { currentPage: hist }"
-                class="tr-table cursor">
-                <td>{{informe.descripcion}} </td>
-                <td>{{informe.value }}</td>
-                <td> {{informe.usuario }}</td>
-                <td> {{informe.Fecha_Ingreso | date : 'dd/MM/yyyy' }}</td>
-                <td> {{informe.Hora }}</td>
-              </tr>
+              @for (informe of resultVentas.informeHistorico | slice: (pageThree-1) * pageSize : pageThree * pageSize; track item ) {
+                <tr 
+                  class="tr-table cursor">
+                  <td>{{informe.descripcion}} </td>
+                  <td>{{informe.value }}</td>
+                  <td> {{informe.usuario }}</td>
+                  <td> {{informe.Fecha_Ingreso | date : 'dd/MM/yyyy' }}</td>
+                  <td> {{informe.Hora }}</td>
+                </tr>
+              }
             </tbody>
           </table>
-          <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="hist = $event" maxSize="12"
+          <ngb-pagination [collectionSize]="collectionSizeThree" [(page)]="pageThree"
+          [pageSize]="pageSize"></ngb-pagination>
+          <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="hist = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
             screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
-          </paging-controls>
+          </paging-controls> -->
 
         </div>
         <div class="content-errors" *ngIf="false">

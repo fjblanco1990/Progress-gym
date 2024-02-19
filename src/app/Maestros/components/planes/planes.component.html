@@ -11,8 +11,8 @@
                         <div class="group">
                             <input type="text" required="required" formControlName="Descripcion"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Descripcion.errors?.required &&
-                            ( PlanesForm.controls.Descripcion.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls['Descripcion'].errors?.['required'] &&
+                            ( PlanesForm.controls['Descripcion'].touched)">
                                 {{ 'La descripcion es obligatoria'}}
                             </span>
                             <span class="highlight"></span>
@@ -26,8 +26,8 @@
                         <div class="group">
                             <input type="number" required="required" formControlName="Valor_Plan"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Valor_Plan.errors?.required &&
-                            ( PlanesForm.controls.Valor_Plan.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls['Valor_Plan'].errors?.['required'] &&
+                            ( PlanesForm.controls['Valor_Plan'].touched)">
                                 {{'El valor del plan es obligatorio'}}
                             </span>
                             <span class="highlight"></span>
@@ -40,8 +40,8 @@
                         <div class="group">
                             <input type="number" required="required" formControlName="Cantidad_Dias"
                             (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
-                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls.Cantidad_Dias.errors?.required &&
-                            ( PlanesForm.controls.Cantidad_Dias.touched)">
+                            <span class="text-danger text-validation-sm" *ngIf="PlanesForm.controls['Cantidad_Dias'].errors?.['required'] &&
+                            ( PlanesForm.controls['Cantidad_Dias'].touched)">
                                 {{'La cantidad del dias del plan es obligatorio'}}
                             </span>
                             <span class="highlight"></span>

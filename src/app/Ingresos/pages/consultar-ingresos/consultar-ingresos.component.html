@@ -20,7 +20,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="text" required="required" formControlName="Documento"
-                                    (input)="filtrarDocumento(consultarIngresosForm.controls.Documento.value)"
+                                    (input)="filtrarDocumento(consultarIngresosForm.controls['Documento'].value)"
                                     (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -32,7 +32,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="text" required="required" formControlName="Nombre"
-                                    (input)="filterNombre(consultarIngresosForm.controls.Nombre.value)"
+                                    (input)="filterNombre(consultarIngresosForm.controls['Nombre'].value)"
                                     (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -64,7 +64,7 @@
                             <div class="group">
                                 <div class="col-sm content-btn-footer">
                                     <button type="button" class="btn-gym-progress" title="Consultar"
-                                        (click)="filterRangoFechas(consultarIngresosForm.controls.FechaInicial.value,consultarIngresosForm.controls.FechaFinal.value)">Consultar</button>
+                                        (click)="filterRangoFechas(consultarIngresosForm.controls['FechaInicial'].value,consultarIngresosForm.controls['FechaFinal'].value)">Consultar</button>
                                     <button type="button" class="btn-gym-dark" (click)="reset()">Limpiar</button>
                                 </div>
                             </div>
@@ -83,18 +83,21 @@
                             <th class="table-title-gym">Hora</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let ingreso of data | paginate: { currentPage: p }" class="tr-table cursor">
+                        @for (ingreso of data  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                        <tr  class="tr-table cursor">
                             <td>{{ingreso.cliente.Nombres}} {{ingreso.cliente.Apellidos}}</td>
                             <td>{{ingreso.ingreso.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
                             <td>{{ingreso.ingreso.Hora_Ingreso}}</td>
                         </tr>
-
+                    }
                     </tbody>
                 </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event" maxSize="9"
+                <ngb-pagination [collectionSize]="collectionSize" [(page)]="page"
+                [pageSize]="pageSize"></ngb-pagination>
+                <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event" maxSize="9"
                     responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
                     screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page"></paging-controls>
+                    screenReaderCurrentLabel="You're on page"></paging-controls> -->
             </div>
             <div class="content-errors" *ngIf="data.length <= 0">
 

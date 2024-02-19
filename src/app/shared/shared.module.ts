@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
 import { NgxTablePaginationModule } from 'ngx-table-pagination';
+//import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NgxTablePaginationModule } from 'ngx-table-pagination';
     RouterModule,
     ReactiveFormsModule,
     ComponentsModule,
-    NgxTablePaginationModule
+    //NgxTablePaginationModule
+    //NgxLoadingModule.forRoot({})
   ],
   exports: [
     NavbarComponent,

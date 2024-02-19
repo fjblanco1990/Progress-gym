@@ -76,8 +76,8 @@ export class UsuairosComponent implements OnInit {
 
   GuardarUsuario() {
     if (this.UsuariosForm.valid) {
-      this.UsuariosForm.controls.Estado.setValue( this.UsuariosForm.controls.Estado.value === '1'? true : false);
-      this.UsuariosForm.controls.Fecha_creacion.setValue(new Date());
+      this.UsuariosForm.controls['Estado'].setValue( this.UsuariosForm.controls['Estado'].value === '1'? true : false);
+      this.UsuariosForm.controls['Fecha_creacion'].setValue(new Date());
        this._usuariosService.guardarUsuarios(this.UsuariosForm.value).subscribe(result => {
       this._notiService.ExitosoGeneral('El registro se guardo con exito.');
       this.UsuariosForm.reset();
@@ -92,7 +92,7 @@ export class UsuairosComponent implements OnInit {
   }
 
   EditarUsuario() {
-    this.UsuariosForm.controls.Estado.setValue( this.UsuariosForm.controls.Estado.value === '1'? true : false);
+    this.UsuariosForm.controls['Estado'].setValue( this.UsuariosForm.controls['Estado'].value === '1'? true : false);
     this._usuariosService.editarUsuario(this.UsuariosForm.value).subscribe(result => {
       if (result) {
         this._notiService.ExitosoGeneral('El registro se actualizo con exito.');

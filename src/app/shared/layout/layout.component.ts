@@ -24,6 +24,7 @@ export class LayoutComponent implements OnInit {
   ventasForm!: UntypedFormGroup;
   conceptoData: any;
   usuariosData: any;
+  clientesData: any;
   dataDiarios: any[] = [];
   dataPlanes: any[] = [];
   pla: number = 1;
@@ -45,6 +46,7 @@ export class LayoutComponent implements OnInit {
     this.initialiceFormSeguridad();
     this.getConceptos();
     this.getUsuarios();
+    this.getClientes();
     this.getFormasPago();
     localStorage.setItem('active', '0');
   }
@@ -62,7 +64,7 @@ export class LayoutComponent implements OnInit {
       this._notifAlert.Advertencia('Debe seleccionar una opcion valida');
       this.ventasForm.controls[input].reset();
     } else {
-      this.ventasForm.controls.Valor_Venta.setValue(this.ventasForm.controls[input].value.valor_concepto)
+      this.ventasForm.controls['Valor_Venta'].setValue(this.ventasForm.controls[input].value.valor_concepto)
     }
 
   }
@@ -75,6 +77,11 @@ export class LayoutComponent implements OnInit {
     this._modalServices.getUsuarios().subscribe(result => this.usuariosData = result);
   }
 
+  getClientes() {
+    this._modalServices.getClientes().subscribe( result => {this.clientesData = result; console.log(this.clientesData)});
+    
+  }
+
   getFormasPago() {
     this._formaPagoService.getFormasPago().subscribe(result => {this.formasData = result; console.log( this.formasData)}
     );
@@ -82,22 +89,22 @@ export class LayoutComponent implements OnInit {
 
   saveVenta() {
     if (this.ventasForm.valid) {
-      if (this.ventasForm.controls.Id_Usuario.value.Estado) {
-        this.ventasForm.controls.Id_Usuario.setValue(this.ventasForm.controls.Id_Usuario.value.Id_Usuario);
+      if (this.ventasForm.controls['Id_Usuario'].value.Estado) {
+        this.ventasForm.controls['Id_Usuario'].setValue(this.ventasForm.controls['Id_Usuario'].value.Id_Usuario);
         const fecha_Up = new Date;
         var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
-        this.ventasForm.controls.Fecha_Ingreso.setValue(fecha_update_format);
-        this.ventasForm.controls.Id_Concepto.setValue(this.ventasForm.controls.Id_Concepto.value.Id_Concepto);
+        this.ventasForm.controls['Fecha_Ingreso'].setValue(fecha_update_format);
+        this.ventasForm.controls['Id_Concepto'].setValue(this.ventasForm.controls['Id_Concepto'].value.Id_Concepto);
         const hora = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
         const hora_format = moment(hora, 'H:m:s').format('h:mm a');
-        this.ventasForm.controls.Hora_Venta.setValue(hora_format);
+        this.ventasForm.controls['Hora_Venta'].setValue(hora_format);
         this._ventasService.saveVentas(this.ventasForm.value).subscribe(resultSAve => {
           this.ventasForm.reset();
           this._notifAlert.Exitoso('La venta se registro con exito');
         })
       } else {
         this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
-        this.ventasForm.controls.Id_Usuario.reset();
+        this.ventasForm.controls['Id_Usuario'].reset();
       }
     } else {
       this.ventasForm.markAsTouched();
@@ -113,7 +120,7 @@ export class LayoutComponent implements OnInit {
   ConsultarCierre() {
     this.totalVentasDiarias = 0;
     this.totalVentasPlanes = 0;
-    var idUser = this.ventasForm.controls.Id_Usuario.value;
+    var idUser = this.ventasForm.controls['Id_Usuario'].value;
     var dateInicial = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
     var dateFinal = moment(new Date().toISOString()).format("YYYY-MM-DD").toString();
     var data = {
@@ -125,14 +132,14 @@ export class LayoutComponent implements OnInit {
       result => {
         this.dataDiarios = result
         result.forEach(({ ...venta }) => {
-          this.totalVentasDiarias = this.totalVentasDiarias + venta.venta.Valor_Venta;
+          this.totalVentasDiarias = this.totalVentasDiarias + venta['venta'].Valor_Venta;
         });
       });
     this._ventasService.GetAllVentasByUserPlanes(data).subscribe(
       result => {
         this.dataPlanes = result
         result.forEach(({ ...venta }) => {
-          this.totalVentasPlanes = this.totalVentasPlanes + venta.Ventas_Cliente.Valor_Venta;
+          this.totalVentasPlanes = this.totalVentasPlanes + venta['Ventas_Cliente'].Valor_Venta;
         });
       });
   }
@@ -140,7 +147,7 @@ export class LayoutComponent implements OnInit {
   validarIdentidad() {
     
     if (this.seguridadForm.valid) {
-      const pass = this.seguridadForm.controls.password.value;
+      const pass = this.seguridadForm.controls['password'].value;
       this._usuariosService.getUsuarios().subscribe( 
         result => {
           this.usuarios = result;
@@ -177,6 +184,7 @@ export class LayoutComponent implements OnInit {
       Id_Venta: [null,],
       Id_Concepto: [[Validators.required]],
       Id_Usuario: [null, []],
+      Id_Cliente: [ null, [Validators.required]],
       Id_Forma_pago: [null],
       Fecha_Ingreso: [null, []],
       Valor_Venta: [null, [Validators.required]],

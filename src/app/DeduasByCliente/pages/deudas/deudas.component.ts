@@ -27,6 +27,9 @@ export class DeudasComponent implements OnInit {
   p: number = 1;
   loading: boolean = false;
   totalDeudas = 0;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(private _formBuilder: UntypedFormBuilder, private _modalServices: ModalIngresoService, private _notifAlert: NotificacionesService,
     private _clientesService: ClientesService, private _deudasService: DeudasService) { }
 
@@ -48,6 +51,7 @@ export class DeudasComponent implements OnInit {
           this.totalDeudas = this.totalDeudas + deuda.deuda.Valor_deuda;
         });
         this.deudasModelLstSearch = result;
+        this.collectionSize = this.deudasModelLstSearch.length;
         this.loading = false; 
       });
   }
@@ -82,12 +86,12 @@ export class DeudasComponent implements OnInit {
     } else {
       this.loading = true;
       var fecha_update_format = moment(new Date).format("YYYY-MM-DD").toString();
-      this.deudasForm.controls.Fecha_deuda.setValue(fecha_update_format);
+      this.deudasForm.controls['Fecha_deuda'].setValue(fecha_update_format);
       const hora = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
       const hora_format = moment(hora, 'H:m:s').format('h:mm a');
-      this.deudasForm.controls.Hora_deuda.setValue(hora_format);
-      this.deudasForm.controls.Id_Cliente.setValue(this.deudasForm.controls.Id_Cliente.value.Id_Cliente);
-      this.deudasForm.controls.Id_Usuario.setValue(this.deudasForm.controls.Id_Usuario.value.Id_Usuario);
+      this.deudasForm.controls['Hora_deuda'].setValue(hora_format);
+      this.deudasForm.controls['Id_Cliente'].setValue(this.deudasForm.controls['Id_Cliente'].value.Id_Cliente);
+      this.deudasForm.controls['Id_Usuario'].setValue(this.deudasForm.controls['Id_Usuario'].value.Id_Usuario);
       this._deudasService.GuardarDeuda(this.deudasForm.value).subscribe(
         result => {
           this.deudasForm.reset();
@@ -120,7 +124,7 @@ export class DeudasComponent implements OnInit {
   }
 
   filtrarUsuario() {
-    var usuario = this.deudasConsultaForm.controls.Usuario.value.Id_Usuario;
+    var usuario = this.deudasConsultaForm.controls['Usuario'].value.Id_Usuario;
     this.deudasModelLstSearch = this.deudasDatas;
     if (usuario)
       this.deudasModelLstSearch = this.deudasModelLstSearch.filter(c => c.usuario.Id_Usuario === usuario);

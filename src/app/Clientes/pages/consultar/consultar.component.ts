@@ -32,6 +32,9 @@ export class ConsultarComponent implements OnInit {
   p: number = 1;
   planData: PlanModel[] = [];
   usuariosData: Usuario_Model[] = [];
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(private _clientesService: ClientesService,
     private _formBuilder: UntypedFormBuilder, 
     private _patternsService: PatternsService, 
@@ -94,11 +97,17 @@ export class ConsultarComponent implements OnInit {
                   }
                   this.clientesModelLst.push(this.clientesCompleto);
                   this.clientesModelLstSearch.push(this.clientesCompleto);
+                  this.collectionSize = this.clientesModelLstSearch.length;
             })
            
         });
       }
     );
+  }
+
+  handlePageChange(event: number): void {
+    this.page = event;
+    this.getAllClients();
   }
 
   getPlanes() {
@@ -138,7 +147,7 @@ export class ConsultarComponent implements OnInit {
   }
 
   filtrarUsuario() {
-    var usuario = this.consultarClientForm.controls.Usuario.value.Id_Usuario;
+    var usuario = this.consultarClientForm.controls['Usuario'].value.Id_Usuario;
     this.clientesModelLstSearch = this.clientesModelLst;
     if (usuario) 
       this.clientesModelLstSearch = this.clientesModelLstSearch.filter(c => c.usuario.Id_Usuario === usuario);

@@ -6,8 +6,9 @@ import { DeudasComponent } from './pages/deudas/deudas.component';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxTablePaginationModule } from 'ngx-table-pagination';
-import { LoadingModule } from 'ngx-loading';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgxTablePaginationModule } from 'ngx-table-pagination';
+// import { LoadingModule } from 'ngx-loading';
 
 
 @NgModule({
@@ -20,8 +21,9 @@ import { LoadingModule } from 'ngx-loading';
     SharedModule,
     ComponentsModule,
     ReactiveFormsModule,
-    NgxTablePaginationModule,
-    LoadingModule
+    NgbPaginationModule
+    //NgxTablePaginationModule,
+    //LoadingModule
   ]
 })
 export class DeudasModule { }

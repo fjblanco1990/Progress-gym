@@ -16,7 +16,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="text" required="required" formControlName="Documento"
-                                    (input)="filtrarDocumento(deudasConsultaForm.controls.Documento.value)"
+                                    (input)="filtrarDocumento(deudasConsultaForm.controls['Documento'].value)"
                                     (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -28,7 +28,7 @@
                         <div class="col-sm">
                             <div class="group">
                                 <input type="text" required="required" formControlName="Nombre"
-                                    (input)="filtrarNombre(deudasConsultaForm.controls.Nombre.value)"
+                                    (input)="filtrarNombre(deudasConsultaForm.controls['Nombre'].value)"
                                     (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()" />
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
@@ -44,8 +44,8 @@
                                         {{usuario.Nombre_completo}}
                                     </option>
                                 </select>
-                                <span class="text-danger text-validation-sm" *ngIf="deudasConsultaForm.controls.Usuario.errors?.required &&
-                                    ( deudasConsultaForm.controls.Usuario.touched)">
+                                <span class="text-danger text-validation-sm" *ngIf="deudasConsultaForm.controls['Usuario'].errors?.['required'] &&
+                                    ( deudasConsultaForm.controls['Usuario'].touched)">
                                     {{ 'El usuario que registra Obligatorio'}}
                                 </span>
                                 <span class="highlight"></span>
@@ -69,7 +69,7 @@
                             <div class="group">
                                 <div class="col-sm content-btn-footer">
                                     <button type="button" class="btn-gym-progress" title="Consultar"
-                                        (click)="filterRangoFechas(deudasConsultaForm.controls.Fecha_deuda.value)">Consultar</button>
+                                        (click)="filterRangoFechas(deudasConsultaForm.controls['Fecha_deuda'].value)">Consultar</button>
                                     <button type="button" class="btn-gym-dark" (click)="reset()">Limpiar</button>
                                 </div>
                             </div>
@@ -92,7 +92,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let deuda of deudasModelLstSearch | paginate: { currentPage: p }"
+                        @for (deuda of deudasModelLstSearch  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                        <tr
                             class="tr-table cursor">
                             <td>{{deuda.usuario.Nombre_completo}}</td>
                             <td>{{deuda.cliente.Nombres}} {{deuda.cliente.Apellidos}} </td>
@@ -106,6 +107,7 @@
                             </td>
 
                         </tr>
+                    }
                         <tr>
                             <td></td>
                             <td></td>
@@ -121,10 +123,12 @@
 
                     </tbody>
                 </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
                     maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
                     screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page"></paging-controls>
+                    screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page"
+                                    [pageSize]="pageSize"></ngb-pagination>
             </div>
             <div class="content-errors" *ngIf="deudasModelLstSearch.length <= 0">
 
@@ -161,8 +165,8 @@
                                                 {{optCliente.cliente.Nombres}} {{optCliente.cliente.Apellidos}}
                                             </option>
                                         </select>
-                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Id_Cliente.errors?.required &&
-                                                    ( deudasForm.controls.Id_Cliente.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls['Id_Cliente'].errors?.['required'] &&
+                                                    ( deudasForm.controls['Id_Cliente'].touched)">
                                             {{ 'El cliente es obligatorio'}}
                                         </span>
                                         <span class="highlight"></span>
@@ -179,8 +183,8 @@
                                                 {{optUser.Nombre_completo}}
                                             </option>
                                         </select>
-                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Id_Usuario.errors?.required &&
-                                                    ( deudasForm.controls.Id_Usuario.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls['Id_Usuario'].errors?.['required'] &&
+                                                    ( deudasForm.controls['Id_Usuario'].touched)">
                                             {{ 'El usuario es obligatorio'}}
                                         </span>
                                         <span class="highlight"></span>
@@ -195,8 +199,8 @@
                                     <div class="group">
                                         <input type="text" required="required" formControlName="descripcion"
                                             (focus)="desactiveRegistroIngreso()" />
-                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.descripcion.errors?.required &&
-                                                    ( deudasForm.controls.descripcion.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls['descripcion'].errors?.['required'] &&
+                                                    ( deudasForm.controls['descripcion'].touched)">
                                             {{ 'La descripción de obligatoria'}}
                                         </span>
 
@@ -210,8 +214,8 @@
                                     <div class="group">
                                         <input type="number" required="required" formControlName="Valor_deuda"
                                             (focus)="desactiveRegistroIngreso()" />
-                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls.Valor_deuda.errors?.required &&
-                                                    ( deudasForm.controls.Valor_deuda.touched)">
+                                        <span class="text-danger text-validation-sm" *ngIf="deudasForm.controls['Valor_deuda'].errors?.['required'] &&
+                                                    ( deudasForm.controls['Valor_deuda'].touched)">
                                             {{ 'El valor de la deuda es obligatorio'}}
                                         </span>
 
@@ -237,4 +241,4 @@
 </div>
 
 <app-modal-ingreso [HabilitarRegistroIngreso]="habilitarModal"></app-modal-ingreso>
-<ngx-loading [show]="loading"></ngx-loading>
+<!-- <ngx-loading [show]="loading"></ngx-loading> -->
