@@ -51,6 +51,25 @@
                         </div>
                         <div class="col-sm">
                             <div class="group">
+                                <select required formControlName="Estado"
+                                    (change)="validarSeleccion('Estado', ''); filtrarUsuarioEstado()">
+                                    <!-- <option value="-1">---Seleccione---</option> -->
+                                    <option [ngValue]="status.description" *ngFor="let status of estados">
+                                        {{status.description}}
+                                    </option>
+                                </select>
+                                <span class="text-danger text-validation-sm" *ngIf="consultarClientForm.controls['Usuario'].errors?.['required'] &&
+                                    ( consultarClientForm.controls['Usuario'].touched)">
+                                    {{ 'El Estado es obligatorio , debe seleccionar una opción'}}
+                                </span>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="label-select">Estado</label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="group">
                                 <input type="date" required="required" formControlName="FechaInicial" 
                                 (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
                                 <span class="highlight"></span>
@@ -93,7 +112,12 @@
                     <tbody>
                            @for (cliente of clientesModelLstSearch  | slice: (page-1) * pageSize : page * pageSize; track item ) {
                             <tr class="tr-table cursor"
-                            [ngClass]="{ 'color-warnign': cliente.porVencer && !cliente.Vencido && cliente.DiasFaltantes < 3, 'color-normal': !cliente.porVencer &&  !cliente.Vencido &&  cliente.DiasFaltantes > 3, 'color-danger ': cliente.Vencido && cliente.porVencer && cliente.DiasFaltantes <= 0, 'color-danger ': cliente.Vencido && cliente.porVencer  }"
+                            [ngClass]="{ 
+                                'color-warnign': cliente.porVencer && !cliente.Vencido && cliente.DiasFaltantes < 3,
+                                'color-normal': !cliente.porVencer &&  !cliente.Vencido &&  cliente.DiasFaltantes > 3, 
+                                'color-danger ': cliente.Vencido && cliente.porVencer && cliente.DiasFaltantes <= 0, 
+                                'color-danger ': cliente.Vencido && cliente.porVencer  
+                            }"
                             [title]=" cliente.DiasFaltantes < 0 ? 'Vencido hace '+ cliente.DiasFaltantes +' ' + cliente.palabra: 'Le quedan '+ cliente.DiasFaltantes +' '+ cliente.palabra "
                             (click)="editarCliente(cliente)">
                                 <td>{{cliente.cliente.Nombres}} {{cliente.cliente.Apellidos}}</td>
