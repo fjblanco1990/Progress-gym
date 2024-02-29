@@ -17,6 +17,9 @@ export class PlanesComponent implements OnInit {
   planesData: PlanModel[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(private _planService: PlanesService, private _build: UntypedFormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
@@ -34,7 +37,7 @@ export class PlanesComponent implements OnInit {
   }
 
   getPlanes() {
-    this._planService.getPlanes().subscribe(result => this.planesData = result);
+    this._planService.getPlanes().subscribe(result => { this.planesData = result; this.collectionSize = this.planesData.length; });
   }
 
   mapPlan(plan: PlanModel) {

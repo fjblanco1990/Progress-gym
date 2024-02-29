@@ -59,26 +59,29 @@
                       </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let report of dataReportVenta | paginate: { currentPage: p }" class="tr-table cursor">
-                            <td>{{report.usuario.Nombre_completo}}</td>
-                            <td>{{report.concepto.Descripcion}}</td>
-                            <td>{{report.formas.Descripcion}}</td>
-                            <td>{{report.venta.Valor_Venta | currency}}</td>
-                            <td>{{report.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{report.venta.Hora_Venta}}</td>
-                        </tr>
-                     
+                        @for (report of dataReportVenta  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                            <tr class="tr-table cursor">
+                                <td>{{report.usuario.Nombre_completo}}</td>
+                                <td>{{report.concepto.Descripcion}}</td>
+                                <td>{{report.formas.Descripcion}}</td>
+                                <td>{{report.venta.Valor_Venta | currency}}</td>
+                                <td>{{report.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{report.venta.Hora_Venta}}</td>
+                            </tr>
+                        }
                       
                     </tbody>
                   </table>
-                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                  <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
                       maxSize="12"
                       responsive="true"
                       previousLabel="Anterior"
                       nextLabel="Siguiente"
                       screenReaderPaginationLabel="Pagination"
                       screenReaderPageLabel="page"
-                      screenReaderCurrentLabel="You're on page"></paging-controls>
+                      screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                      <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                      [pageSize]="pageSize"></ngb-pagination>
             </div>
             <div class="content-table" *ngIf="dataReportPlan.length > 0" >
                 <table class="table table-dark table-hover table-gym">
@@ -86,35 +89,44 @@
                       <tr >
                         <th class="table-title-gym">Plan</th>
                         <th class="table-title-gym">Valor venta</th>
+                        <th class="table-title-gym">Forma pago</th>
+                        <th class="table-title-gym">Cliente</th>
+                        <th class="table-title-gym">Usuario</th>
                         <th class="table-title-gym">Fecha venta</th>
                         <th class="table-title-gym">Hora venta</th>
                       </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let report of dataReportPlan | paginate: { currentPage: v }" class="tr-table cursor">
-                           
-                            <td>{{report.Plan?.Descripcion}}</td>
-                            <td>{{report.Plan?.Valor_Plan | currency}}</td>
-                            <td>{{report.Ventas_Cliente?.Fecha | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{report.Ventas_Cliente?.Hora_Venta_Cliente}}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>Total ventas: </td>
-                            <td>{{ totalVentaUsuarioReport | currency}}</td>
-                        </tr>
-                      
+                        @for (report of dataReportPlan  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                            <tr class="tr-table cursor">
+                            
+                                <td>{{report.Plan?.Descripcion}}</td>
+                                <td>{{report.Plan?.Valor_Plan | currency}}</td>
+                                <td>{{report.Cliente?.Id_Forma_pago == 1 ? 'Efectivo': 'Transferencia' }}</td>
+                                <td>{{report.Cliente?.Nombres + ' ' + report.Cliente?.Apellidos}}</td>
+                                <td>{{report.Usuario?.Nombre_completo }}</td>
+                                <td>{{report.Ventas_Cliente?.Fecha | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{report.Ventas_Cliente?.Hora_Venta_Cliente}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Total ventas: </td>
+                                <td>{{ totalVentaUsuarioReport | currency}}</td>
+                            </tr>
+                        }
                     </tbody>
                   </table>
-                  <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="v = $event"
+                  <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="v = $event"
                       maxSize="12"
                       responsive="true"
                       previousLabel="Anterior"
                       nextLabel="Siguiente"
                       screenReaderPaginationLabel="Pagination"
                       screenReaderPageLabel="page"
-                      screenReaderCurrentLabel="You're on page"></paging-controls>
+                      screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                      <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                                    [pageSize]="pageSize"></ngb-pagination>
             </div> 
             </div>
             

@@ -476,8 +476,9 @@ export class RegistrarComponent implements OnInit {
         result => {
           this.usuarios = result;
           const identidad = this.usuarios.filter(u => u.Password === pass );
-          if (identidad.length > 0) {
-            this.registerClientForm.controls['Id_Usuario'].setValue(identidad[0].Id_Usuario);
+          if (identidad.length > 0 && identidad[0].Nick_Name === 'Faer_Gym') {
+            // this.registerClientForm.controls['Id_Usuario'].setValue(identidad[0].Id_Usuario);
+            this.registerClientForm.controls['Id_Usuario'].reset();
             this.closeModal.nativeElement.click();
           } else {
             if (this.editaFechaInicial) {

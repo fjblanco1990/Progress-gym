@@ -93,16 +93,18 @@
 
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-sm" *ngIf="ingresoDiario">
                                     <div class="group">
-                                        <select required formControlName="Id_Cliente">
-                                            <option [ngValue]="optCliente.cliente" *ngFor="let optCliente of clientesData">
-                                                {{optCliente.cliente.Nombre }} {{optCliente.cliente.Apellidos}}
-                                            </option>
-                                        </select>
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label class="label-select">Cliente</label>
+                                        <input type="text" required="required" formControlName="NameCliente"
+                                            (focus)="desactiveRegistroIngreso()" />
+                                        <span class="text-danger text-validation-sm" *ngIf="ventasForm.controls['NameCliente'].errors?.['required'] &&
+                                                ( ventasForm.controls['NameCliente'].touched)">
+                                        {{ 'El nombre del cliente es obligatorio'}}
+                                    </span>
+
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label class="label-title">Cliente</label>
 
                                     </div>
                                 </div>
@@ -153,7 +155,7 @@
 
 <div class="modal fade" id="ModalCierre" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg modal-dialog-centered">
+    <div class="modal-dialog  modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header title-dark">
                 <h5 class="modal-title" id="titleModal">Informacion de cierre</h5>
@@ -204,26 +206,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let diarios of dataDiarios | paginate: { currentPage: dia , id: 'first'}"
-                                class="tr-table cursor">
-                                <td>{{diarios.concepto.Descripcion}}</td>
-                                <td>{{diarios.venta.Valor_Venta | currency}}</td>
-                                <td>{{diarios.usuario.Nombre_completo}}</td>
-                                <td>{{diarios.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td><strong>TOTAL </strong></td>
-                                <td> {{ totalVentasDiarias | currency}} </td>
-                            </tr>
+                            @for (diarios of dataDiarios  | slice: (pageDiarios-1) * pageSizeDiarios : pageDiarios * pageSizeDiarios; track item ) {
+                                <tr
+                                    class="tr-table cursor">
+                                    <td>{{diarios.concepto.Descripcion}}</td>
+                                    <td>{{diarios.venta.Valor_Venta | currency}}</td>
+                                    <td>{{diarios.usuario.Nombre_completo}}</td>
+                                    <td>{{diarios.venta.Fecha_Ingreso | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                               
+                            }
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>TOTAL </strong></td>
+                                    <td> {{ totalVentasDiarias | currency}} </td>
+                                </tr>
                         </tbody>
                     </table>
-                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="dia = $event"
-                        id="first" maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
-                        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                        screenReaderCurrentLabel="You're on page">
-                    </paging-controls>
+                    <ngb-pagination class="paginator-footer" [collectionSize]="collectionSizeDiarios" [(page)]="pageDiarios" responsive="true"
+                                    [pageSize]="pageSizeDiarios"></ngb-pagination>
                 </div>
                 <div class="content-table" *ngIf="dataPlanes.length > 0">
                     <table class="table table-dark table-hover table-gym">
@@ -238,31 +240,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let planes of dataPlanes | paginate: { currentPage: pla , id: 'second'}"
-                                class="tr-table cursor">
-                                <td>{{planes.Plan.Descripcion}}</td>
-                                <td>{{planes.Plan.Valor_Plan | currency}}</td>
-                                <td>{{planes.Ventas_Cliente.Fecha | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{planes.Ventas_Cliente.Hora_Venta_Cliente}}</td>
-                                <td>{{planes.Cliente.Nombres}} {{planes.Cliente.Apellidos}}</td>
-                                <td>{{planes.Usuario.Nombre_completo}}</td>
+                            @for (planes of dataPlanes  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                                <tr 
+                                    class="tr-table cursor">
+                                    <td>{{planes.Plan.Descripcion}}</td>
+                                    <td>{{planes.Plan.Valor_Plan | currency}}</td>
+                                    <td>{{planes.Ventas_Cliente.Fecha | date: 'dd/MM/yyyy'}}</td>
+                                    <td>{{planes.Ventas_Cliente.Hora_Venta_Cliente}}</td>
+                                    <td>{{planes.Cliente.Nombres}} {{planes.Cliente.Apellidos}}</td>
+                                    <td>{{planes.Usuario.Nombre_completo}}</td>
 
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><strong>TOTAL </strong></td>
-                                <td> {{ totalVentasPlanes | currency}}</td>
-                            </tr>
+                                </tr>
+                               
+                            }
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>TOTAL </strong></td>
+                                    <td> {{ totalVentasPlanes | currency}}</td>
+                                </tr>
                         </tbody>
                     </table>
-                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="pla = $event"
-                        id="second" maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
-                        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                        screenReaderCurrentLabel="You're on page">
-                    </paging-controls>
+                    <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                                    [pageSize]="pageSize"></ngb-pagination>
                 </div>
                 <div class="content-errors" *ngIf="dataPlanes.length <= 0 && dataDiarios.length <= 0">
                     <h4>No se encontraron resultados con los parametros ingresados</h4>

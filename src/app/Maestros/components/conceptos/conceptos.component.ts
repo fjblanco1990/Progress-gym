@@ -17,6 +17,9 @@ export class ConceptosComponent implements OnInit {
   conceptosData: ConceptoModel[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(private _conceptoService: ConceptoService, private _build: UntypedFormBuilder, private _notiService: NotificacionesService) { }
 
   ngOnInit(): void {
@@ -33,7 +36,7 @@ export class ConceptosComponent implements OnInit {
   }
 
   getConceptos() {
-    this._conceptoService.getConceptos().subscribe( result => this.conceptosData =  result);
+    this._conceptoService.getConceptos().subscribe( result => { this.conceptosData =  result; this.collectionSize = this.conceptosData.length; });
   }
 
   mapConceptos(concepto: ConceptoModel) {

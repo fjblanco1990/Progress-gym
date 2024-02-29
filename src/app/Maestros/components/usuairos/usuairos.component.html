@@ -101,23 +101,26 @@
                     </thead>
                     <tbody>
                         <!-- (click)="editarCliente(cliente)" -->
-                        <tr *ngFor="let user of usuarioData | paginate: { currentPage: p }" class="tr-table cursor">
-                            <td>{{user.Nombre_completo}} </td>
-                            <td>{{user.Nick_Name}}</td>
-                            <td>{{user.Estado === true ? 'Activo': 'In activo'}}</td>
-                            <td>{{user.Fecha_creacion | date: 'dd/MM/yyyy'}}</td>
-                            <td>
-                                <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapUser(user)"></i>
-                                <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarUsuario(user)"></i>
-                            </td>
-                        </tr>
-
+                        @for (user of usuarioData  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                            <tr class="tr-table cursor">
+                                <td>{{user.Nombre_completo}} </td>
+                                <td>{{user.Nick_Name}}</td>
+                                <td>{{user.Estado === true ? 'Activo': 'In activo'}}</td>
+                                <td>{{user.Fecha_creacion | date: 'dd/MM/yyyy'}}</td>
+                                <td>
+                                    <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true" (click)="mapUser(user)"></i>
+                                    <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarUsuario(user)"></i>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
                     maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
                     screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page"></paging-controls>
+                    screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                    <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                                    [pageSize]="pageSize"></ngb-pagination>
             </div>
             <div class="content-errors" *ngIf="usuarioData.length <= 0">
                 <h4>No se encontraron resultados.</h4>

@@ -25,6 +25,7 @@ export class RegistrarIngresosComponent implements OnInit {
   @ViewChild('openModalPlanes', {static: true}) openModalPlanes!: ElementRef;
   @ViewChild('openModalHistorico', {static: true}) openModalHistorico!: ElementRef;
   informesForm!: UntypedFormGroup;
+  filterForm!: UntypedFormGroup;
   fechaActual!: Date;
   habilitarModal: boolean = true;
   config: any;
@@ -38,6 +39,11 @@ export class RegistrarIngresosComponent implements OnInit {
     informeData: [],
     informeVenta: [
       {
+        // venta: [
+        //   {
+        //     NameCliente : ''
+        //   }
+        // ],
         descripcion: '',
         value: 0
       }
@@ -55,6 +61,8 @@ export class RegistrarIngresosComponent implements OnInit {
       }
     ]
   }
+
+  informeVenta: any[] = [];
   conceptosData: ConceptoModel[] = [];
   usuariosData: Usuario_Model[] = [];
   resultVentasSuminitros = 0;
@@ -82,6 +90,7 @@ export class RegistrarIngresosComponent implements OnInit {
 
   ngOnInit(): void {
     this.InicializarFromulario();
+    this.InicializarFromularioFilter();
     this.getConceptos();
     this.getUsuarios();
     localStorage.setItem('active', '0');
@@ -119,6 +128,9 @@ export class RegistrarIngresosComponent implements OnInit {
       this.datesSend.Fecha_Final =   dateFormat;
       this._ventasService.GetVentasUnicasDiarias(this.datesSend).subscribe( result => {
         this.resultVentas.informeVenta = result;
+        // this.informeVenta = r
+        console.log('VENTASDIARIAS', this.resultVentas.informeVenta);
+        
         result.forEach(({...venta}) => {
           this.totalVentasDiarias = this.totalVentasDiarias + venta['venta'].Valor_Venta;
         });
@@ -127,6 +139,16 @@ export class RegistrarIngresosComponent implements OnInit {
       });
 
   }
+
+  // filtrarVentaByCliente(cliente: string) {
+   
+  //   if (cliente) 
+
+  //   this.resultVentas.informeVenta.forEach(infoVenta => {
+  //     this.resultVentas.informeVenta = infoVenta.venta.filter(v => v.NameCliente.includes(cliente))
+  //   });
+
+  // }
 
   ObtenerPlanesDiarios() {
     this.resultVentas.informePlanes = [];
@@ -137,6 +159,8 @@ export class RegistrarIngresosComponent implements OnInit {
     this.datesSend.Fecha_Final =   dateFormat;
     this._ventasService.GetVentasPlanesDiarios(this.datesSend).subscribe( result => {
       this.resultVentas.informePlanes = result;
+      console.log('VPLAN',this.resultVentas.informePlanes);
+      
       result.forEach(({...ventasClientes }) => {
         this.totalPlanesDiarios = this.totalPlanesDiarios + ventasClientes['ventasClientes'].Valor_Venta;
       });
@@ -148,11 +172,14 @@ export class RegistrarIngresosComponent implements OnInit {
   ObtenerHistoricoVentas() {
     this.resultVentas.informeHistorico = [];
     this._ventasService.GetVentasAll().subscribe( result => {
+      console.log('VENTAH',result);
+      
       result.forEach((venta: any) => {
         const conpdata = this.conceptosData.find(c => c.Id_Concepto == venta.Id_Concepto);
         const userData = this.usuariosData.find( c => c.Id_Usuario == venta.Id_Usuario)
         const infoVenta = {
             descripcion: conpdata === undefined  ? '' : conpdata.Descripcion,
+            cliente: venta.NameCliente === null ? '' : venta.NameCliente,
             value: venta.Valor_Venta,
             usuario: userData === undefined ? '': userData?.Nombre_completo,
             Fecha_Ingreso: venta.Fecha_Ingreso,
@@ -161,6 +188,8 @@ export class RegistrarIngresosComponent implements OnInit {
         
         this.resultVentas.informeHistorico.push(infoVenta);
       });
+      console.log('HISTO',this.resultVentas.informeHistorico);
+      
       this.collectionSizeThree = this.resultVentas.informeHistorico.length;
       this.openModalHistorico.nativeElement.click();
     })
@@ -227,6 +256,13 @@ export class RegistrarIngresosComponent implements OnInit {
       FechaInicial: [null, [Validators.required]],
       FechaFinal: [null, [Validators.required]],
     });
+  }
+
+  InicializarFromularioFilter() {
+    this.filterForm = this._formBuilder.group({
+      nameClient: [null],
+    });
+
   }
 
 }

@@ -16,10 +16,13 @@ export class UsuairosComponent implements OnInit {
 
   UsuariosForm!: UntypedFormGroup;
   habilitarModal: boolean = true;
-  p: number = 1;
+
   usuarioData: Usuario_Model[] = [];
   showBtnEdit: boolean = false;
   showBtnSave: boolean = true;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   public estados = [
     {
       value: 1,
@@ -54,7 +57,7 @@ export class UsuairosComponent implements OnInit {
   }
 
   getUsuarios() {
-    this._usuariosService.getUsuarios().subscribe(result => this.usuarioData = result);
+    this._usuariosService.getUsuarios().subscribe(result => {this.usuarioData = result; this.collectionSize = this.usuarioData.length; });
   }
 
   mapUser(user: Usuario_Model) {

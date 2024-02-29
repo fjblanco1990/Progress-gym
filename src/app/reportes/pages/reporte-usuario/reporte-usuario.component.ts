@@ -22,6 +22,9 @@ export class ReporteUsuarioComponent implements OnInit {
   dataReportPlan: any[] = [];
   totalVentaUsuarioReport: number = 0;
   dataReportLst: any[] = [];
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
   constructor(
     // private _clientesService: ClientesService,
     private _formBuilder: UntypedFormBuilder, 
@@ -44,7 +47,7 @@ export class ReporteUsuarioComponent implements OnInit {
   }
 
   getUsuarios() {
-    this._modalServices.getUsuarios().subscribe(result => this.usuariosData = result);
+    this._modalServices.getUsuarios().subscribe(result => {this.usuariosData = result; this.collectionSize = this.usuariosData.length; });
   }
 
   getRepotByUser() {
@@ -59,6 +62,8 @@ export class ReporteUsuarioComponent implements OnInit {
       map(({...result}) => {
         this.dataReportVenta = result.venta_completa;
         this.dataReportPlan = result.ventas_planes_usuarios;
+        console.log('PLANES VENDIDOS', this.dataReportPlan);
+        
           result.venta_completa.forEach((element: any) => {
             this.dataReportLst.push(element);
             this.totalVentaUsuarioReport = this.totalVentaUsuarioReport + element.venta.Valor_Venta;

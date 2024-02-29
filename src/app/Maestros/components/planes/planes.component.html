@@ -71,7 +71,9 @@
                     </thead>
                     <tbody>
                         <!-- (click)="editarCliente(cliente)" -->
-                        <tr *ngFor="let plan of planesData | paginate: { currentPage: p }" class="tr-table cursor">
+                        @for (plan of planesData  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                        <tr  class="tr-table cursor">
+                            
                             <td>{{plan.Descripcion}} </td>
                             <td>{{plan.Valor_Plan | currency}}</td>
                             <td>{{plan.Cantidad_Dias}}</td>
@@ -80,13 +82,15 @@
                                 <!-- <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true" (click)="EliminarPlan(plan.Id_Plan)"></i> -->
                             </td>
                         </tr>
-
+                    }
                     </tbody>
                 </table>
-                <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
+                <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="p = $event"
                     maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
                     screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page"></paging-controls>
+                    screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                    <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                                    [pageSize]="pageSize"></ngb-pagination>
             </div>
             <div class="content-errors" *ngIf="planesData.length <= 0">
                 <h4>No se encontraron resultados.</h4>

@@ -82,7 +82,7 @@ export class ConsultarComponent implements OnInit {
                       } else if (this.clientesCompleto.DiasFaltantes <= 3) {
                         this.clientesCompleto.Vencido = false;
                         this.clientesCompleto.porVencer = true;
-                      }
+                      } 
                     }
                   } else {
                     this.clientesCompleto.DiasFaltantes =  (this.ObtenerDiasTranscurridos( this.fechaActual.toString(), cliente.cliente.Fecha_fin.toString()));

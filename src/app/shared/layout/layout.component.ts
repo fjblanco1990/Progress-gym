@@ -37,6 +37,13 @@ export class LayoutComponent implements OnInit {
   formasData: Forma_PagoModel[] = [];
   @ViewChild('openSeguridad') openSeguridad!: any;
   @ViewChild('closeModalSeguridad') closeModalSeguridad!: any;
+  page = 1;
+  pageSize = 4;
+  collectionSize = 0;
+  pageDiarios = 1;
+  pageSizeDiarios = 4;
+  collectionSizeDiarios = 0;
+  ingresoDiario: boolean = false;
   constructor(private _formBuilder: UntypedFormBuilder, private _notifAlert: NotificacionesService, private _ventasService: VentasService,
     private _modalServices: ModalIngresoService,private _usuariosService: UsuariosService, private route: Router,
     private _formaPagoService: FormaPagoService) { }
@@ -56,7 +63,9 @@ export class LayoutComponent implements OnInit {
   }
 
   habilitarRegistroIngreso() {
+    this.ingresoDiario = false;
     this.habilitarIngreso = true;
+    this.ventasForm.controls['NameCliente'].reset();
   }
 
   validarSeleccion(input: string, name_input: string) {
@@ -66,7 +75,9 @@ export class LayoutComponent implements OnInit {
     } else {
       this.ventasForm.controls['Valor_Venta'].setValue(this.ventasForm.controls[input].value.valor_concepto)
     }
-
+    if (this.ventasForm.controls[input].value.Id_Concepto === 6) {
+        this.ingresoDiario = true;
+    }
   }
 
   getConceptos() {
@@ -89,7 +100,9 @@ export class LayoutComponent implements OnInit {
 
   saveVenta() {
     if (this.ventasForm.valid) {
+      
       if (this.ventasForm.controls['Id_Usuario'].value.Estado) {
+        this.ingresoDiario = false;
         this.ventasForm.controls['Id_Usuario'].setValue(this.ventasForm.controls['Id_Usuario'].value.Id_Usuario);
         const fecha_Up = new Date;
         var fecha_update_format = moment(fecha_Up.toISOString()).format("YYYY-MM-DD").toString();
@@ -103,10 +116,15 @@ export class LayoutComponent implements OnInit {
           this._notifAlert.Exitoso('La venta se registro con exito');
         })
       } else {
+        this.ingresoDiario = false;
+        this.ventasForm.controls['NameCliente'].reset();
         this._notifAlert.Advertencia('El usuario se encuentra desactivado, no puede realizar ventas con este usuario.');
         this.ventasForm.controls['Id_Usuario'].reset();
       }
     } else {
+      if (this.ventasForm.controls['NameCliente'].status === "INVALID") {
+        this._notifAlert.Advertencia('El nombre del clienta para la venta es obligatorio.');
+      }
       this.ventasForm.markAsTouched();
     }
   }
@@ -130,14 +148,16 @@ export class LayoutComponent implements OnInit {
     }
     this._ventasService.GetAllVentasByUserDiarias(data).subscribe(
       result => {
-        this.dataDiarios = result
+        this.dataDiarios = result;
+        this.collectionSizeDiarios = this.dataDiarios.length;
         result.forEach(({ ...venta }) => {
           this.totalVentasDiarias = this.totalVentasDiarias + venta['venta'].Valor_Venta;
         });
       });
     this._ventasService.GetAllVentasByUserPlanes(data).subscribe(
       result => {
-        this.dataPlanes = result
+        this.dataPlanes = result;
+        this.collectionSize = this.dataPlanes.length;
         result.forEach(({ ...venta }) => {
           this.totalVentasPlanes = this.totalVentasPlanes + venta['Ventas_Cliente'].Valor_Venta;
         });
@@ -184,11 +204,11 @@ export class LayoutComponent implements OnInit {
       Id_Venta: [null,],
       Id_Concepto: [[Validators.required]],
       Id_Usuario: [null, []],
-      Id_Cliente: [ null, [Validators.required]],
       Id_Forma_pago: [null],
       Fecha_Ingreso: [null, []],
       Valor_Venta: [null, [Validators.required]],
-      Hora_Venta: [null]
+      Hora_Venta: [null],
+      NameCliente: [null]
     });
   }
 

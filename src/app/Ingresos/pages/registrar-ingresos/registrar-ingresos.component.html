@@ -112,7 +112,7 @@
             }
             </tbody>
           </table>
-          <ngb-pagination [collectionSize]="collectionSize" [(page)]="page"
+          <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page"
           [pageSize]="pageSize"></ngb-pagination>
           <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="ing = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
@@ -140,14 +140,30 @@
         <button type="button" class="btn-close btn-x" data-bs-dismiss="modal">X</button>
       </div>
       <div class="modal-body">
+        <div class="row">
+          <div class="col-sm">
+              <div class="group">
+                <form [formGroup]="filterForm">
+                  <!-- (input)="filtrarVentaByCliente(filterForm.controls['nameClient'].value)" -->
+                   <input type="text" required="required" formControlName="nameClient"
+                   
+                   (focus)="desactiveRegistroIngreso()" (blur)="habilitarRegistroIngreso()"/>
+                  <span class="highlight"></span>
+                  <span class="bar"></span>
+                  <label class="label-title">Cliente</label>
+                </form>
+              </div>
+          </div>
+        </div>
         <div class="content-table" *ngIf="resultVentas.informeVenta.length > 0">
           <table class="table table-dark table-hover table-gym">
             <thead>
               <tr>
                 <th class="table-title-gym">Concepto</th>
                 <th class="table-title-gym">Usuario venta</th>
+                <th class="table-title-gym">Cliente</th>
                 <th class="table-title-gym">Valor</th>
-                <th class="table-title-gym"> Hora de la venta</th>
+                <th class="table-title-gym">Hora de la venta</th>
                 <th class="table-title-gym">Metodo pago</th>
               </tr>
             </thead>
@@ -156,6 +172,7 @@
                 <tr class="tr-table cursor">
                   <td>{{informe.concepto?.Descripcion}} </td>
                   <td>{{informe.usuario?.Nombre_completo}} </td>
+                  <td>{{informe.venta?.NameCliente}} </td>
                   <td>{{informe.venta?.Valor_Venta | currency}}</td>
                   <td>{{informe.venta?.Hora_Venta }}</td>
                   <td>{{informe.formas?.Descripcion }}</td>
@@ -165,6 +182,7 @@
                 <td></td>
                 <td><strong>TOTAL </strong> </td>
                 <td></td>
+                <td></td>
                 <td>
                   {{ totalVentasDiarias | currency}}
                 </td>
@@ -172,7 +190,7 @@
               </tr>
             </tbody>
           </table>
-          <ngb-pagination [collectionSize]="collectionSizeOne" [(page)]="pageOne"
+          <ngb-pagination class="paginator-footer" [collectionSize]="collectionSizeOne" [(page)]="pageOne"
           [pageSize]="pageSize"></ngb-pagination>
           <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="venta = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
@@ -204,21 +222,22 @@
           <table class="table table-dark table-hover table-gym">
             <thead>
               <tr>
+                <th class="table-title-gym">Usuario</th>
                 <th class="table-title-gym">Nombre cliente</th>
                 <th class="table-title-gym">Plan</th>
                 <th class="table-title-gym">Valor</th>
                 <th class="table-title-gym">Hora</th>
-                <th class="table-title-gym">Usuario venta</th>
+              
               </tr>
             </thead>
             <tbody>
               @for (informe of resultVentas.informePlanes | slice: (pageTwo-1) * pageSize : pageTwo * pageSize; track item ) {
                 <tr class="tr-table cursor">
+                  <td> {{informe.usuario.Nombre_completo }}</td>
                   <td>{{informe.cliente.Nombres}} {{informe.cliente.Apellidos}} </td>
                   <td>{{informe.plan.Descripcion }}</td>
                   <td> {{informe.ventasClientes.Valor_Venta | currency }}</td>
                   <td> {{informe.ventasClientes.Hora_Venta_Cliente }}</td>
-                  <td> {{informe.usuario.Nombre_completo }}</td>
                 </tr>
               }
               <tr>
@@ -236,7 +255,7 @@
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"
             screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
           </paging-controls> -->
-          <ngb-pagination [collectionSize]="collectionSizeTwo" [(page)]="pageTwo"
+          <ngb-pagination class="paginator-footer" [collectionSize]="collectionSizeTwo" [(page)]="pageTwo"
           [pageSize]="pageSize"></ngb-pagination>
         </div>
         <div class="content-errors" *ngIf="resultVentas.informePlanes.length <= 0">
@@ -265,6 +284,7 @@
             <thead>
               <tr>
                 <th class="table-title-gym">Descripcion</th>
+                <th class="table-title-gym">Cliente</th>
                 <th class="table-title-gym">Valor</th>
                 <th class="table-title-gym">Usuario</th>
                 <th class="table-title-gym">Fecha venta</th>
@@ -275,16 +295,17 @@
               @for (informe of resultVentas.informeHistorico | slice: (pageThree-1) * pageSize : pageThree * pageSize; track item ) {
                 <tr 
                   class="tr-table cursor">
-                  <td>{{informe.descripcion}} </td>
-                  <td>{{informe.value }}</td>
-                  <td> {{informe.usuario }}</td>
-                  <td> {{informe.Fecha_Ingreso | date : 'dd/MM/yyyy' }}</td>
-                  <td> {{informe.Hora }}</td>
+                  <td> {{ informe.descripcion}} </td>
+                  <td> {{ informe.cliente }} </td>
+                  <td> {{ informe.value }} </td>
+                  <td> {{ informe.usuario }} </td>
+                  <td> {{ informe.Fecha_Ingreso | date : 'dd/MM/yyyy' }} </td>
+                  <td> {{ informe.Hora }} </td>
                 </tr>
               }
             </tbody>
           </table>
-          <ngb-pagination [collectionSize]="collectionSizeThree" [(page)]="pageThree"
+          <ngb-pagination class="paginator-footer" [collectionSize]="collectionSizeThree" [(page)]="pageThree"
           [pageSize]="pageSize"></ngb-pagination>
           <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="hist = $event" maxSize="12"
             responsive="true" previousLabel="Anterior" nextLabel="Siguiente" screenReaderPaginationLabel="Pagination"

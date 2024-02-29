@@ -68,23 +68,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let concepto of conceptosData | paginate: { currentPage: con }"
-                                class="tr-table cursor">
-                                <td>{{concepto.Descripcion}} </td>
-                                <td>{{concepto.valor_concepto | currency}}</td>
-                                <td>
-                                    <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true"
-                                        (click)="mapConceptos(concepto)"></i>
-                                    <!-- <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true"
-                                        (click)="EliminarConcepto(concepto.Id_Concepto)"></i> -->
-                                </td>
-                            </tr>
+                            @for (concepto of conceptosData  | slice: (page-1) * pageSize : page * pageSize; track item ) {
+                                <tr class="tr-table cursor">
+                                    <td>{{concepto.Descripcion}} </td>
+                                    <td>{{concepto.valor_concepto | currency}}</td>
+                                    <td>
+                                        <i class="fa fa-pencil-square-o fa-lg icon-table-gym" aria-hidden="true"
+                                            (click)="mapConceptos(concepto)"></i>
+                                        <!-- <i class="fa fa-trash-o fa-lg icon-table-gym" aria-hidden="true"
+                                            (click)="EliminarConcepto(concepto.Id_Concepto)"></i> -->
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
-                    <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="con = $event"
+                    <!-- <paging-controls class="paginator-footer" [isItemsPerPage]="false" (pageChange)="con = $event"
                         maxSize="12" responsive="true" previousLabel="Anterior" nextLabel="Siguiente"
                         screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
-                        screenReaderCurrentLabel="You're on page"></paging-controls>
+                        screenReaderCurrentLabel="You're on page"></paging-controls> -->
+                        <ngb-pagination class="paginator-footer" [collectionSize]="collectionSize" [(page)]="page" responsive="true"
+                                    [pageSize]="pageSize"></ngb-pagination>
                 </div>
                 <div class="content-errors" *ngIf="conceptosData.length <= 0">
 
